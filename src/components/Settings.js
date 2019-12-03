@@ -3,7 +3,7 @@ import { View, Text, StyleSheet } from 'react-native';
 
 const Settings = () => {
 	return (
-		<View style = { styles.container }>
+		<View style = { styles.mainView }>
 			<Text>Paramètres</Text>
 		</View>
 	);
@@ -16,7 +16,7 @@ Settings.navigationOptions = {
 export default Settings;
 
 const styles = StyleSheet.create({
-	container: {
+	mainView: {
 		flex: 1,
 		alignItems: 'center',
 		justifyContent: 'center',

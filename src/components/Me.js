@@ -4,7 +4,7 @@ import { View, Text, StyleSheet, Button } from 'react-native';
 
 const Me = () => {
 	return (
-		<View style = { styles.container }>
+		<View style = { styles.mainView }>
 <View style = {styles.side}>
 </View>
 			<View style = {styles.middle}>
@@ -34,7 +34,7 @@ Me.navigationOptions = {
 export default Me;
 
 const styles = StyleSheet.create({
-	container: {
+	mainView: {
 		flex: 1,
 		flexDirection: 'row'
 	},

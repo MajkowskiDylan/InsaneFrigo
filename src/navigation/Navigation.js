@@ -20,7 +20,7 @@ const MeNavigation = createStackNavigator({
 	initialRouteName: 'Me',
 });
 
-// Navigation de l'onglet Me
+// Navigation de l'onglet Search
 const SearchNavigation = createStackNavigator({
 	Search: Search,
 },
@@ -36,6 +36,7 @@ const SettingsNavigation = createStackNavigator({
 	initialRouteName: 'Settings',
 });
 
+// Barre de navigation
 const TabNavigation = createBottomTabNavigator({
 	Search: {
 		screen: SearchNavigation,
@@ -69,7 +70,7 @@ const TabNavigation = createBottomTabNavigator({
 		activeBackgroundColor: colors.mainGreenColor,
 		activeTintColor: 'white',
 	},
-	initialRouteName: 'Me',
+	initialRouteName: 'Search',	// CHANGER ET METTRE 'ME'
 });
 
 export default createAppContainer(TabNavigation);

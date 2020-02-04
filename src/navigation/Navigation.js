@@ -42,8 +42,9 @@ const TabNavigation = createBottomTabNavigator({
 		screen: SearchNavigation,
 		navigationOptions: {
 			title: 'Search',
-			tabBarIcon: () => {
-				return <Image style = { styles.tabIcon } source = { assets.hotIcon }/>
+			tabBarIcon: ({focused}) => {
+				if (focused) return <Image style = { styles.tabIcon } source = { assets.searchIcon }/>
+				else return <Image style = { styles.tabIconUnselected } source = { assets.searchIcon }/>
 			},
 		},
 	},
@@ -51,8 +52,9 @@ const TabNavigation = createBottomTabNavigator({
 		screen: MeNavigation,
 		navigationOptions: {
 			title: 'Me',
-			tabBarIcon: () => {
-				return <Image style = { styles.tabIcon } source = { assets.hotIcon }/>
+			tabBarIcon: ({focused}) => {
+				if (focused) return <Image style = { styles.tabIcon } source = { assets.userIcon }/>
+				else return <Image style = { styles.tabIconUnselected } source = { assets.userIcon }/>
 			},
 		},
 	},
@@ -60,8 +62,9 @@ const TabNavigation = createBottomTabNavigator({
 		screen: SettingsNavigation,
 		navigationOptions: {
 			title: 'Settings',
-			tabBarIcon: () => {
-				return <Image style = { styles.tabIcon } source = { assets.hotIcon }/>
+			tabBarIcon: ({focused}) => {
+				if (focused) return <Image style = { styles.tabIcon } source = { assets.settingsIcon }/>
+				else return <Image style = { styles.tabIconUnselected } source = { assets.settingsIcon }/>
 			},
 		},
 	},
@@ -81,4 +84,9 @@ const styles = StyleSheet.create({
 		height: 20,
 		tintColor: 'white',
 	},
+	tabIconUnselected: {
+		width: 20,
+		height: 20,
+		tintColor: 'black',
+	}
 });

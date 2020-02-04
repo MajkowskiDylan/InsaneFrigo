@@ -5,20 +5,20 @@ import { View, Text, StyleSheet, Button } from 'react-native';
 const Me = () => {
 	return (
 		<View style = { styles.mainView }>
-<View style = {styles.side}>
-</View>
+			<View style = {styles.side}>
+			</View>
 			<View style = {styles.middle}>
 				<View style = {styles.middleTop}>
 					<View style = {styles.bt1}>
-				<Button title="My fridge" />
+						<Button title="My fridge" />
 					</View>	
 					<View style = {styles.bt2}>
-					<Button title="My list" />
+						<Button title="My list" />
 					</View>	
 					<View style = {styles.bt1}>
-					<Button title="My recipes"/>
+						<Button title="My recipes"/>
 					</View>	
-			</View>
+				</View>
 			<View style = {styles.middleBottom}></View>
 			</View>
 			<View style = {styles.side}>

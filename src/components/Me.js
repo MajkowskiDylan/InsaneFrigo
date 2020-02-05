@@ -1,7 +1,10 @@
 import React from 'react';
 import { colors } from '../definitions/colors';
-import { View, Text, StyleSheet, Button } from 'react-native';
-
+import { View, Text, StyleSheet,Image, Button, navigation, TouchableHighlight } from 'react-native';
+import { assets } from '../definitions/assets';
+_searchIngr = () => {
+	console.log('Recqsdqsdqsqsdqent...');
+}
 const Me = () => {
 	return (
 		<View style = { styles.mainView }>
@@ -10,7 +13,7 @@ const Me = () => {
 			<View style = {styles.middle}>
 				<View style = {styles.middleTop}>
 					<View style = {styles.bt1}>
-						<Button title="My fridge" />
+					<Button title="My fridge" />
 					</View>	
 					<View style = {styles.bt2}>
 						<Button title="My list" />

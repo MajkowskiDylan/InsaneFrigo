@@ -7,6 +7,7 @@ import { createBottomTabNavigator } from 'react-navigation-tabs';
 import Me from '../components/Me';
 import Search from '../components/Search';
 import Settings from '../components/Settings';
+import MyFridge from '../components/MyFridge';
 
 import { colors } from '../definitions/colors';
 import { assets } from '../definitions/assets';
@@ -18,6 +19,13 @@ const MeNavigation = createStackNavigator({
 },
 {
 	initialRouteName: 'Me',
+});
+
+const MyFridgeNavigation = createStackNavigator({
+	MyFridge: MyFridge,
+},
+{
+	initialRouteName: 'MyFridge',
 });
 
 // Navigation de l'onglet Search
@@ -58,6 +66,16 @@ const TabNavigation = createBottomTabNavigator({
 			},
 		},
 	},
+	//MyFridge: {
+	//	screen: MyFridgeNavigation,
+	//	navigationOptions: {
+	//		title: 'MyFridge',
+	//		tabBarIcon: ({focused}) => {
+	//			if (focused) return <Image style = { styles.tabIcon } source = { assets.userIcon }/>
+	//			else return <Image style = { styles.tabIconUnselected } source = { assets.userIcon }/>
+	//		},
+	//	},
+	//},
 	Settings: {
 		screen: SettingsNavigation,
 		navigationOptions: {

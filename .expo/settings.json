@@ -1,6 +1,6 @@
 {
   "urlRandomness": "zk-72w",
-  "hostType": "localhost",
+  "hostType": "tunnel",
   "lanType": "ip",
   "dev": true,
   "minify": false,

@@ -6,7 +6,13 @@ function updateQuota(state = initialState, action) {
     case 'UPDATE':
       nextState = {
         ...state,
-        quota: 100
+        quota: action.value
+      }
+      return nextState || state
+    case 'CHANGE':
+      nextState = {
+        ...state,
+        quota:state.quota + action.value
       }
       return nextState || state
     default:

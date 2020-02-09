@@ -2,24 +2,25 @@ import React from 'react';
 import { colors } from '../definitions/colors';
 import { View, Text, StyleSheet,Image, Button, navigation, TouchableHighlight } from 'react-native';
 import { assets } from '../definitions/assets';
-_searchIngr = () => {
-	console.log('Recqsdqsdqsqsdqent...');
-}
-const Me = () => {
+import MyFridge from './Fridge';
+import MyShoppingList from './ShoppingList';
+import MyRecipes from './SavedRecipes';
+
+const Me = ({navigation}) => {
 	return (
 		<View style = { styles.mainView }>
 			<View style = {styles.side}>
 			</View>
 			<View style = {styles.middle}>
 				<View style = {styles.middleTop}>
-					<View style = {styles.bt1}>
-					<Button title="My fridge" />
+					<View style = {styles.btn}>
+					<Button onPress={() => navigation.navigate('Fridge')}  title="My Fridge" />
+					</View>
+					<View style = {styles.btn}>
+						<Button onPress={() => navigation.navigate('ShoppingList')} title="My Shopping List" />
 					</View>	
-					<View style = {styles.bt2}>
-						<Button title="My list" />
-					</View>	
-					<View style = {styles.bt1}>
-						<Button title="My recipes"/>
+					<View style = {styles.btn}>
+						<Button onPress={() => navigation.navigate('SavedRecipes')} title="Saved Recipes"/>
 					</View>	
 				</View>
 			<View style = {styles.middleBottom}></View>
@@ -50,7 +51,6 @@ const styles = StyleSheet.create({
 	},
 	middleTop: {
 		flex: 1,
-		backgroundColor: 'purple',
 		flexDirection: 'column',
 		height: '100%'
 	},
@@ -58,16 +58,9 @@ const styles = StyleSheet.create({
 		flex: 1,
 		justifyContent: "center"
 	},
-	bt1:{
+	btn:{
 		flex: 1,
-		color: colors.mainGreenColor,
-		backgroundColor: colors.mainOrangeColor,
 		justifyContent: "center"
 		
-	},
-	bt2:{
-		flex: 1,
-		backgroundColor: colors.mainGreenColor,
-		justifyContent: "center"
 	},
 });

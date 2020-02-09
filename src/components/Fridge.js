@@ -1,42 +1,33 @@
 import React from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableHighlight, Image, Button, TouchableWithoutFeedback, TouchableOpacity } from 'react-native';
-	
 
 import { colors } from '../definitions/colors';
 import { assets } from '../definitions/assets';
+import { ButtonGroup } from 'react-native-elements';
+import IngredientSearch from './IngredientSearch';
 
-const MyFridge = () => {
-_searchIngr = () => {
-		console.log('Recherche d\'un ingredient...');
-	}
+
+const Fridge = (props) => {
+
 
 	return (
 		<View style = { styles.mainView }>
-			<View style = { styles.searchView }>
-				<TextInput
-					placeholder = "Ingredient's name"
-					style = { styles.searchField }
-				/>
-				<TouchableHighlight onPress = { _searchIngr }>
-					<View style = { styles.button }>
-						<Image  style = { styles.searchIcon } source = { assets.hotIcon } />
-					</View>
-                   
-				</TouchableHighlight>
-                
+			<View>
+				<IngredientSearch/>
 			</View>
-<View>
-<Text>Sort by: Name Aisle</Text>
-</View>
+			<View>
+				<Text> My Fridge List From API !</Text>
+	
+			</View>
 		</View>
     );
 }
 
-MyFridge.navigationOptions = {
-	title: 'MyFridge',
+Fridge.navigationOptions = {
+	title: 'Fridge',
 };
 
-export default MyFridge;
+export default Fridge;
 
 const styles = StyleSheet.create({
 	mainView: {

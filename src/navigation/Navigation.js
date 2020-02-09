@@ -7,8 +7,9 @@ import { createBottomTabNavigator } from 'react-navigation-tabs';
 import Me from '../components/Me';
 import Search from '../components/Search';
 import Settings from '../components/Settings';
-import MyFridge from '../components/MyFridge';
-
+import Fridge from '../components/Fridge';
+import ShoppingList from '../components/ShoppingList';
+import SavedRecipes from '../components/SavedRecipes';
 import { colors } from '../definitions/colors';
 import { assets } from '../definitions/assets';
 
@@ -16,16 +17,31 @@ import { assets } from '../definitions/assets';
 const MeNavigation = createStackNavigator({
 	Me: Me,
 	// Liste des components accessibles depuis l'onglet Me
+	Fridge: Fridge,
+	ShoppingList: ShoppingList,
+	SavedRecipes: SavedRecipes,
 },
 {
 	initialRouteName: 'Me',
 });
 
-const MyFridgeNavigation = createStackNavigator({
-	MyFridge: MyFridge,
+const FridgeNavigation = createStackNavigator({
+	Fridge: Fridge,
 },
 {
-	initialRouteName: 'MyFridge',
+	initialRouteName: 'Fridge',
+});
+const ShoppingListNavigation = createStackNavigator({
+	ShoppingList: ShoppingList,
+},
+{
+	initialRouteName: 'ShoppingList',
+});
+const SavedRecipesNavigation = createStackNavigator({
+	SavedRecipes: SavedRecipes,
+},
+{
+	initialRouteName: 'SavedRecipes',
 });
 
 // Navigation de l'onglet Search
@@ -66,16 +82,6 @@ const TabNavigation = createBottomTabNavigator({
 			},
 		},
 	},
-	//MyFridge: {
-	//	screen: MyFridgeNavigation,
-	//	navigationOptions: {
-	//		title: 'MyFridge',
-	//		tabBarIcon: ({focused}) => {
-	//			if (focused) return <Image style = { styles.tabIcon } source = { assets.userIcon }/>
-	//			else return <Image style = { styles.tabIconUnselected } source = { assets.userIcon }/>
-	//		},
-	//	},
-	//},
 	Settings: {
 		screen: SettingsNavigation,
 		navigationOptions: {

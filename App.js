@@ -1,14 +1,15 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
-import Navigation from './src/navigation/Navigation';
+import { Provider } from 'react-redux';
 
-import Me from './src/components/Me';
-import Search from './src/components/Search';
-import Settings from './src/components/Settings';
+import Navigation from './src/navigation/Navigation';
+import Store from './src/store/config';
 
 export default function App() {
 	return (
-		<Navigation/>
+	<Provider store={ Store }>
+      	<Navigation/>
+    </Provider>
 	);
 }
 

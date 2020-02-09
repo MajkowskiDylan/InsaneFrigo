@@ -1,12 +1,14 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { CheckBox, Button } from 'react-native-elements'
+import { connect } from 'react-redux';
 import Icon from 'react-native-vector-icons';
 
 import { colors } from '../definitions/colors';
 import { assets } from '../definitions/assets';
 
-const Settings = () => {
+const Settings = (quota) => {
+	console.log(quota.quota)
 	return (
 		 <View style={{flex: 10, flexDirection: 'column'}}>
         	<View style = { styles.configuration }>
@@ -15,8 +17,8 @@ const Settings = () => {
 				<CheckBox title = 'When adding an ingredient to the fridge from the shopping liste remove it from the shopping list.' />
 			</View>
 			<View style = { styles.api}>
-				<Text style ={styles.title}>API</Text>
-				<Text style ={styles.txt}>API's credits remaining:</Text>
+				<Text style ={styles.title}>API </Text>
+				<Text style ={styles.txt}>API's credits remaining : <Text style={{fontWeight: 'bold'}}> {quota.quota} token</Text></Text>
 				<Text style ={styles.txt}>Last updates:</Text>
 			</View>
 			<View style = { styles.clearData }>
@@ -32,7 +34,13 @@ Settings.navigationOptions = {
 	title: 'Settings',
 };
 
-export default Settings;
+const mapStateToProps = (state) => {
+	return {
+	  quota: state.quota
+	}
+  }
+  
+  export default connect(mapStateToProps)(Settings);
 
 const styles = StyleSheet.create({
 	configuration: {

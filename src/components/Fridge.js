@@ -1,13 +1,13 @@
 import React from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableHighlight, Image, Button, TouchableWithoutFeedback, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableHighlight, Image, Button, TouchableWithoutFeedback, TouchableOpacity, navigation } from 'react-native';
 
 import { colors } from '../definitions/colors';
 import { assets } from '../definitions/assets';
 import { ButtonGroup } from 'react-native-elements';
 import IngredientSearch from './IngredientSearch';
+import AddTo from './AddTo';
 
-
-const Fridge = (props) => {
+const Fridge = ({navigation}) => {
 
 
 	return (
@@ -17,7 +17,7 @@ const Fridge = (props) => {
 			</View>
 			<View>
 				<Text> My Fridge List From API !</Text>
-	
+				<Button onPress={() => navigation.navigate('AddTo')} title="Add ingredient"/>
 			</View>
 		</View>
     );

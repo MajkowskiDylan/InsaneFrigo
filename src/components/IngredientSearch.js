@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, Component } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableHighlight, Image, Button, TouchableWithoutFeedback, TouchableOpacity } from 'react-native';
 	
 
@@ -6,14 +6,15 @@ import { colors } from '../definitions/colors';
 import { assets } from '../definitions/assets';
 import { ButtonGroup } from 'react-native-elements';
 
-const IngredientSearch = (props) => {
+const IngredientSearch = ({navigation}) => {
+	const [filter, setFilter] = useState(0);
+	const filters = ['Name', 'Aisle'];
+
 
 	_searchIngredient = () => {
 		console.log('Recherche d\'un ingredient...');
 	}
 
-	const filters = ['Name', 'Aisle'];
-	const { selectedButtonStyle, selectedTextStyle} = styles;
 	return (
 		<View>
 			<View style = { styles.searchView }>
@@ -23,16 +24,17 @@ const IngredientSearch = (props) => {
 				/>
 				<TouchableHighlight onPress = { _searchIngredient }>
 					<View style = { styles.button }>
-						<Image  style = { styles.searchIcon } source = { assets.hotIcon } />
+						<Image  style = { styles.searchIcon } source = { assets.searchIcon } />
 					</View>
 				</TouchableHighlight>
 			</View>
 
-			<ButtonGroup selectedButtonStyle={selectedButtonStyle} selectedTextStyle={selectedTextStyle} buttons={filters}></ButtonGroup>
-			<Button title="add ingredient"/>
+			<ButtonGroup onPress={filter => setFilter(filter)} selectedIndex={filter} buttons={filters}></ButtonGroup>
+			
 		</View>
     );
 }
+
 
 export default IngredientSearch;
 

@@ -1,12 +1,12 @@
 import React from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableHighlight, Image, Button, TouchableWithoutFeedback, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableHighlight, Image, Button, TouchableWithoutFeedback, TouchableOpacity, navigation } from 'react-native';
 	
 import IngredientSearch from './IngredientSearch';
 import { colors } from '../definitions/colors';
 import { assets } from '../definitions/assets';
 import { ButtonGroup } from 'react-native-elements';
 
-const ShoppingList = (props) => {
+const ShoppingList = ({navigation}) => {
 
 	return (
 		<View style = { styles.mainView }>
@@ -15,6 +15,7 @@ const ShoppingList = (props) => {
 			</View>
 			<View>
 				<Text> My Shopping List From API !</Text>
+				<Button onPress={() => navigation.navigate('AddTo', {from: "my shopping list",})} title="Add ingredient"/>
 			</View>
 		</View>
     );

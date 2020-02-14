@@ -17,7 +17,7 @@ const Fridge = ({navigation}) => {
 			</View>
 			<View>
 				<Text> My Fridge List From API !</Text>
-				<Button onPress={() => navigation.navigate('AddTo')} title="Add ingredient"/>
+				<Button onPress={() => navigation.navigate('AddTo', {from: "my fridge",})} title="Add ingredient"/>
 			</View>
 		</View>
     );

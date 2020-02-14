@@ -11,12 +11,14 @@ import Fridge from '../components/Fridge';
 import ShoppingList from '../components/ShoppingList';
 import SavedRecipes from '../components/SavedRecipes';
 import AddTo from '../components/AddTo';
+import My from '../components/My';
 import { colors } from '../definitions/colors';
 import { assets } from '../definitions/assets';
 
 // Navigation de l'onglet Me
 const MeNavigation = createStackNavigator({
 	Me: Me,
+	My: My,
 	Fridge: Fridge,
 	ShoppingList: ShoppingList,
 	SavedRecipes: SavedRecipes,
@@ -29,6 +31,7 @@ const MeNavigation = createStackNavigator({
 const FridgeNavigation = createStackNavigator({
 	Fridge: Fridge,
 	AddTo: AddTo,
+	My: My,
 },
 {
 	initialRouteName: 'Fridge',
@@ -36,22 +39,36 @@ const FridgeNavigation = createStackNavigator({
 const ShoppingListNavigation = createStackNavigator({
 	ShoppingList: ShoppingList,
 	AddTo: AddTo,
+	My: My,
 },
 {
 	initialRouteName: 'ShoppingList',
 });
+const MyNavigation = createStackNavigator({
+	My: My,
+	AddTo: AddTo,
+	Me: Me,
+},
+{
+	initialRouteName: 'My',
+});
 const SavedRecipesNavigation = createStackNavigator({
 	SavedRecipes: SavedRecipes,
+	My: My,
 },
 {
 	initialRouteName: 'SavedRecipes',
 });
 const AddToNavigation = createStackNavigator({
 	AddTo: AddTo,
+	Fridge: Fridge,
+	ShoppingList: ShoppingList,
+	My: My,
 },
 {
 	initialRouteName: 'AddTo',
 });
+
 // Navigation de l'onglet Search
 const SearchNavigation = createStackNavigator({
 	Search: Search,

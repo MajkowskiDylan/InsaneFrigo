@@ -14,10 +14,10 @@ const Me = ({navigation}) => {
 			<View style = {styles.middle}>
 				<View style = {styles.middleTop}>
 					<View style = {styles.btn}>
-					<Button onPress={() => navigation.navigate('Fridge')}  title="My Fridge" />
+					<Button onPress={() => navigation.navigate('My', {origin: "Fridge",})}  title="My Fridge" />
 					</View>
 					<View style = {styles.btn}>
-						<Button onPress={() => navigation.navigate('ShoppingList')} title="My Shopping List" />
+						<Button onPress={() => navigation.navigate('My', {origin: "ShoppingList",})} title="My Shopping List" />
 					</View>	
 					<View style = {styles.btn}>
 						<Button onPress={() => navigation.navigate('SavedRecipes')} title="Saved Recipes"/>

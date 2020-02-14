@@ -1,17 +1,16 @@
-import React from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableHighlight, Image, Button, TouchableWithoutFeedback, TouchableOpacity } from 'react-native';
+import React, { useState, Component } from 'react';
+import { View, Text, StyleSheet, TextInput, TouchableHighlight, Image, Button, TouchableWithoutFeedback, TouchableOpacity, navigation } from 'react-native';
 	
 import { colors } from '../definitions/colors';
 import { assets } from '../definitions/assets';
 import IngredientSearch from './IngredientSearch';
 
 const AddTo = (props) => {
-
+	console.log(props);
 	return (
 		<View>
 			<IngredientSearch/>
-            <Text> Add To : Fridge / My List (un seul composant pour les deux, ça fonctionnera comme un filtre... 
-                remarque à moi-même: d'ailleurs on pourrait faire pareil avec Fridge et Shopping List ?) </Text>
+            <Text> Add To : Fridge / My List (un seul composant pour les deux, ça fonctionnera comme un filtre... </Text>
 		</View>
     );
 }

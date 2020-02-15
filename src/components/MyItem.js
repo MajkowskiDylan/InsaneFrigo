@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, Component } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableHighlight, Image, Button, TouchableWithoutFeedback, TouchableOpacity, FlatList } from 'react-native';
 	
 import { getIngredients } from '../api/spoonacular';
@@ -8,6 +8,7 @@ import { ButtonGroup } from 'react-native-elements';
 
 const MyItem = (props) => {
     const ingredient = props.ingredient;
+    const urlIngr = "https://spoonacular.com/cdn/ingredients_100x100/";
 
     _removeIngredient = () => {
         console.log("On enleve hop hop hop!");
@@ -22,14 +23,14 @@ const MyItem = (props) => {
 
 	return (
         <TouchableOpacity style={ styles.mainContainer } >
-        <Image style={ styles.typeImage }/>
+        <Image source={{uri: urlIngr + ingredient.image}} style={ styles.typeImage }/>
         <View style={ styles.itemsContainer }>
           <Text style={ styles.itemNameText }> 
           { ingredient.name }
           </Text>
         </View>
         
-        <Button title="+" style = {styles.typeImage } onPress={ _addToList}/>
+        <Button title="+" style = {styles.typeImage } onPress={ _searchIngredients}/>
 
         <Button title="-" style = {styles.typeImage } onPress={ _removeIngredient}/>
       </TouchableOpacity>

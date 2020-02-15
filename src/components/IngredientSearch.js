@@ -1,15 +1,27 @@
 import React, { useState, Component } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableHighlight, Image, Button, TouchableWithoutFeedback, TouchableOpacity } from 'react-native';
-	
-
+import { View, Text, StyleSheet, TextInput, TouchableHighlight, Image, Button, FlatList } from 'react-native';
+import MyItem from './MyItem';
 import { colors } from '../definitions/colors';
 import { assets } from '../definitions/assets';
 import { ButtonGroup } from 'react-native-elements';
+import { getIngredients } from '../api/spoonacular';
 
-const IngredientSearch = ({navigation}) => {
+const IngredientSearch = () => {
 	const [filter, setFilter] = useState(0);
 	const filters = ['Name', 'Aisle'];
-
+	const [ingredients, setIngredients] = useState([]);
+	
+    _searchIngredients = async () => {
+		var apiSearchResult = [];
+		try {
+			apiSearchResult = ( await getIngredients() ); 
+		} catch (error) {
+			apiSearchResult = [];
+		}
+		setIngredients( apiSearchResult );
+		console.log(apiSearchResult);
+	}
+	
 	return (
 		<View>
 			<View style = { styles.searchView }>
@@ -17,13 +29,18 @@ const IngredientSearch = ({navigation}) => {
 					placeholder = "Ingredient's name"
 					style = { styles.searchField }
 				/>
-				<TouchableHighlight>
+				<TouchableHighlight onPress={ _searchIngredients }>
 					<View style = { styles.button }>
-						<Image  style = { styles.searchIcon } source = { assets.searchIcon } />
+						<Image  style = { styles.searchIcon } source = { assets.searchIcon }/>
 					</View>
 				</TouchableHighlight>
 			</View>
 			<ButtonGroup onPress={filter => setFilter(filter)} selectedIndex={filter} buttons={filters}></ButtonGroup>
+			<FlatList
+        data={ ingredients }
+        keyExtractor={ (item) => item.name.toString() }
+        renderItem={ ({item}) => <MyItem ingredient={ item }/> }
+      />
 		</View>
     );
 }

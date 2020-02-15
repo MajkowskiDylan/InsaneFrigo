@@ -5,39 +5,27 @@ import { getIngredients } from '../api/spoonacular';
 import { colors } from '../definitions/colors';
 import { assets } from '../definitions/assets';
 import { ButtonGroup } from 'react-native-elements';
-import { fakeIngredients } from '../components/fakeDataTemp';
 import MyItem from './MyItem';
 const My = (props) => {
 	const params = props.navigation.state.params;
+	const [fridge, setFridge] = useState([]);
+	const [shoppingList, setShoppingList] = useState([]);
 	// params.origin fait référence à la page d'origine, par exemple si on a cliqué sur My Fridge ou My Shopping List dans la page Me.js
-	const [ingredients, setIngredients] = useState([]);
-	
-	_searchIngredients = async () => {
-		var apiSearchResult = [];
-		try {
-			apiSearchResult = ( await getIngredients() ); 
-		} catch (error) {
-			apiSearchResult = [];
-		}
-		setIngredients( apiSearchResult.ingredients );
-		console.log(apiSearchResult);
-	}
 
 	return (
         <View>
+			<Button onPress={() => props.navigation.navigate('AddTo', {src: params.origin,})} title="Add ingredient" />
+			<Text> My { params.origin } List ! (Fixed) </Text>
 			<IngredientSearch/>
-            <Button onPress={() => props.navigation.navigate('AddTo', {src: params.origin,})} title="Add ingredient" />
-            <Text> My { params.origin } List ! (Fixed) </Text>
-			<FlatList
-        data={ fakeIngredients }
-        keyExtractor={ (item) => item.name.toString() }
-        renderItem={ ({item}) => <MyItem ingredient={ item }/> }
-      />
 		</View>
     );
 }
 
 export default My;
+
+My.navigationOptions = {
+	title: 'My ',
+};
 
 const styles = StyleSheet.create({
 	selectedButtonStyle: {

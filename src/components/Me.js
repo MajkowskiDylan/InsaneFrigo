@@ -2,8 +2,6 @@ import React from 'react';
 import { colors } from '../definitions/colors';
 import { View, Text, StyleSheet,Image, Button, navigation, TouchableHighlight } from 'react-native';
 import { assets } from '../definitions/assets';
-import MyFridge from './Fridge';
-import MyShoppingList from './ShoppingList';
 import MyRecipes from './SavedRecipes';
 
 const Me = ({navigation}) => {

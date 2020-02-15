@@ -10,11 +10,6 @@ const IngredientSearch = ({navigation}) => {
 	const [filter, setFilter] = useState(0);
 	const filters = ['Name', 'Aisle'];
 
-
-	_searchIngredient = () => {
-		console.log('Recherche d\'un ingredient...');
-	}
-
 	return (
 		<View>
 			<View style = { styles.searchView }>
@@ -22,7 +17,7 @@ const IngredientSearch = ({navigation}) => {
 					placeholder = "Ingredient's name"
 					style = { styles.searchField }
 				/>
-				<TouchableHighlight onPress = { _searchIngredient }>
+				<TouchableHighlight>
 					<View style = { styles.button }>
 						<Image  style = { styles.searchIcon } source = { assets.searchIcon } />
 					</View>

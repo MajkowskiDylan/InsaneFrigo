@@ -1,35 +1,41 @@
 import React, { useState, Component } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableHighlight, Image, Button, TouchableWithoutFeedback, TouchableOpacity, navigation } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableHighlight, Image, Button, FlatList, navigation } from 'react-native';
 import IngredientSearch from './IngredientSearch';
 import { getIngredients } from '../api/spoonacular';
 import { colors } from '../definitions/colors';
 import { assets } from '../definitions/assets';
 import { ButtonGroup } from 'react-native-elements';
-
+import { fakeIngredients } from '../components/fakeDataTemp';
+import MyItem from './MyItem';
 const My = (props) => {
-	const [filter, setFilter] = useState(0);
-    const filters = ['Name', 'Aisle'];
-
-
-    
-    console.log(props);
-    _searchIngredient = () => {
-		console.log('Recherche d\'un ingredient...');
-    }
-
+	const params = props.navigation.state.params;
+	// params.origin fait référence à la page d'origine, par exemple si on a cliqué sur My Fridge ou My Shopping List dans la page Me.js
+	const [ingredients, setIngredients] = useState([]);
+	
+	_searchIngredients = async () => {
+		var apiSearchResult = [];
+		try {
+			apiSearchResult = ( await getIngredients() ); 
+		} catch (error) {
+			apiSearchResult = [];
+		}
+		setIngredients( apiSearchResult.ingredients );
+		console.log(apiSearchResult);
+	}
 
 	return (
         <View>
 			<IngredientSearch/>
-            <Button onPress={() => props.navigation.navigate('AddTo', {src: props.navigation.state.params.origin,})} title="Add ingredient" />
-            <Text> My {props.navigation.state.params.origin} List From API !</Text>
+            <Button onPress={() => props.navigation.navigate('AddTo', {src: params.origin,})} title="Add ingredient" />
+            <Text> My { params.origin } List ! (Fixed) </Text>
+			<FlatList
+        data={ fakeIngredients }
+        keyExtractor={ (item) => item.name.toString() }
+        renderItem={ ({item}) => <MyItem ingredient={ item }/> }
+      />
 		</View>
     );
 }
-
-My.navigationOptions = {
-	title: 'My',
-};
 
 export default My;
 

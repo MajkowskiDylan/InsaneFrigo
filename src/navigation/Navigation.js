@@ -7,8 +7,6 @@ import { createBottomTabNavigator } from 'react-navigation-tabs';
 import Me from '../components/Me';
 import Search from '../components/Search';
 import Settings from '../components/Settings';
-import Fridge from '../components/Fridge';
-import ShoppingList from '../components/ShoppingList';
 import SavedRecipes from '../components/SavedRecipes';
 import AddTo from '../components/AddTo';
 import My from '../components/My';
@@ -19,30 +17,11 @@ import { assets } from '../definitions/assets';
 const MeNavigation = createStackNavigator({
 	Me: Me,
 	My: My,
-	Fridge: Fridge,
-	ShoppingList: ShoppingList,
 	SavedRecipes: SavedRecipes,
 	AddTo: AddTo,
 },
 {
 	initialRouteName: 'Me',
-});
-
-const FridgeNavigation = createStackNavigator({
-	Fridge: Fridge,
-	AddTo: AddTo,
-	My: My,
-},
-{
-	initialRouteName: 'Fridge',
-});
-const ShoppingListNavigation = createStackNavigator({
-	ShoppingList: ShoppingList,
-	AddTo: AddTo,
-	My: My,
-},
-{
-	initialRouteName: 'ShoppingList',
 });
 const MyNavigation = createStackNavigator({
 	My: My,
@@ -61,8 +40,6 @@ const SavedRecipesNavigation = createStackNavigator({
 });
 const AddToNavigation = createStackNavigator({
 	AddTo: AddTo,
-	Fridge: Fridge,
-	ShoppingList: ShoppingList,
 	My: My,
 },
 {

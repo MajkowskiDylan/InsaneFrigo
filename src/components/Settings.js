@@ -7,24 +7,31 @@ import Icon from 'react-native-vector-icons';
 import { colors } from '../definitions/colors';
 import { assets } from '../definitions/assets';
 
-const Settings = ({quota, dispatch}) => {
+const Settings = ({quota, settingPreferance, dispatch}) => {
 
 	_updateQuota = async () => {
-		const action = { type: 'UPDATE', value: 300 };
+	const action = { type: 'UPDATE', value: 300 };
 		dispatch(action);
 	}
 	_addQuota = async () => {
-		const action = { type: 'CHANGE', value: 1 };
+	const action = { type: 'CHANGE', value: 1 };
 		dispatch(action);
 	}
 
-	console.log(quota)
+     _updateFtoL= async () => {
+	const action = { type: 'UPFTOL', value: !(settingPreferance.FtoL) };
+		dispatch(action);
+	}
+	_updateLtoF= async () => {
+	const action = { type: 'UPLTOF', value: !(settingPreferance.LtoF) };
+		dispatch(action);
+    }
 	return (
 		 <View style={{flex: 10, flexDirection: 'column'}}>
         	<View style = { styles.configuration }>
 				<Text style ={styles.title}	>Configuration</Text>
-				<CheckBox title = 'Add ingredients removed from the fridge to the shopping list.' />
-				<CheckBox title = 'When adding an ingredient to the fridge from the shopping liste remove it from the shopping list.' />
+				<CheckBox checked={settingPreferance.FtoL} onPress={this._updateFtoL} title = 'Add ingredients removed from the fridge to the shopping list.' />
+				<CheckBox checked={settingPreferance.LtoF} onPress={this._updateLtoF} title = 'When adding an ingredient to the fridge from the shopping liste remove it from the shopping list.' />
 			</View>
 			<View style = { styles.api}>
 				<Text style ={styles.title}>API </Text>
@@ -46,7 +53,8 @@ Settings.navigationOptions = {
 
 const mapStateToProps = (state) => {
 	return {
-	  quota: state.quota
+	  quota: state.updateQuota.quota,
+	  settingPreferance: state.settingPreferance
 	}
   }
   

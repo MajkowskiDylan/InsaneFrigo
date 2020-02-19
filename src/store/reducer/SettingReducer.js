@@ -10,7 +10,6 @@ function settingPreferance (state = initialState, action) {
             }
             return nextState || state
         case 'UPFTOL':
-            console.log('UPFTOL');
             nextState = {
                 ...state,
                 FtoL: action.value

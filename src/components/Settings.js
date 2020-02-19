@@ -35,8 +35,8 @@ const Settings = ({quota, settingPreferance, dispatch}) => {
 			</View>
 			<View style = { styles.api}>
 				<Text style ={styles.title}>API </Text>
-				<Text style ={styles.txt}>API's credits remaining : <Text style={{fontWeight: 'bold'}}> {quota} token</Text></Text>
-				<Text style ={styles.txt}>Last updates:</Text>
+				<Text style ={styles.txt}>API's credits remaining : <Text style={{fontWeight: 'bold'}}> {quota.quota} token</Text></Text>
+				<Text style ={styles.txt}>Last updates: <Text style={{fontWeight: 'bold'}}> {quota.date} </Text></Text>
 			</View>
 			<View style = { styles.clearData }>
 				<View style = { styles.clearDataSub }>
@@ -53,7 +53,7 @@ Settings.navigationOptions = {
 
 const mapStateToProps = (state) => {
 	return {
-	  quota: state.updateQuota.quota,
+	  quota: state.updateQuota,
 	  settingPreferance: state.settingPreferance
 	}
   }

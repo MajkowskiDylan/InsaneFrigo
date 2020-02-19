@@ -1,14 +1,47 @@
-import React from 'react';
+import React, { useState, useRef } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableHighlight, Image } from 'react-native';
 
 import { colors } from '../definitions/colors';
 import { assets } from '../definitions/assets';
 
+import Error from './Error';
+import RecipesList from './RecipesList';
+
+import { getRecipeWithSearch } from '../api/spoonacular';
+
 const Search = () => {
+	const searchTerm = useRef("");
+	const [recipes, setRecipes] = useState([]);
+	const [isRefreshing, setRefreshingState] = useState( false );
+	const [isErrorDuringDataLoading, setErrorDataLoading] = useState( false );
+	const paginationData = useRef( {currentOffset: 0, maxResults: 0} );
+	
+	// Changement du texte de l'input
+	_inputSearchTermChanged = (text) => {
+		searchTerm.current = text;
+	}
 
 	// Recherche d'un aliment
 	_searchItem = () => {
-		console.log('Recherche d\'un alignment...');
+		paginationData.current = { currentOffset: 0, maxResults: 0 }
+		_loadRecipes([]);
+	}
+
+	// Charge les données retournées par l'API
+	_loadRecipes = async (prevRecipes) => {
+		setRefreshingState( true );
+		setErrorDataLoading( false );
+		try {
+			var apiSearchResult = ( await getRecipeWithSearch( searchTerm.current, paginationData.current.currentOffset /* FAUT AJOUTER D'AUTRES TRUCS ICI */ ) );
+			paginationData.current = { currentOffset: paginationData.current.currentOffset + apiSearchResult.results_shown, maxResults: apiSearchResult.results_found }
+			setRecipes( [...prevRecipes, ...apiSearchResult.results] );
+		} catch (error) {
+			paginationData.current = { currentOffset: 0, maxResults: 0 };
+			setRecipes( [] );
+			setErrorDataLoading( true );
+		} finally {
+			setRefreshingState( false );
+		}
 	}
 
 	return (
@@ -17,6 +50,8 @@ const Search = () => {
 				<TextInput
 					placeholder = 'Aliments...'
 					style = { styles.searchField }
+					onChangeText = { text => _inputSearchTermChanged(text) }
+					onSubmitEditing = { _searchItem }
 				/>
 				<TouchableHighlight onPress = { _searchItem }>
 					<View style = { styles.button }>
@@ -24,6 +59,16 @@ const Search = () => {
 					</View>
 				</TouchableHighlight>
 			</View>
+			{ isErrorDuringDataLoading ? // Si il y'a une erreur, afficher le component Error
+			( 
+				<Error msgError = 'Impossible de charger le contenu de la page.'/> 
+			)
+			: (		
+				<RecipesList
+					recipes = { recipes }
+					refreshingState = { isRefreshing }
+				/>
+			)}
 		</View>
 	);
 }

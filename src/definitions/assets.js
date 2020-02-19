@@ -9,4 +9,5 @@ export const assets = {
 	toUnsaveIcon: require( '../../assets/icons/toUnsave.png' ),
 	userIcon: require( '../../assets/icons/user.png' ),
 	suppIcon: require( '../../assets/icons/supprimer.png' ),
+	timeIcon: require( '../../assets/icons/time.png' ),
 };

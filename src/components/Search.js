@@ -9,7 +9,7 @@ import RecipesList from './RecipesList';
 
 import { getRecipeWithSearch } from '../api/spoonacular';
 
-const Search = () => {
+const Search = ({navigation}) => {
 	const searchTerm = useRef("");
 	const [recipes, setRecipes] = useState([]);
 	const [isRefreshing, setRefreshingState] = useState( false );
@@ -44,6 +44,11 @@ const Search = () => {
 		}
 	}
 
+	// Gère la navigation
+	_navigateToRecipeDetails = ( recipeID ) => {
+		navigation.navigate("RecipeDetails", { recipeID });
+	}
+
 	return (
 		<View style = { styles.mainView }>
 			<View style = { styles.searchView }>
@@ -55,7 +60,7 @@ const Search = () => {
 				/>
 				<TouchableHighlight onPress = { _searchItem }>
 					<View style = { styles.button }>
-						<Image  style = { styles.searchIcon } source = { assets.hotIcon } />
+						<Image  style = { styles.searchIcon } source = { assets.searchIcon } />
 					</View>
 				</TouchableHighlight>
 			</View>
@@ -67,6 +72,7 @@ const Search = () => {
 				<RecipesList
 					recipes = { recipes }
 					refreshingState = { isRefreshing }
+					onClickNavigation = { _navigateToRecipeDetails }
 				/>
 			)}
 		</View>
@@ -82,6 +88,7 @@ export default Search;
 const styles = StyleSheet.create({
 	mainView: {
 		flex: 1,
+		backgroundColor: colors.mainSearchColor,
 	},
 	searchView: {
 		alignItems: 'stretch',

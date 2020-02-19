@@ -10,6 +10,7 @@ import Settings from '../components/Settings';
 import SavedRecipes from '../components/SavedRecipes';
 import AddTo from '../components/AddTo';
 import My from '../components/My';
+import RecipeDetails from '../components/RecipeDetails';
 import { colors } from '../definitions/colors';
 import { assets } from '../definitions/assets';
 
@@ -49,6 +50,7 @@ const AddToNavigation = createStackNavigator({
 // Navigation de l'onglet Search
 const SearchNavigation = createStackNavigator({
 	Search: Search,
+	RecipeDetails: RecipeDetails,
 },
 {
 	initialRouteName: 'Search',

@@ -25,6 +25,15 @@ export async function getRecipeWithSearch(searchTerm, diet, cuisine) {
 }
 
 /**
+ * 
+ * @export
+ */
+export async function getRecipeDetails() {
+    console.log('Chargement des données...')
+    return null;
+}
+
+/**
  *
  * @export
  */

@@ -22,9 +22,16 @@ const Search = ({navigation}) => {
 	}
 
 	// Recherche d'un aliment
-	_searchItem = () => {
+	_searchRecipes = () => {
 		paginationData.current = { currentOffset: 0, maxResults: 0 }
 		_loadRecipes([]);
+	}
+
+	// Charge des données supplementaires
+	_searchMoreRecipes = () => {
+		if( paginationData.current.currentOffset < paginationData.current.maxResults ) {
+			_loadRecipes(recipes);
+		}
 	}
 
 	// Charge les données retournées par l'API
@@ -32,8 +39,8 @@ const Search = ({navigation}) => {
 		setRefreshingState( true );
 		setErrorDataLoading( false );
 		try {
-			var apiSearchResult = ( await getRecipeWithSearch( searchTerm.current, paginationData.current.currentOffset /* FAUT AJOUTER D'AUTRES TRUCS ICI */ ) );
-			paginationData.current = { currentOffset: paginationData.current.currentOffset + apiSearchResult.results_shown, maxResults: apiSearchResult.results_found }
+			var apiSearchResult = ( await getRecipeWithSearch( paginationData.current.currentOffset, searchTerm.current /* FAUT AJOUTER D'AUTRES TRUCS ICI */ ) );
+			paginationData.current = { currentOffset: paginationData.current.currentOffset + apiSearchResult.number, maxResults: apiSearchResult.totalResults }
 			setRecipes( [...prevRecipes, ...apiSearchResult.results] );
 		} catch (error) {
 			paginationData.current = { currentOffset: 0, maxResults: 0 };
@@ -56,9 +63,9 @@ const Search = ({navigation}) => {
 					placeholder = 'Aliments...'
 					style = { styles.searchField }
 					onChangeText = { text => _inputSearchTermChanged(text) }
-					onSubmitEditing = { _searchItem }
+					onSubmitEditing = { _searchRecipes }
 				/>
-				<TouchableHighlight onPress = { _searchItem }>
+				<TouchableHighlight onPress = { _searchRecipes }>
 					<View style = { styles.button }>
 						<Image  style = { styles.searchIcon } source = { assets.searchIcon } />
 					</View>
@@ -73,6 +80,8 @@ const Search = ({navigation}) => {
 					recipes = { recipes }
 					refreshingState = { isRefreshing }
 					onClickNavigation = { _navigateToRecipeDetails }
+					refreshRecipes = { _searchRecipes }
+					loadMoreRecipes = { _searchMoreRecipes }
 				/>
 			)}
 		</View>

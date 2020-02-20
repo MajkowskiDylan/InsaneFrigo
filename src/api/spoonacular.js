@@ -8,10 +8,10 @@ const API_KEY = '226d462b515c4039a17e404e2b66ebe7';
  * @param {*} cuisine
  * @returns
  */
-export async function getRecipeWithSearch(searchTerm, diet, cuisine) {
+export async function getRecipeWithSearch(offset, searchTerm, diet, cuisine) {
 	try {
 		const myHeaders = new Headers({ 'apiKey': API_KEY });
-		const url = `https://api.spoonacular.com/recipes/search?apiKey=${API_KEY}&query=${searchTerm || ''}&diet=${diet || ''}&cuisine=${cuisine || ''}`;
+		const url = `https://api.spoonacular.com/recipes/search?offset=${offset}&apiKey=${API_KEY}&query=${searchTerm || ''}&diet=${diet || ''}&cuisine=${cuisine || ''}`;
 		const response = await fetch(url, { headers: myHeaders });
 		if (response.ok) {
 			return response.json();
@@ -19,7 +19,7 @@ export async function getRecipeWithSearch(searchTerm, diet, cuisine) {
 		throw new Error(response.status);
 
 	} catch (error) {
-		console.log('Error with function getRecipeWithSearch ' + error.message);
+		console.log('[ ! ] Error with function getRecipeWithSearch ' + error.message);
 		throw error;
 	}
 }
@@ -28,9 +28,20 @@ export async function getRecipeWithSearch(searchTerm, diet, cuisine) {
  * 
  * @export
  */
-export async function getRecipeDetails() {
-    console.log('Chargement des données...')
-    return null;
+export async function getRecipeDetails(recipeID) {
+    try {
+		const myHeaders = new Headers({ 'apiKey': API_KEY });
+		const url = `https://api.spoonacular.com/recipes/${recipeID}/ingredientWidget.json?apiKey=${API_KEY}`;
+		const response = await fetch(url, { headers: myHeaders });
+		if (response.ok) {
+			return response.json();
+		}
+		throw new Error(response.status);
+
+	} catch (error) {
+		console.log('[ ! ] Error with function getRecipeDetails ' + error.message);
+		throw error;
+	}
 }
 
 /**
@@ -58,7 +69,7 @@ export async function getMyFridge(searchTerm, diet, cuisine) {
 		throw new Error(response.status);
 
 	} catch (error) {
-		console.log('Error with function getMyFridge ' + error.message);
+		console.log('[ ! ] Error with function getMyFridge ' + error.message);
 		throw error;
 	}
 }
@@ -78,7 +89,7 @@ export async function getIngredients() {
         throw new Error(response.status);
 		
     } catch (error) {
-        console.log('Error with function getIngredients ' + error.message);
+        console.log('[ ! ] Error with function getIngredients ' + error.message);
         throw error;
     }
 }

@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 import RecipeItem from './RecipeItem';
 
-const RecipesList = ({recipes, refreshingState, onClickNavigation}) => {
+const RecipesList = ({recipes, refreshingState, onClickNavigation, refreshRecipes, loadMoreRecipes}) => {
 
 	return (
 		<FlatList
@@ -12,11 +12,14 @@ const RecipesList = ({recipes, refreshingState, onClickNavigation}) => {
             data = { recipes }
             keyExtractor = { (item) => item.id.toString() }
             renderItem = { ({item}) => <RecipeItem
-                                            recipe = { item }
-                                            /**isSaved = { _isItSaved(item.recipe.id) } */
-                                            onClickOnMe = { onClickNavigation }
-                                        /> }
+                                        recipe = { item }
+                                        /**isSaved = { _isItSaved(item.recipe.id) } */
+                                        onClickOnMe = { onClickNavigation }
+                                    /> }
             refreshing = { refreshingState }
+            onRefresh = { refreshRecipes }
+            onEndReached = { loadMoreRecipes }
+            onEndReachedThreshold = { 0.5 }
 		/>
 	);
 }

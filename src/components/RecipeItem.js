@@ -13,7 +13,7 @@ const RecipeItem = ({recipe, isSaved, onClickOnMe}) => {
 	}
 
 	return (
-        <TouchableOpacity style = { styles.mainView } onPress = { onClickOnMe }>
+        <TouchableOpacity style = { styles.mainView } onPress={ () => onClickOnMe(recipe.id) } >
             <View style = {styles.viewTop}>
                 <View style = {styles.hr}></View>
                 <Image style = { styles.recipeImage } source = {{ uri: 'https://spoonacular.com/recipeImages/' + recipe.image }}/>
@@ -23,12 +23,12 @@ const RecipeItem = ({recipe, isSaved, onClickOnMe}) => {
             </View>
             <View style = {styles.viewBottom}>
                 <View style = {styles.box}>
-                    <Image  style = { styles.bottomIcon } source = { assets.timeIcon } />
-                    <Text style = {styles.span} > { recipe.readyInMinutes } min. </Text>
-                </View>
-                <View style = {styles.box}>
                     <Image  style = { styles.bottomIcon } source = { assets.userIcon } />
                     <Text style = {styles.span} > { recipe.servings } per. </Text>
+                </View>
+                <View style = {styles.box}>
+                    <Image  style = { styles.bottomIcon } source = { assets.timeIcon } />
+                    <Text style = {styles.span} > { recipe.readyInMinutes } min. </Text>
                 </View>
                 <View style = {styles.boxSave}>
                     { _displaySaved() }
@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
 		backgroundColor: colors.mainGreenColor,
     },
     hr: {
-        height: 3,
+        height: 5,
         borderTopLeftRadius: 3,
         borderTopRightRadius: 3,
         backgroundColor: colors.mainGreenColor,

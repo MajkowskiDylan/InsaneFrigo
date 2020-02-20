@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, ActivityIndicator, ScrollView, Image } from 'react-native';
 import { connect } from 'react-redux';
 
 import { colors } from '../definitions/colors';
@@ -13,15 +13,15 @@ const RecipeDetails = ({navigation}) => {
     const [recipeData, setRecipeData] = useState( null );
 
     useEffect(() => {
-		_loadRestaurant();
+		_loadRecipe();
 	}, []);
     
     // Charge les informations sur la recette selon son ID
-	_loadRestaurant = async () => {
+	_loadRecipe = async () => {
 		try {
-			setRecipeData( await getRecipeDetails(navigation.getParam('recipeID')) );
+			setRecipeData( await getRecipeDetails(navigation.getParam('recipeID')).ingredients );
 			setLoadingState( false );
-		} catch (error) {
+;		} catch (error) {
 			// Do 
 		}
 	}
@@ -43,7 +43,7 @@ const RecipeDetails = ({navigation}) => {
 		if (recipeData) {
 			return (
 				<ScrollView style = { styles.mainView }>
-					Ok ?
+					<Image style = { styles.recipeImage } source = {{ uri: 'https://spoonacular.com/recipeImages/' + recipeData.image }}/>
 				</ScrollView>
 			);
 		}
@@ -70,5 +70,7 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		alignItems: 'center',
 	},
-
+	recipeImage: {
+		height: 200,
+	}
 });

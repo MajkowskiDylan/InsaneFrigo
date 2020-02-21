@@ -12,11 +12,12 @@ const My = (props) => {
 	const [shoppingList, setShoppingList] = useState([]);
 	// params.origin fait référence à la page d'origine, par exemple si on a cliqué sur My Fridge ou My Shopping List dans la page Me.js
 
+
 	return (
         <View>
 			<Button onPress={() => props.navigation.navigate('AddTo', {src: params.origin,})} title="Add ingredient" />
 			<Text> My { params.origin } List ! (Fixed) </Text>
-			<IngredientSearch/>
+			<IngredientSearch superprops={params.origin}/>
 		</View>
     );
 }
@@ -24,7 +25,7 @@ const My = (props) => {
 export default My;
 
 My.navigationOptions = {
-	title: 'My ',
+	title: 'My Fridge / Shopping List ',
 };
 
 const styles = StyleSheet.create({

@@ -1,33 +1,78 @@
 import React, { useState, Component } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableHighlight, Image, Button, FlatList } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableHighlight, Image, Button, FlatList, navigation } from 'react-native';
 import MyItem from './MyItem';
 import { colors } from '../definitions/colors';
 import { assets } from '../definitions/assets';
 import { ButtonGroup } from 'react-native-elements';
 import { getIngredients } from '../api/spoonacular';
+import { connect, dispatch } from 'react-redux';
 
-const IngredientSearch = () => {
+const IngredientSearch = ({props, ingredientsName,saveIngredients, savedIngredients, dispatch}) => {
 	const [filter, setFilter] = useState(0);
 	const filters = ['Name', 'Aisle'];
-	const [ingredients, setIngredients] = useState([]);
+	const [ingredientsData, setIngredientsData] = useState(null);
+	const [isRefreshing, setRefreshingState] = useState( false );
+	var searchTerm = "";
+	console.log(props);
+	_inputSearchTermChanged = (text) => {
+		searchTerm = text;
+	  }
+
+	  _loadMoreIngredients = () => {
+		console.log("End of the list");
+	  }
 	
-    _searchIngredients = async () => {
+    _searchIngredients = async (searchTerm) => {
 		var apiSearchResult = [];
+		var promises = [];
+		var n = 2;
 		try {
-			apiSearchResult = ( await getIngredients() ); 
+			A = ( await getIngredients(n, 'a') );
+			B = ( await getIngredients(n, 'b'));
+			D = ( await getIngredients(n, 'd'));
 		} catch (error) {
-			apiSearchResult = [];
+			A = []; B = []; C = [];	D = [];	E = [];
+			F = [];	G = [];	H = [];	I = [];	J = [];
+			K = [];	L = [];	M = []; N = []; O = [];
+			P = []; Q = []; R = []; S = []; T = [];
+			U = []; V = []; W = []; X = []; Y = []; Z = [];
 		}
-		setIngredients( apiSearchResult );
-		console.log(apiSearchResult);
+		var apiSearchResult = [...B, ...D, ...A];
+		if(filter == 1)
+		{
+			setIngredientsData( apiSearchResult.sort((a,b) =>
+			{
+				console.log(a.aisle + " et " + b.aisle);
+				if(
+					(!((a.aisle)).includes((b.aisle))) ||
+					(!((b.aisle)).includes((a.aisle)))
+					)
+				{
+					return -1
+				}
+				return 1
+			}
+			));
+		}
+		else
+		{
+			setIngredientsData( apiSearchResult.sort((a, b) => { return (a.name).localeCompare(b.name) }));
+		}
+		/*
+		items.sort(function (a, b) {
+  return a.localeCompare(b);
+});
+		*/
 	}
-	
+
 	return (
 		<View>
 			<View style = { styles.searchView }>
 				<TextInput
 					placeholder = "Ingredient's name"
 					style = { styles.searchField }
+					onChangeText={ text => _inputSearchTermChanged(text) }
+					onSubmitEditing={ _searchIngredients }
 				/>
 				<TouchableHighlight onPress={ _searchIngredients }>
 					<View style = { styles.button }>
@@ -37,12 +82,15 @@ const IngredientSearch = () => {
 			</View>
 			<ButtonGroup onPress={filter => setFilter(filter)} selectedIndex={filter} buttons={filters}></ButtonGroup>
 			<FlatList
-        data={ ingredients }
-        keyExtractor={ (item) => item.name.toString() }
-        renderItem={ ({item}) => <MyItem ingredient={ item }/> }
+        data={ ingredientsData }
+		keyExtractor={ (item) => item.name.toString() }
+		renderItem={ ({item}) => <MyItem ingredient={ item }/> }
+		onEndReached={ _loadMoreIngredients }
+        onEndReachedThreshold={ 0.5 }
       />
 		</View>
-    );
+	);
+
 }
 
 

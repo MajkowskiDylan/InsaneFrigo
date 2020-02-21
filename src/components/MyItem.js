@@ -1,39 +1,42 @@
 import React, { useState, Component } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableHighlight, Image, Button, TouchableWithoutFeedback, TouchableOpacity, FlatList } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableHighlight, Image, Button, TouchableWithoutFeedback, TouchableOpacity, FlatList, navigation } from 'react-native';
 	
 import { getIngredients } from '../api/spoonacular';
 import { colors } from '../definitions/colors';
 import { assets } from '../definitions/assets';
 import { ButtonGroup } from 'react-native-elements';
+import { connect, dispatch } from 'react-redux';
+import { saveRestaurants } from '../store/reducer/updateListReducer';
 
-const MyItem = (props) => {
+const MyItem = (props,{navigation,saveRestaurants, dispatch}) => {
     const ingredient = props.ingredient;
-    const urlIngr = "https://spoonacular.com/cdn/ingredients_100x100/";
+    const uriIngredient = "https://spoonacular.com/cdn/ingredients_100x100/";
+    var name = (ingredient.name)
 
-    _removeIngredient = () => {
-        console.log("On enleve hop hop hop!");
-    }
-
-    // D'ici, quand on est dans le Fridge, on ajoute à la ShoppingList
-    // D'ici, quand on est dans la Shopping List, on ajoute au Fridge
-    _addToList = () => {
-        console.log("On ajoute ça allez allez allez");
-        // Dependant de Settings: un ingredient retire peut etre ajoute automatiquement ajoute a l'autre
+    _saveRestaurant = async () => {
+      const action = { type: 'SAVE_RESTAURANT', value: navigation.getParam('restaurantsID') };
+      dispatch(action);
+      }
+    
+    _unsaveRestaurant = async () => {
+      const action = { type: 'UNSAVE_RESTAURANT', value: navigation.getParam('restaurantsID') };
+      dispatch(action);
     }
 
 	return (
         <TouchableOpacity style={ styles.mainContainer } >
-        <Image source={{uri: urlIngr + ingredient.image}} style={ styles.typeImage }/>
+        <Image source={{uri: uriIngredient + ingredient.image}} style={ styles.typeImage }/>
         <View style={ styles.itemsContainer }>
           <Text style={ styles.itemNameText }> 
-          { ingredient.name }
+          { ingredient.name } {ingredient.aisle}
           </Text>
         </View>
-        
-        <Button title="+" style = {styles.typeImage } onPress={ _searchIngredients}/>
+        <Button title="kek" style = {styles.typeImage } onPress={() => _saveRestaurant()} />
+        <Button title="+" style = {styles.typeImage } />
 
-        <Button title="-" style = {styles.typeImage } onPress={ _removeIngredient}/>
+        <Button title="-" source = { assets.suppIcon } />
       </TouchableOpacity>
+
       
 )};
 
@@ -41,7 +44,13 @@ MyItem.navigationOptions = {
 	title: 'MyItem',
 };
 
-export default MyItem;
+export default connect(mapStateToProps)(MyItem);
+
+const mapStateToProps = (state) => {
+	return {
+	  saveRestaurants: state.saveRestaurants.restaurantsID
+	}
+}
 
 const styles = StyleSheet.create({
     mainContainer: {
@@ -50,8 +59,8 @@ const styles = StyleSheet.create({
       flexDirection: "row",
     },
     typeImage: {
-      height: 80,
-      width: 80,
+      height: 100,
+      width: 100,
       backgroundColor: '#6b689c',
     },
     itemsContainer: {
@@ -59,6 +68,7 @@ const styles = StyleSheet.create({
       marginLeft: 10,
     },
     itemNameText: {
+      textTransform: 'capitalize',
       fontWeight: 'bold',
       fontSize: 20,
     },

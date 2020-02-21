@@ -4,6 +4,7 @@ import { AsyncStorage } from 'react-native'
 
 import updateQuota from './reducer/quotaReducer';
 import settingPreferance from './reducer/SettingReducer';
+import updateList from './reducer/updateListReducer';
 
 const persistConfig = {
     key: 'root',
@@ -12,7 +13,8 @@ const persistConfig = {
 
 const combinedReducer = combineReducers({
   updateQuota,
-  settingPreferance
+  settingPreferance,
+  updateList
 })
 
 const persistedReducer = persistReducer(persistConfig, combinedReducer);

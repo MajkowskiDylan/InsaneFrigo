@@ -1,5 +1,5 @@
-const API_KEY = '226d462b515c4039a17e404e2b66ebe7';
-
+//const API_KEY = '226d462b515c4039a17e404e2b66ebe7';
+const API_KEY = '50ab304e889a43f0ba48ca3fe77277cd';
 /**
  *
  * @export
@@ -75,11 +75,11 @@ export async function getMyFridge(searchTerm, diet, cuisine) {
 }
 
 
-export async function getIngredients() {
+export async function getIngredients(number, searchTerm) {
     try {
         const myHeaders = new Headers({ 'apikey': API_KEY  });
 		//const url = `https://api.spoonacular.com/recipes/search?apiKey=${API_KEY}&offset=${offset||0}&number=${number||10}&${query||""}`; 
-        const url = `https://api.spoonacular.com/food/ingredients/autocomplete?apiKey=${API_KEY}&metaInformation=true&number=10&query=a`;
+        const url = `https://api.spoonacular.com/food/ingredients/autocomplete?apiKey=${API_KEY}&metaInformation=true&number=${number || '2'}&query=${searchTerm || ''}`;
         console.log('url: ' + url);
         const response = await fetch(url, { headers: myHeaders });
 		

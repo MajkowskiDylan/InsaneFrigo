@@ -32,9 +32,9 @@ const MyItem = (props,{navigation,saveRestaurants, dispatch}) => {
           </Text>
         </View>
         <Button title="kek" style = {styles.typeImage } onPress={() => _saveRestaurant()} />
-        <Button title="+" style = {styles.typeImage } />
-
-        <Button title="-" source = { assets.suppIcon } />
+        <TouchableOpacity>
+        <Image style={styles.typeImage } source={ assets.toUnsaveIcon } />
+        </TouchableOpacity>
       </TouchableOpacity>
 
       

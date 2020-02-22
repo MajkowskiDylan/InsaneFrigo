@@ -1,5 +1,5 @@
-import React, { useState, Component } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableHighlight, Image, Button, FlatList, navigation } from 'react-native';
+import React, { useState, useRef,  Component } from 'react';
+import { View, Text, StyleSheet, TextInput, TouchableHighlight, Image, Button, FlatList, navigation, Keyboard } from 'react-native';
 import MyItem from './MyItem';
 import { colors } from '../definitions/colors';
 import { assets } from '../definitions/assets';
@@ -10,59 +10,61 @@ import { connect, dispatch } from 'react-redux';
 const IngredientSearch = ({props, ingredientsName,saveIngredients, savedIngredients, dispatch}) => {
 	const [filter, setFilter] = useState(0);
 	const filters = ['Name', 'Aisle'];
-	const [ingredientsData, setIngredientsData] = useState(null);
+	const [ingredientsData, setIngredientsData] = useState([]);
 	const [isRefreshing, setRefreshingState] = useState( false );
-	var searchTerm = "";
-	console.log(props);
-	_inputSearchTermChanged = (text) => {
-		searchTerm = text;
-	  }
+	const [isErrorDuringDataLoading, setErrorDataLoading] = useState( false );
+	const paginationData = useRef( {currentOffset: 0, maxResults: 0} );
+	const searchTerm = useRef("");
 
-	  _loadMoreIngredients = () => {
-		console.log("End of the list");
-	  }
+	// Changement du texte de l'input
+	_inputSearchTermChanged = (text) => {
+		searchTerm.current = text;
+	}
+
+	// Recherche d'un aliment
+	_searchIngredients = () => {
+		paginationData.current = { currentOffset: 0, maxResults: 0 }
+		_loadIngredients([]);
+	}
+
+	// Charge des données supplementaires
+	_searchMoreIngredients = () => {
+		if( paginationData.current.currentOffset < paginationData.current.maxResults ) {
+			_loadIngredients(ingredientsData);
+		}
+	}
 	
-    _searchIngredients = async (searchTerm) => {
-		var apiSearchResult = [];
-		var promises = [];
-		var n = 2;
+    _loadIngredients = async (prevIngredients) => {
+		setRefreshingState( true );
+		setErrorDataLoading( false );
 		try {
-			A = ( await getIngredients(n, 'a') );
-			B = ( await getIngredients(n, 'b'));
-			D = ( await getIngredients(n, 'd'));
-		} catch (error) {
-			A = []; B = []; C = [];	D = [];	E = [];
-			F = [];	G = [];	H = [];	I = [];	J = [];
-			K = [];	L = [];	M = []; N = []; O = [];
-			P = []; Q = []; R = []; S = []; T = [];
-			U = []; V = []; W = []; X = []; Y = []; Z = [];
-		}
-		var apiSearchResult = [...B, ...D, ...A];
-		if(filter == 1)
-		{
-			setIngredientsData( apiSearchResult.sort((a,b) =>
-			{
-				console.log(a.aisle + " et " + b.aisle);
-				if(
-					(!((a.aisle)).includes((b.aisle))) ||
-					(!((b.aisle)).includes((a.aisle)))
-					)
+			var apiSearchResult = ( await getIngredients( paginationData.current.currentOffset, searchTerm.current, 3 ) );
+			A = [{"name": "Aomate", "aisle": "Bilboquet"}];
+			B = [{"name": "Baricot", "aisle": "Legume"}];
+			C = [{"name": "Caerfqsot", "aisle": "Volcan"}];
+			D = [{"name": "Domme", "aisle": "Fruit"}];
+			E = [{"name": "Aoqsdlm", "aisle": "Legume"}];
+			F = [{"name": "Kkkk", "aisle": "Fruit"}];
+			G = [{"name": "Jjjjj", "aisle": "Legume"}];
+			H = [{"name": "Iiii", "aisle": "Fruit"}];
+			//var apiSearchResult = [...D,...A, ...B, ...C, ...E, ...F, ...G, ...H];
+			console.log(apiSearchResult);
+			setIngredientsData( [...prevIngredients, ...apiSearchResult].sort((a,b) => {
+				if(filter == 1)
 				{
-					return -1
+					return (a.aisle).localeCompare(b.aisle);
 				}
-				return 1
-			}
-			));
+				return (a.name).localeCompare(b.name);
+			}));
+			paginationData.current = { currentOffset: paginationData.current.currentOffset + apiSearchResult.number, maxResults: apiSearchResult.totalResults }
+			
+		} catch (error) {
+			paginationData.current = { currentOffset: 0, maxResults: 0 };
+			setIngredientsData( [] );
+			setErrorDataLoading( false ); // il faut mettre true
+		} finally {
+			setRefreshingState( false );
 		}
-		else
-		{
-			setIngredientsData( apiSearchResult.sort((a, b) => { return (a.name).localeCompare(b.name) }));
-		}
-		/*
-		items.sort(function (a, b) {
-  return a.localeCompare(b);
-});
-		*/
 	}
 
 	return (
@@ -72,7 +74,7 @@ const IngredientSearch = ({props, ingredientsName,saveIngredients, savedIngredie
 					placeholder = "Ingredient's name"
 					style = { styles.searchField }
 					onChangeText={ text => _inputSearchTermChanged(text) }
-					onSubmitEditing={ _searchIngredients }
+					onSubmitEditing={ () => {_searchIngredients(); Keyboard.dismiss()} }
 				/>
 				<TouchableHighlight onPress={ _searchIngredients }>
 					<View style = { styles.button }>
@@ -81,13 +83,19 @@ const IngredientSearch = ({props, ingredientsName,saveIngredients, savedIngredie
 				</TouchableHighlight>
 			</View>
 			<ButtonGroup onPress={filter => setFilter(filter)} selectedIndex={filter} buttons={filters}></ButtonGroup>
+			{ isErrorDuringDataLoading ? // Si il y'a une erreur, afficher le component Error
+			( 
+				<Error msgError = 'Impossible de charger le contenu de la page.'/> 
+			)
+			: (	
 			<FlatList
         data={ ingredientsData }
 		keyExtractor={ (item) => item.name.toString() }
 		renderItem={ ({item}) => <MyItem ingredient={ item }/> }
-		onEndReached={ _loadMoreIngredients }
+		onEndReached={ _searchMoreIngredients }
         onEndReachedThreshold={ 0.5 }
       />
+	  )}
 		</View>
 	);
 
@@ -95,17 +103,10 @@ const IngredientSearch = ({props, ingredientsName,saveIngredients, savedIngredie
 
 
 export default IngredientSearch;
-
 const styles = StyleSheet.create({
-	selectedButtonStyle: {
-		backgroundColor: 'red',
-	},
-	selectedTextStyle: {
-		color: 'orange',
-		fontWeight: '900',
-	},
 	mainView: {
 		flex: 1,
+		backgroundColor: colors.mainSearchColor,
 	},
 	searchView: {
 		alignItems: 'stretch',
@@ -128,25 +129,5 @@ const styles = StyleSheet.create({
 	searchIcon: {
 		width: 50,
 		height: 50,
-	},
-	buttonContainer: {
-		flexDirection: 'row',
-		margin: 10
-	  },
-	  button: {
-		height: 20,
-		width: 20,
-		borderRadius: 10,
-		borderWidth: 1,
-		borderColor: '#DCDCDC',
-		alignItems: 'center',
-		justifyContent: 'center',
-		marginRight: 20
-	  },
-	  checkedButton: {
-		width: 14,
-		height: 14,
-		borderRadius: 7,
-		backgroundColor:'#04549b'
-	  }
+	}
 });

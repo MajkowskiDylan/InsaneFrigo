@@ -6,10 +6,12 @@ import { colors } from '../definitions/colors';
 import { assets } from '../definitions/assets';
 import { ButtonGroup } from 'react-native-elements';
 import MyItem from './MyItem';
-const My = (props) => {
+const My = (props, {navigation}) => {
+
 	const params = props.navigation.state.params;
 	const [fridge, setFridge] = useState([]);
 	const [shoppingList, setShoppingList] = useState([]);
+
 	// params.origin fait référence à la page d'origine, par exemple si on a cliqué sur My Fridge ou My Shopping List dans la page Me.js
 
 

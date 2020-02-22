@@ -11,10 +11,9 @@ const AddTo = (props) => {
 	console.log(props);
 	return (
 		<View>
+			<Text> Je viens de { params.src } </Text>
 			<IngredientSearch/>
-            <Text> Je viens de { params.src } </Text>
-				
-		</View>
+            </View>
     );
 }
 

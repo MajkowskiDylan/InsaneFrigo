@@ -75,7 +75,7 @@ export async function getMyFridge(searchTerm, diet, cuisine) {
 }
 
 
-export async function getIngredients(number, searchTerm) {
+export async function getIngredients(offset, searchTerm, number) {
     try {
         const myHeaders = new Headers({ 'apikey': API_KEY  });
 		//const url = `https://api.spoonacular.com/recipes/search?apiKey=${API_KEY}&offset=${offset||0}&number=${number||10}&${query||""}`; 

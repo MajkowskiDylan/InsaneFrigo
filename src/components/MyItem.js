@@ -28,12 +28,12 @@ const MyItem = (props,{navigation,saveRestaurants, dispatch}) => {
         <Image source={{uri: uriIngredient + ingredient.image}} style={ styles.typeImage }/>
         <View style={ styles.itemsContainer }>
           <Text style={ styles.itemNameText }> 
-          { ingredient.name } {ingredient.aisle}
+          { ingredient.name },aisle: {ingredient.aisle}
           </Text>
         </View>
         <Button title="kek" style = {styles.typeImage } onPress={() => _saveRestaurant()} />
         <TouchableOpacity>
-        <Image style={styles.typeImage } source={ assets.toUnsaveIcon } />
+        <Image style={styles.typeImage } source={ assets.suppIcon } />
         </TouchableOpacity>
       </TouchableOpacity>
 

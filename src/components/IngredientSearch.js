@@ -38,7 +38,11 @@ const IngredientSearch = ({props, ingredientsName,saveIngredients, savedIngredie
 		setRefreshingState( true );
 		setErrorDataLoading( false );
 		try {
-			var apiSearchResult = ( await getIngredients( paginationData.current.currentOffset, searchTerm.current, 3 ) );
+			//var apiSearchResult = ( await getIngredients( paginationData.current.currentOffset, searchTerm.current, 3 ) );
+			A = ( await getIngredients( paginationData.current.currentOffset, 'a', 3 ) );
+			B  = ( await getIngredients( paginationData.current.currentOffset, 'b', 3 ) );
+			C  = ( await getIngredients( paginationData.current.currentOffset, 'c', 3 ) );
+			/*
 			A = [{"name": "Aomate", "aisle": "Bilboquet"}];
 			B = [{"name": "Baricot", "aisle": "Legume"}];
 			C = [{"name": "Caerfqsot", "aisle": "Volcan"}];
@@ -47,7 +51,8 @@ const IngredientSearch = ({props, ingredientsName,saveIngredients, savedIngredie
 			F = [{"name": "Kkkk", "aisle": "Fruit"}];
 			G = [{"name": "Jjjjj", "aisle": "Legume"}];
 			H = [{"name": "Iiii", "aisle": "Fruit"}];
-			//var apiSearchResult = [...D,...A, ...B, ...C, ...E, ...F, ...G, ...H];
+			*/
+			var apiSearchResult = [...A, ...C, ...B];
 			console.log(apiSearchResult);
 			setIngredientsData( [...prevIngredients, ...apiSearchResult].sort((a,b) => {
 				if(filter == 1)
@@ -56,12 +61,12 @@ const IngredientSearch = ({props, ingredientsName,saveIngredients, savedIngredie
 				}
 				return (a.name).localeCompare(b.name);
 			}));
-			paginationData.current = { currentOffset: paginationData.current.currentOffset + apiSearchResult.number, maxResults: apiSearchResult.totalResults }
+			//paginationData.current = { currentOffset: paginationData.current.currentOffset + apiSearchResult.number, maxResults: apiSearchResult.totalResults }
 			
 		} catch (error) {
 			paginationData.current = { currentOffset: 0, maxResults: 0 };
 			setIngredientsData( [] );
-			setErrorDataLoading( false ); // il faut mettre true
+			setErrorDataLoading( true ); // il faut mettre true
 		} finally {
 			setRefreshingState( false );
 		}

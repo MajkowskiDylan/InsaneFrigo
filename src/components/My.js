@@ -7,19 +7,13 @@ import { assets } from '../definitions/assets';
 import { ButtonGroup } from 'react-native-elements';
 import MyItem from './MyItem';
 const My = (props, {navigation}) => {
-
 	const params = props.navigation.state.params;
-	const [fridge, setFridge] = useState([]);
-	const [shoppingList, setShoppingList] = useState([]);
-
 	// params.origin fait référence à la page d'origine, par exemple si on a cliqué sur My Fridge ou My Shopping List dans la page Me.js
-
-
 	return (
         <View>
 			<Button onPress={() => props.navigation.navigate('AddTo', {src: params.origin,})} title="Add ingredient" />
 			<Text> My { params.origin } List ! (Fixed) </Text>
-			<IngredientSearch superprops={params.origin}/>
+			<IngredientSearch myOrigin={params.origin}/>
 		</View>
     );
 }

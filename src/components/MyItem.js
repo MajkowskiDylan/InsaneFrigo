@@ -11,8 +11,11 @@ import { saveRestaurants } from '../store/reducer/updateListReducer';
 const MyItem = (props,{navigation,saveRestaurants, dispatch}) => {
     const ingredient = props.ingredient;
     const uriIngredient = "https://spoonacular.com/cdn/ingredients_100x100/";
-    var name = (ingredient.name)
-
+    var name = (ingredient.name);
+    const tempTBFridge = [{"name": "Tomate", "aisle": "Fruigume"},{"name": "Haricot", "aisle": "Legume"}];
+    const tempTBShopList= [{"name": "Asperge", "aisle": "Legume"}, {"name": "Riz", "aisle": "Fruit"}];
+  
+    console.log(navigation);
     _saveRestaurant = async () => {
       const action = { type: 'SAVE_RESTAURANT', value: navigation.getParam('restaurantsID') };
       dispatch(action);
@@ -22,7 +25,21 @@ const MyItem = (props,{navigation,saveRestaurants, dispatch}) => {
       const action = { type: 'UNSAVE_RESTAURANT', value: navigation.getParam('restaurantsID') };
       dispatch(action);
     }
-
+    const _displaySaved = () => {
+      /*if( isSaved ) { return ( <Image  style = { styles.saveIcon } source = { assets.onFridgeIcon } /> ); }
+      return ( <Image  style = { styles.saveIcon } source = { assets.outFridgeIcon } /> );*/
+      return ( 
+        <TouchableOpacity>
+        <TouchableOpacity style = {styles.box}>
+        <Image style = { styles.bottomIcon } source = { assets.outFridgeIcon } />
+        </TouchableOpacity>
+      <TouchableOpacity style = {styles.box}>
+        <Image style = { styles.bottomIcon } source = { assets.onFridgeIcon } />
+        </TouchableOpacity>
+        </TouchableOpacity>
+        );
+    }
+  //A METTRE EN BAS: <Button title="sav" style = {styles.typeImage } onPress={() => _saveRestaurant()} />
 	return (
         <TouchableOpacity style={ styles.mainContainer } >
         <Image source={{uri: uriIngredient + ingredient.image}} style={ styles.typeImage }/>
@@ -31,7 +48,10 @@ const MyItem = (props,{navigation,saveRestaurants, dispatch}) => {
           { ingredient.name },aisle: {ingredient.aisle}
           </Text>
         </View>
-        <Button title="kek" style = {styles.typeImage } onPress={() => _saveRestaurant()} />
+        
+        
+        { _displaySaved() }
+        
         <TouchableOpacity>
         <Image style={styles.typeImage } source={ assets.suppIcon } />
         </TouchableOpacity>
@@ -59,8 +79,8 @@ const styles = StyleSheet.create({
       flexDirection: "row",
     },
     typeImage: {
-      height: 100,
-      width: 100,
+      height: 50,
+      width: 50,
       backgroundColor: '#6b689c',
     },
     itemsContainer: {
@@ -82,5 +102,17 @@ const styles = StyleSheet.create({
       flexDirection: 'row',
       alignItems: 'center',
           justifyContent: 'center',
-    }
+    },
+    box: {
+      flex: 1,
+      fontSize: 20,
+      paddingTop: 15,
+      paddingLeft: 20,
+      flexDirection: 'row',
+    },
+    bottomIcon: {
+      width: 25,
+      height: 25,
+      marginRight: 10,
+  }
   });

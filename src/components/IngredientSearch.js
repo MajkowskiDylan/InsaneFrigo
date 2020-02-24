@@ -7,7 +7,7 @@ import { ButtonGroup } from 'react-native-elements';
 import { getIngredients } from '../api/spoonacular';
 import { connect, dispatch } from 'react-redux';
 
-const IngredientSearch = ({props, ingredientsName,saveIngredients, savedIngredients, dispatch}) => {
+const IngredientSearch = (props, {navigation, ingredientsName,saveIngredients, savedIngredients, dispatch}) => {
 	const [filter, setFilter] = useState(0);
 	const filters = ['Name', 'Aisle'];
 	const [ingredientsData, setIngredientsData] = useState([]);
@@ -15,7 +15,10 @@ const IngredientSearch = ({props, ingredientsName,saveIngredients, savedIngredie
 	const [isErrorDuringDataLoading, setErrorDataLoading] = useState( false );
 	const paginationData = useRef( {currentOffset: 0, maxResults: 0} );
 	const searchTerm = useRef("");
-
+    const tempTBFridge = [{"name": "Tomate", "aisle": "Fruigume"},{"name": "Haricot", "aisle": "Legume"}];
+	const tempTBShopList= [{"name": "Asperge", "aisle": "Legume"}, {"name": "Riz", "aisle": "Fruit"}];
+	const myOrigin = props.myOrigin;
+	console.log(props);
 	// Changement du texte de l'input
 	_inputSearchTermChanged = (text) => {
 		searchTerm.current = text;
@@ -38,22 +41,21 @@ const IngredientSearch = ({props, ingredientsName,saveIngredients, savedIngredie
 		setRefreshingState( true );
 		setErrorDataLoading( false );
 		try {
-			//var apiSearchResult = ( await getIngredients( paginationData.current.currentOffset, searchTerm.current, 3 ) );
-			A = ( await getIngredients( paginationData.current.currentOffset, 'a', 3 ) );
-			B  = ( await getIngredients( paginationData.current.currentOffset, 'b', 3 ) );
-			C  = ( await getIngredients( paginationData.current.currentOffset, 'c', 3 ) );
-			/*
-			A = [{"name": "Aomate", "aisle": "Bilboquet"}];
-			B = [{"name": "Baricot", "aisle": "Legume"}];
-			C = [{"name": "Caerfqsot", "aisle": "Volcan"}];
-			D = [{"name": "Domme", "aisle": "Fruit"}];
-			E = [{"name": "Aoqsdlm", "aisle": "Legume"}];
-			F = [{"name": "Kkkk", "aisle": "Fruit"}];
-			G = [{"name": "Jjjjj", "aisle": "Legume"}];
-			H = [{"name": "Iiii", "aisle": "Fruit"}];
-			*/
-			var apiSearchResult = [...A, ...C, ...B];
-			console.log(apiSearchResult);
+			if(myOrigin == "Fridge")
+			{
+				var apiSearchResult = tempTBFridge;
+			}
+			else if (myOrigin == "ShoppingList")
+			{
+				var apiSearchResult = tempTBShopList;
+			}
+			else
+			{
+				var apiSearchResult = ( await getIngredients( paginationData.current.currentOffset, searchTerm.current, 10 ) );
+			}
+
+			//var apiSearchResult = [...A, ...C, ...B];
+			//console.log(apiSearchResult);
 			setIngredientsData( [...prevIngredients, ...apiSearchResult].sort((a,b) => {
 				if(filter == 1)
 				{

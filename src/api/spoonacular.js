@@ -1,5 +1,6 @@
 //const API_KEY = '226d462b515c4039a17e404e2b66ebe7';
 const API_KEY = '50ab304e889a43f0ba48ca3fe77277cd';
+
 /**
  *
  * @export
@@ -31,7 +32,7 @@ export async function getRecipeWithSearch(offset, searchTerm, diet, cuisine) {
 export async function getRecipeDetails(recipeID) {
     try {
 		const myHeaders = new Headers({ 'apiKey': API_KEY });
-		const url = `https://api.spoonacular.com/recipes/${recipeID}/ingredientWidget.json?apiKey=${API_KEY}`;
+		const url = `https://api.spoonacular.com/recipes/${recipeID}/information?apiKey=${API_KEY}`;
 		const response = await fetch(url, { headers: myHeaders });
 		if (response.ok) {
 			return response.json();

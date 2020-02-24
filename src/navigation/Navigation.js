@@ -14,6 +14,16 @@ import RecipeDetails from '../components/RecipeDetails';
 import { colors } from '../definitions/colors';
 import { assets } from '../definitions/assets';
 
+// Navigation de l'onglet Search
+const SearchNavigation = createStackNavigator({
+	Search: Search,
+	RecipeDetails: RecipeDetails,
+},
+{
+	initialRouteName: 'Search',
+});
+
+
 // Navigation de l'onglet Me
 const MeNavigation = createStackNavigator({
 	Me: Me,
@@ -45,15 +55,6 @@ const AddToNavigation = createStackNavigator({
 },
 {
 	initialRouteName: 'AddTo',
-});
-
-// Navigation de l'onglet Search
-const SearchNavigation = createStackNavigator({
-	Search: Search,
-	RecipeDetails: RecipeDetails,
-},
-{
-	initialRouteName: 'Search',
 });
 
 // Navigation de l'onglet Settings
@@ -101,7 +102,7 @@ const TabNavigation = createBottomTabNavigator({
 		activeBackgroundColor: colors.mainGreenColor,
 		activeTintColor: 'white',
 	},
-	initialRouteName: 'Search',	// CHANGER ET METTRE 'ME'
+	initialRouteName: 'Me',
 });
 
 export default createAppContainer(TabNavigation);

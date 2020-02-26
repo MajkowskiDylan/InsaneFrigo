@@ -5,4 +5,5 @@ export const colors = {
 	mainSearchColor: '#FAFAFA',
 	mainBlueColor: '#6b689c',
 	mainWhiteColor: '#FFF',
+	mainRedColor: '#E53935',
 }

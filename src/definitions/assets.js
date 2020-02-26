@@ -10,4 +10,5 @@ export const assets = {
 	userIcon: require( '../../assets/icons/user.png' ),
 	suppIcon: require( '../../assets/icons/supprimer.png' ),
 	timeIcon: require( '../../assets/icons/time.png' ),
+	errorIcon: require( '../../assets/icons/error.png' ),
 };

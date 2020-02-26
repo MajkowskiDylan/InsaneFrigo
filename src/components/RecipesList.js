@@ -1,26 +1,32 @@
 import React from 'react';
-import { FlatList, StyleSheet } from 'react-native';
+import { FlatList, StyleSheet, Text } from 'react-native';
 import { connect } from 'react-redux';
 
 import RecipeItem from './RecipeItem';
 
-const RecipesList = ({recipes, refreshingState, onClickNavigation, refreshRecipes, loadMoreRecipes}) => {
+const RecipesList = ({recipes, refreshingState, onClickNavigation, refreshRecipes, loadMoreRecipes, notFirstSearch}) => {
 
 	return (
-		<FlatList
-			style = { styles.RecipesList }
-            data = { recipes }
-            keyExtractor = { (item) => item.id.toString() }
-            renderItem = { ({item}) => <RecipeItem
-                                        recipe = { item }
-                                        /**isSaved = { _isItSaved(item.recipe.id) } */
-                                        onClickOnMe = { onClickNavigation }
-                                    /> }
-            refreshing = { refreshingState }
-            onRefresh = { refreshRecipes }
-            onEndReached = { loadMoreRecipes }
-            onEndReachedThreshold = { 0.5 }
-		/>
+        notFirstSearch && recipes.length == 0 ? // Si une recherche a déjà était faite et qu'aucun résultat n'est trouvé
+        ( 
+            <Text>No results were found for your search.</Text>
+        ): 
+        (
+            <FlatList
+                style = { styles.RecipesList }
+                data = { recipes }
+                keyExtractor = { (item) => item.id.toString() }
+                renderItem = { ({item}) => <RecipeItem
+                                            recipe = { item }
+                                            /**isSaved = { _isItSaved(item.recipe.id) } */
+                                            onClickOnMe = { onClickNavigation }
+                                        /> }
+                refreshing = { refreshingState }
+                onRefresh = { refreshRecipes }
+                onEndReached = { loadMoreRecipes }
+                onEndReachedThreshold = { 0.5 }
+            />
+		)  
 	);
 }
 

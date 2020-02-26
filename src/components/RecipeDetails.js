@@ -5,13 +5,15 @@ import { connect } from 'react-redux';
 import { colors } from '../definitions/colors';
 import { assets } from '../definitions/assets';
 
+import Error from './Error';
 import { getRecipeDetails } from '../api/spoonacular';
-import { Colors } from 'react-native/Libraries/NewAppScreen';
+import IngredientItem from './IngredientItem';
 
 const RecipeDetails = ({navigation}) => {
-    
+
+	const [recipe, setRecipe] = useState( null );
 	const [isLoading, setLoadingState] = useState( true );
-    const [recipe, setRecipe] = useState( null );
+	const [isErrorDuringDataLoading, setErrorDataLoading] = useState( false );
 
     useEffect(() => {
 		_loadRecipe();
@@ -19,11 +21,12 @@ const RecipeDetails = ({navigation}) => {
     
     // Charge les informations sur la recette selon son ID
 	_loadRecipe = async () => {
+		setErrorDataLoading(false);
 		try {
 			setRecipe( await getRecipeDetails(navigation.getParam('recipeID')) );
 			setLoadingState( false );
 		} catch (error) {
-			// Do 
+			setErrorDataLoading(true);
 		}
 	}
 
@@ -36,7 +39,7 @@ const RecipeDetails = ({navigation}) => {
 				</View>
 			);
 		}
-		return null; // Si on souhaite ne rien afficher (pas obligatoire)
+		return null;
     }
 
     // Détails d'une recette
@@ -64,17 +67,41 @@ const RecipeDetails = ({navigation}) => {
 						</View>
 					</View>
 					<FlatList
-						style = { styles.dietItem }
+						style = { styles.tagList }
 						data = { recipe.diets }
 						keyExtractor = { (item) => item.toString() }
-						renderItem = { ({item}) => <Text>{item}</Text> }
+						renderItem = { ({item}) => <Text style = {styles.dietItem}>{item}</Text> }
+						horizontal
 					/>
 					<FlatList
-						style = { styles.cuisineItem }
-						data = { recipe.diets }
+						style = { styles.tagList }
+						data = { recipe.cuisines }
 						keyExtractor = { (item) => item.toString() }
-						renderItem = { ({item}) => <Text>{item}</Text> }
+						renderItem = { ({item}) => <Text style = {styles.cuisineItem}>{item}</Text> }
+						horizontal
 					/>
+					<View style = {styles.ingredients}>
+						<Text style = {styles.title}>Ingrédients</Text>
+						<FlatList
+							style = { styles.ingredientsList }
+							data = { recipe.extendedIngredients }
+							keyExtractor = { (item) => item.id.toString() }
+							renderItem = { ({item}) => <IngredientItem original = {item.original} image = {item.image} instructions = {item.instructions} />}
+						/>
+					</View>
+					<View style = {styles.instructions}>
+						<Text style = {styles.title}>Préparation</Text>
+						<FlatList
+							style = { styles.instructionsList }
+							data = { recipe.analyzedInstructions[0].steps }
+							keyExtractor = { (item) => item.number.toString() }
+							renderItem = {({item}) => <Text style = {styles.step}> <Text style = {styles.li}>{item.number}</Text> {item.step} </Text>}
+							
+						/>
+					</View>
+					{
+						console.log( "> " + recipe.analyzedInstructions[0].steps[0].number)
+					}
 				</ScrollView>
 			);
 		}
@@ -85,8 +112,14 @@ const RecipeDetails = ({navigation}) => {
 
 	return (
 		<View style = {styles.mainView}>
-			{ _displayLoading() }
-			{ _displayRecipeDetails() }
+			{ isErrorDuringDataLoading ? // Si il y'a une erreur, afficher le component Error
+			( 
+				<Error msgError = 'Unable to load page content.'/> 
+			)
+			: (	
+				_displayLoading(),
+				_displayRecipeDetails()
+			)}
 		</View>
 	);
 }
@@ -153,12 +186,52 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: "bold",
 	},
+	tagList: {
+		flexDirection: "row",
+	},
 	dietItem:{
+		margin: 3,
 		padding: 3,
+		padding: 5,
+		paddingTop: 3,
+		borderRadius: 5,
+		color: colors.mainWhiteColor,
 		backgroundColor: colors.mainGreenColor,
 	},
 	cuisineItem: {
+		margin: 3,
 		padding: 3,
+		padding: 5,
+		paddingTop: 3,
+		borderRadius: 5,
+		color: colors.mainWhiteColor,
 		backgroundColor: colors.mainBlueColor,
+	},
+	ingredients: {
+		padding: 10,
+		marginTop: 50,
+	},
+	ingredientsList: {
+		textAlign: "justify",
+	},
+	instructions: {
+		padding: 10,
+		marginTop: 50,
+	},
+	instructionsList: {
+		textAlign: "justify",
+	},
+	li: {
+		color: colors.mainGreenColor,
+		fontWeight: "bold",
+		marginHorizontal: 5,
+	},
+	step: {
+		marginLeft: 5,
+		marginTop: 8,
+	},
+	title: {
+		fontWeight: "bold",
+		fontSize: 20,
 	}
 });

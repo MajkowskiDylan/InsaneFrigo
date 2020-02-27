@@ -10,7 +10,7 @@ const RecipeItem = ({recipe, isSaved, onClickOnMe}) => {
     const _displaySaved = () => {
 		if( isSaved ) { return ( <Image  style = { styles.saveIcon } source = { assets.toUnsaveIcon } /> ); }
 		return ( <Image  style = { styles.saveIcon } source = { assets.toSaveIcon } /> );
-	}
+    }
 
 	return (
         <TouchableOpacity style = { styles.mainView } onPress = { () => onClickOnMe(recipe.id) } >

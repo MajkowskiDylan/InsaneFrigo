@@ -2,9 +2,10 @@ import { createStore, combineReducers } from 'redux';
 import { persistStore, persistReducer, purgeStoredState } from 'redux-persist'
 import { AsyncStorage } from 'react-native'
 
-import updateQuota from './reducer/quotaReducer';
-import settingPreferance from './reducer/SettingReducer';
-import updateList from './reducer/updateListReducer';
+import updateQuota from './reducers/quotaReducer';
+import settingPreferance from './reducers/SettingReducer';
+import updateList from './reducers/updateListReducer';
+import savedRecipes from './reducers/recipeReducer';
 
 const persistConfig = {
     key: 'root',
@@ -14,7 +15,8 @@ const persistConfig = {
 const combinedReducer = combineReducers({
   updateQuota,
   settingPreferance,
-  updateList
+  updateList,
+  savedRecipes
 })
 
 const persistedReducer = persistReducer(persistConfig, combinedReducer);

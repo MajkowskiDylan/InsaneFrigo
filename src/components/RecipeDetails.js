@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ActivityIndicator, ScrollView, Image, FlatList } from 'react-native';
+import { View, Text, StyleSheet, ActivityIndicator, ScrollView, Image, FlatList, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 
 import { colors } from '../definitions/colors';
@@ -9,11 +9,13 @@ import Error from './Error';
 import { getRecipeDetails } from '../api/spoonacular';
 import IngredientItem from './IngredientItem';
 
-const RecipeDetails = ({navigation}) => {
+const RecipeDetails = ({navigation, savedRecipes, dispatch}) => {
 
 	const [recipe, setRecipe] = useState( null );
 	const [isLoading, setLoadingState] = useState( true );
 	const [isErrorDuringDataLoading, setErrorDataLoading] = useState( false );
+
+	console.log( "> Sauvegarede :\n" + savedRecipes);
 
     useEffect(() => {
 		_loadRecipe();
@@ -28,6 +30,16 @@ const RecipeDetails = ({navigation}) => {
 		} catch (error) {
 			setErrorDataLoading(true);
 		}
+	}
+
+	_saveRecipe = async () => {
+		const action = { type: 'SAVE_RECIPE', value: navigation.getParam('recipeID') };
+		dispatch(action);
+	}
+
+	_unsaveRecipe = async () => {
+		const action = { type: 'UNSAVE_RECIPE', value: navigation.getParam('recipeID') };
+		dispatch(action);
 	}
 
     // Chargement des données
@@ -108,7 +120,19 @@ const RecipeDetails = ({navigation}) => {
 		return null;
 	}
 	
-	const _displaySaved = () => { return null }
+	const _displaySaved = () => { 
+		if (savedRecipes.findIndex((e) => e === navigation.getParam('recipeID')) != -1)
+			return (
+				<TouchableOpacity onPress = { _unsaveRecipe }>
+					<Image style = { styles.saveIcon } source = { assets.toUnsaveIcon } />
+				</TouchableOpacity>
+			)
+		return (
+			<TouchableOpacity onPress = { _saveRecipe }>
+				<Image  style = { styles.saveIcon } source = { assets.toSaveIcon } />
+			</TouchableOpacity>
+		)
+	 }
 
 	return (
 		<View style = {styles.mainView}>
@@ -124,8 +148,12 @@ const RecipeDetails = ({navigation}) => {
 	);
 }
 
-/*export default connect(mapStateToProps)(RecipeDetails);*/
-export default RecipeDetails;
+// Récupère la variable globale state
+const mapStateToProps = (state) => {
+	return { savedRecipes: state.savedRecipes.savedRecipeIDs }
+}
+
+export default connect(mapStateToProps)(RecipeDetails);
 
 const styles = StyleSheet.create({
 	mainView: {

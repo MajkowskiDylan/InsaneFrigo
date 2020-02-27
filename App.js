@@ -8,11 +8,11 @@ import {store, persistor} from './src/store/config';
 
 export default function App() {
 	return (
-	<Provider store={ store }>
-		<PersistGate loading={null} persistor={persistor}>
-			<Navigation/>
-		</PersistGate>
-    </Provider>
+		<Provider store = { store }>
+			<PersistGate loading = {null} persistor = {persistor}>
+				<Navigation/>
+			</PersistGate>
+		</Provider>
 	);
 }
 

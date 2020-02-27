@@ -1,5 +1,6 @@
 //const API_KEY = '226d462b515c4039a17e404e2b66ebe7';
-const API_KEY = '50ab304e889a43f0ba48ca3fe77277cd';
+//const API_KEY = '50ab304e889a43f0ba48ca3fe77277cd';
+const API_KEY = '11c9a6db60ff45b3b9f38a00174fa4c1'; 
 
 /**
  *

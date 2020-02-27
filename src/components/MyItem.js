@@ -6,7 +6,7 @@ import { colors } from '../definitions/colors';
 import { assets } from '../definitions/assets';
 import { ButtonGroup } from 'react-native-elements';
 import { connect, dispatch } from 'react-redux';
-import { saveRestaurants } from '../store/reducer/updateListReducer';
+import { saveRestaurants } from '../store/reducers/updateListReducer';
 
 const MyItem = (props,{navigation,saveRestaurants, dispatch}) => {
     const ingredient = props.ingredient;

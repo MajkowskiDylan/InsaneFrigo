@@ -1,4 +1,4 @@
-import React, { useState, useRef,  Component } from 'react';
+import React, { useState, useRef, useEffect,  Component } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableHighlight, Image, Button, FlatList, navigation, Keyboard } from 'react-native';
 import MyItem from './MyItem';
 import { colors } from '../definitions/colors';
@@ -15,10 +15,12 @@ const IngredientSearch = (props, {navigation, ingredientsName,saveIngredients, s
 	const [isErrorDuringDataLoading, setErrorDataLoading] = useState( false );
 	const paginationData = useRef( {currentOffset: 0, maxResults: 0} );
 	const searchTerm = useRef("");
-    const tempTBFridge = [{"name": "Tomate", "aisle": "Fruigume"},{"name": "Haricot", "aisle": "Legume"}];
-	const tempTBShopList= [{"name": "Asperge", "aisle": "Legume"}, {"name": "Riz", "aisle": "Fruit"}];
+	const [theFridge, setTheFridge] = useState([{"name": "Jessaie", "aisle": "EssaiCatego"},{"name": "Brazidfl", "aisle": "Woblosd"}]);
+    const [theShoppingList, setTheShoppingList] = useState([]);
 	const myOrigin = props.myOrigin;
 	console.log(props);
+
+
 	// Changement du texte de l'input
 	_inputSearchTermChanged = (text) => {
 		searchTerm.current = text;
@@ -43,15 +45,15 @@ const IngredientSearch = (props, {navigation, ingredientsName,saveIngredients, s
 		try {
 			if(myOrigin == "Fridge")
 			{
-				var apiSearchResult = tempTBFridge;
+				var apiSearchResult = theFridge.filter(element => (element.name).startsWith(searchTerm.current));
 			}
 			else if (myOrigin == "ShoppingList")
 			{
-				var apiSearchResult = tempTBShopList;
+				var apiSearchResult = theShoppingList.filter(element => (element.name).startsWith(searchTerm.current));
 			}
 			else
 			{
-				var apiSearchResult = ( await getIngredients( paginationData.current.currentOffset, searchTerm.current, 10 ) );
+				var apiSearchResult = ( await getIngredients( paginationData.current.currentOffset, searchTerm.current, 2 ) );
 			}
 
 			//var apiSearchResult = [...A, ...C, ...B];
@@ -90,11 +92,7 @@ const IngredientSearch = (props, {navigation, ingredientsName,saveIngredients, s
 				</TouchableHighlight>
 			</View>
 			<ButtonGroup onPress={filter => setFilter(filter)} selectedIndex={filter} buttons={filters}></ButtonGroup>
-			{ isErrorDuringDataLoading ? // Si il y'a une erreur, afficher le component Error
-			( 
-				<Error msgError = 'Impossible de charger le contenu de la page.'/> 
-			)
-			: (	
+
 			<FlatList
         data={ ingredientsData }
 		keyExtractor={ (item) => item.name.toString() }
@@ -102,7 +100,7 @@ const IngredientSearch = (props, {navigation, ingredientsName,saveIngredients, s
 		onEndReached={ _searchMoreIngredients }
         onEndReachedThreshold={ 0.5 }
       />
-	  )}
+	 
 		</View>
 	);
 
@@ -110,6 +108,7 @@ const IngredientSearch = (props, {navigation, ingredientsName,saveIngredients, s
 
 
 export default IngredientSearch;
+
 const styles = StyleSheet.create({
 	mainView: {
 		flex: 1,

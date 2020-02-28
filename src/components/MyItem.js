@@ -1,4 +1,4 @@
-import React, { useState, Component } from 'react';
+import React, { useState, useEffect, Component } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableHighlight, Image, Button, TouchableWithoutFeedback, TouchableOpacity, FlatList, navigation } from 'react-native';
 	
 import { getIngredients } from '../api/spoonacular';
@@ -6,31 +6,36 @@ import { colors } from '../definitions/colors';
 import { assets } from '../definitions/assets';
 import { ButtonGroup } from 'react-native-elements';
 import { connect, dispatch } from 'react-redux';
-import { saveRestaurants } from '../store/reducers/updateListReducer';
 
-const MyItem = (props,{navigation,saveRestaurants, dispatch}) => {
+const MyItem = (props, navigation) => {
     const ingredient = props.ingredient;
     const uriIngredient = "https://spoonacular.com/cdn/ingredients_100x100/";
     var name = (ingredient.name);
-    const tempTBFridge = [{"name": "Tomate", "aisle": "Fruigume"},{"name": "Haricot", "aisle": "Legume"}];
-    const tempTBShopList= [{"name": "Asperge", "aisle": "Legume"}, {"name": "Riz", "aisle": "Fruit"}];
-  
-    console.log(navigation);
-    _saveRestaurant = async () => {
-      const action = { type: 'SAVE_RESTAURANT', value: navigation.getParam('restaurantsID') };
-      dispatch(action);
+    const zeListe = [{"name": "hey", "aisle": "oh"}];
+    console.log(props);
+
+    _saveIngredient = async () => {
+      console.log("Loool");
+      var temp = [];
+      temp = zeListe.concat(ingredient);
+      console.log(temp);
+      const action = { type: 'SAVE_INGREDIENT', value: temp };
+      props.dispatch(action);
+      
+      console.log("Onch");
       }
     
-    _unsaveRestaurant = async () => {
-      const action = { type: 'UNSAVE_RESTAURANT', value: navigation.getParam('restaurantsID') };
-      dispatch(action);
+    _unsaveIngredient = async () => {
+      const action = { type: 'UNSAVE_INGREDIENT', value: navigation.getParam('tbIngredients') };
+      props.dispatch(action);
+    }
+    _kek = () => {
+      console.log("kekkek");
     }
     const _displaySaved = () => {
-      /*if( isSaved ) { return ( <Image  style = { styles.saveIcon } source = { assets.onFridgeIcon } /> ); }
-      return ( <Image  style = { styles.saveIcon } source = { assets.outFridgeIcon } /> );*/
       return ( 
         <TouchableOpacity>
-        <TouchableOpacity style = {styles.box}>
+        <TouchableOpacity style = {styles.box} onPress={ _saveIngredient }>
         <Image style = { styles.bottomIcon } source = { assets.outFridgeIcon } />
         </TouchableOpacity>
       <TouchableOpacity style = {styles.box}>
@@ -39,7 +44,7 @@ const MyItem = (props,{navigation,saveRestaurants, dispatch}) => {
         </TouchableOpacity>
         );
     }
-  //A METTRE EN BAS: <Button title="sav" style = {styles.typeImage } onPress={() => _saveRestaurant()} />
+
 	return (
         <TouchableOpacity style={ styles.mainContainer } >
         <Image source={{uri: uriIngredient + ingredient.image}} style={ styles.typeImage }/>
@@ -68,7 +73,7 @@ export default connect(mapStateToProps)(MyItem);
 
 const mapStateToProps = (state) => {
 	return {
-	  saveRestaurants: state.saveRestaurants.restaurantsID
+	  updateIngredients: state.updateIngredients.tbIngredients
 	}
 }
 

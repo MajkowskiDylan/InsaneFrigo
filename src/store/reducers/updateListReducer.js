@@ -1,18 +1,18 @@
-const initialState = { restaurantsID: [] }
+const initialState = { tbIngredients: [] }
 
-function saveRestaurants(state = initialState, action) {
+function updateIngredients(state = initialState, action) {
   let nextState
   switch (action.type) {
-    case 'SAVE_RESTAURANT':
+    case 'SAVE_INGREDIENT':
       nextState = {
         ...state,
-        restaurantsID: [...state.restaurantsID, action.value]
+        tbIngredients: [...state.tbIngredients, action.value]
       };
       return nextState || state
-    case 'UNSAVE_RESTAURANT':
+    case 'UNSAVE_INGREDIENT':
         nextState = {
           ...state,
-          restaurantsID: state.restaurantsID.filter(name => name !== action.value)
+          tbIngredients: state.tbIngredients.filter(name => name !== action.value)
         };
       return nextState || state
     default:
@@ -20,4 +20,4 @@ function saveRestaurants(state = initialState, action) {
   };
 }
 
-export default saveRestaurants;
+export default updateIngredients;

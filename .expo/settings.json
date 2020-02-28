@@ -1,6 +1,6 @@
 {
-  "urlRandomness": "sa-xhb",
-  "hostType": "lan",
+  "urlRandomness": "7x-ipk",
+  "hostType": "tunnel",
   "lanType": "ip",
   "dev": true,
   "minify": false,

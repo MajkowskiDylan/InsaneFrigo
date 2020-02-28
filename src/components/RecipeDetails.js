@@ -15,8 +15,6 @@ const RecipeDetails = ({navigation, savedRecipes, dispatch}) => {
 	const [isLoading, setLoadingState] = useState( true );
 	const [isErrorDuringDataLoading, setErrorDataLoading] = useState( false );
 
-	console.log( "> Sauvegarede :\n" + savedRecipes);
-
     useEffect(() => {
 		_loadRecipe();
 	}, []);
@@ -103,6 +101,7 @@ const RecipeDetails = ({navigation, savedRecipes, dispatch}) => {
 					</View>
 					<View style = {styles.instructions}>
 						<Text style = {styles.title}>Préparation</Text>
+						{console.log(navigation.getParam('recipeID'))}
 						<FlatList
 							style = { styles.instructionsList }
 							data = { recipe.analyzedInstructions[0].steps }
@@ -111,9 +110,6 @@ const RecipeDetails = ({navigation, savedRecipes, dispatch}) => {
 							
 						/>
 					</View>
-					{
-						console.log( "> " + recipe.analyzedInstructions[0].steps[0].number)
-					}
 				</ScrollView>
 			);
 		}

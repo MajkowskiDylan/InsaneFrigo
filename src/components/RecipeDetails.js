@@ -91,7 +91,7 @@ const RecipeDetails = ({navigation, savedRecipes, dispatch}) => {
 						horizontal
 					/>
 					<View style = {styles.ingredients}>
-						<Text style = {styles.title}>Ingrédients</Text>
+						<Text style = {styles.title}>Ingredients</Text>
 						<FlatList
 							style = { styles.ingredientsList }
 							data = { recipe.extendedIngredients }
@@ -99,23 +99,25 @@ const RecipeDetails = ({navigation, savedRecipes, dispatch}) => {
 							renderItem = { ({item}) => <IngredientItem original = {item.original} image = {item.image} instructions = {item.instructions} />}
 						/>
 					</View>
-					<View style = {styles.instructions}>
-						<Text style = {styles.title}>Préparation</Text>
-						{console.log(navigation.getParam('recipeID'))}
-						<FlatList
-							style = { styles.instructionsList }
-							data = { recipe.analyzedInstructions[0].steps }
-							keyExtractor = { (item) => item.number.toString() }
-							renderItem = {({item}) => <Text style = {styles.step}> <Text style = {styles.li}>{item.number}</Text> {item.step} </Text>}
-							
-						/>
-					</View>
+					{
+						recipe.analyzedInstructions.length > 0 ? (
+						<View style = {styles.instructions}>
+							<Text style = {styles.title}>instructions</Text>
+							<FlatList
+								style = { styles.instructionsList }
+								data = { recipe.analyzedInstructions[0].steps }
+								keyExtractor = { (item) => item.number.toString() }
+								renderItem = {({item}) => <Text style = {styles.step}> <Text style = {styles.li}>{item.number}</Text> {item.step} </Text>}
+							/>
+						</View> ) : (null)
+					}
 				</ScrollView>
 			);
 		}
 		return null;
 	}
 	
+	// Bouton de sauvegarde
 	const _displaySaved = () => { 
 		if (savedRecipes.findIndex((e) => e === navigation.getParam('recipeID')) != -1)
 			return (
@@ -128,7 +130,7 @@ const RecipeDetails = ({navigation, savedRecipes, dispatch}) => {
 				<Image  style = { styles.saveIcon } source = { assets.toSaveIcon } />
 			</TouchableOpacity>
 		)
-	 }
+	}
 
 	return (
 		<View style = {styles.mainView}>
@@ -233,14 +235,14 @@ const styles = StyleSheet.create({
 	},
 	ingredients: {
 		padding: 10,
-		marginTop: 50,
+		marginTop: 25,
 	},
 	ingredientsList: {
 		textAlign: "justify",
 	},
 	instructions: {
 		padding: 10,
-		marginTop: 50,
+		marginTop: 25,
 	},
 	instructionsList: {
 		textAlign: "justify",
@@ -257,5 +259,6 @@ const styles = StyleSheet.create({
 	title: {
 		fontWeight: "bold",
 		fontSize: 20,
+		marginBottom: 15,
 	}
 });

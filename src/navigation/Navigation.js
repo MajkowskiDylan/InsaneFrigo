@@ -10,6 +10,7 @@ import Settings from '../components/Settings';
 import SavedRecipes from '../components/SavedRecipes';
 import AddTo from '../components/AddTo';
 import My from '../components/My';
+import IngredientSearch from '../components/IngredientSearch';
 import RecipeDetails from '../components/RecipeDetails';
 import { colors } from '../definitions/colors';
 import { assets } from '../definitions/assets';
@@ -30,6 +31,7 @@ const MeNavigation = createStackNavigator({
 	My: My,
 	SavedRecipes: SavedRecipes,
 	AddTo: AddTo,
+	IngredientSearch: IngredientSearch,
 },
 {
 	initialRouteName: 'Me',
@@ -52,11 +54,19 @@ const SavedRecipesNavigation = createStackNavigator({
 const AddToNavigation = createStackNavigator({
 	AddTo: AddTo,
 	My: My,
+	IngredientSearch: IngredientSearch,
 },
 {
 	initialRouteName: 'AddTo',
 });
-
+const IngredientSearchNavigation = createStackNavigator({
+	AddTo: AddTo,
+	My: My,
+	IngredientSearch: IngredientSearch,
+},
+{
+	initialRouteName: 'IngredientSearch',
+});
 // Navigation de l'onglet Settings
 const SettingsNavigation = createStackNavigator({
 	Settings: Settings,

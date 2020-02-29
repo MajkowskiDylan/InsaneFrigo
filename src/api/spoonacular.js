@@ -80,8 +80,7 @@ export async function getMyFridge(searchTerm, diet, cuisine) {
 export async function getIngredients(offset, searchTerm, number) {
     try {
         const myHeaders = new Headers({ 'apikey': API_KEY  });
-		//const url = `https://api.spoonacular.com/recipes/search?apiKey=${API_KEY}&offset=${offset||0}&number=${number||10}&${query||""}`; 
-        const url = `https://api.spoonacular.com/food/ingredients/autocomplete?apiKey=${API_KEY}&metaInformation=true&number=${number || '2'}&query=${searchTerm || 'a'}`;
+		const url = `https://api.spoonacular.com/food/ingredients/autocomplete?apiKey=${API_KEY}&metaInformation=true&number=${number || '2'}&query=${searchTerm}`;
         console.log('url: ' + url);
         const response = await fetch(url, { headers: myHeaders });
 		

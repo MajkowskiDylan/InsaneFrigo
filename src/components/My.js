@@ -13,7 +13,7 @@ const My = (props, {navigation}) => {
         <View>
 			<Button onPress={() => props.navigation.navigate('AddTo', {src: params.origin,})} title="Add ingredient" />
 			<Text> My { params.origin } List ! (Fixed) </Text>
-			<IngredientSearch myOrigin={params.origin}/>
+			<IngredientSearch myOrigin={params.origin} addTo={false}/>
 		</View>
     );
 }

@@ -1,4 +1,5 @@
-import React, { useState, Component } from 'react';
+
+import React, { useState, useEffect, Component } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableHighlight, Image, Button, TouchableWithoutFeedback, TouchableOpacity, navigation, FlatList } from 'react-native';
 	
 import { colors } from '../definitions/colors';
@@ -7,12 +8,11 @@ import IngredientSearch from './IngredientSearch';
 import MyItem from './MyItem';
 
 const AddTo = (props) => {
-	const params = props.navigation.state.params;
-	console.log(props);
+	const src = props.navigation.state.params.src;
 	return (
 		<View>
-			<Text> Je viens de { params.src } </Text>
-			<IngredientSearch/>
+			<Text> Je viens de { src } </Text>
+			<IngredientSearch addTo={src}/>
             </View>
     );
 }

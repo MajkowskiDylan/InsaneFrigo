@@ -7,7 +7,7 @@ import { ButtonGroup } from 'react-native-elements';
 import { getIngredients } from '../api/spoonacular';
 import { connect, dispatch } from 'react-redux';
 
-const IngredientSearch = (props, {navigation, ingredientsName,saveIngredients, savedIngredients, dispatch}) => {
+const IngredientSearch = (props, navigation, ingredientsName,saveIngredients, savedIngredients, dispatch) => {
 	const [filter, setFilter] = useState(0);
 	const filters = ['Name', 'Aisle'];
 	const [ingredientsData, setIngredientsData] = useState([]);
@@ -15,11 +15,17 @@ const IngredientSearch = (props, {navigation, ingredientsName,saveIngredients, s
 	const [isErrorDuringDataLoading, setErrorDataLoading] = useState( false );
 	const paginationData = useRef( {currentOffset: 0, maxResults: 0} );
 	const searchTerm = useRef("");
-	const [theFridge, setTheFridge] = useState([{"name": "Jessaie", "aisle": "EssaiCatego"},{"name": "Brazidfl", "aisle": "Woblosd"}]);
-    const [theShoppingList, setTheShoppingList] = useState([]);
+	const [theFridge, setTheFridge] = useState([{"name": "Jessaie", "aisle": "EssaiCatego"},{"name": "Zuiglida", "aisle": "Mamarkil"}]);
+	const [theShoppingList, setTheShoppingList] = useState([{"name": "Zuiglida", "aisle": "Mamarkil"}]);
+	const theLists = [theFridge, theShoppingList];
 	const myOrigin = props.myOrigin;
-	console.log(props);
+	var needToAdd = props.addTo;
 
+
+
+	useEffect(() => {
+		_searchIngredients();
+	  }, []);
 
 	// Changement du texte de l'input
 	_inputSearchTermChanged = (text) => {
@@ -54,10 +60,9 @@ const IngredientSearch = (props, {navigation, ingredientsName,saveIngredients, s
 			else
 			{
 				var apiSearchResult = ( await getIngredients( paginationData.current.currentOffset, searchTerm.current, 2 ) );
+				
 			}
 
-			//var apiSearchResult = [...A, ...C, ...B];
-			//console.log(apiSearchResult);
 			setIngredientsData( [...prevIngredients, ...apiSearchResult].sort((a,b) => {
 				if(filter == 1)
 				{
@@ -66,7 +71,7 @@ const IngredientSearch = (props, {navigation, ingredientsName,saveIngredients, s
 				return (a.name).localeCompare(b.name);
 			}));
 			//paginationData.current = { currentOffset: paginationData.current.currentOffset + apiSearchResult.number, maxResults: apiSearchResult.totalResults }
-			
+			//salut
 		} catch (error) {
 			paginationData.current = { currentOffset: 0, maxResults: 0 };
 			setIngredientsData( [] );
@@ -83,7 +88,7 @@ const IngredientSearch = (props, {navigation, ingredientsName,saveIngredients, s
 					placeholder = "Ingredient's name"
 					style = { styles.searchField }
 					onChangeText={ text => _inputSearchTermChanged(text) }
-					onSubmitEditing={ () => {_searchIngredients(); Keyboard.dismiss()} }
+					onSubmitEditing={ () => { _searchIngredients(); Keyboard.dismiss()} }
 				/>
 				<TouchableHighlight onPress={ _searchIngredients }>
 					<View style = { styles.button }>
@@ -96,7 +101,7 @@ const IngredientSearch = (props, {navigation, ingredientsName,saveIngredients, s
 			<FlatList
         data={ ingredientsData }
 		keyExtractor={ (item) => item.name.toString() }
-		renderItem={ ({item}) => <MyItem ingredient={ item }/> }
+		renderItem={ ({item}) => <MyItem ingredient={ item } lists={theLists} parent={myOrigin} addTo={needToAdd}/> }
 		onEndReached={ _searchMoreIngredients }
         onEndReachedThreshold={ 0.5 }
       />
@@ -107,7 +112,17 @@ const IngredientSearch = (props, {navigation, ingredientsName,saveIngredients, s
 }
 
 
-export default IngredientSearch;
+export default connect(mapStateToProps)(IngredientSearch);
+
+IngredientSearch.navigationOptions = {
+	title: 'I',
+};
+
+const mapStateToProps = (state) => {
+	return {
+	  updateIngredients: state.updateIngredients.tbIngredients
+	}
+}
 
 const styles = StyleSheet.create({
 	mainView: {

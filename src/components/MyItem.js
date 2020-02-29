@@ -7,17 +7,21 @@ import { assets } from '../definitions/assets';
 import { ButtonGroup } from 'react-native-elements';
 import { connect, dispatch } from 'react-redux';
 
-const MyItem = (props, navigation) => {
+const MyItem = (props, { navigation }) => {
     const ingredient = props.ingredient;
     const uriIngredient = "https://spoonacular.com/cdn/ingredients_100x100/";
     var name = (ingredient.name);
-    const zeListe = [{"name": "hey", "aisle": "oh"}];
+    const zeFridge = props.lists[0];
+    const zeShoppingList = props.lists[1];
+    const myParent = props.parent;
+    const addTo = props.addTo;
     console.log(props);
 
     _saveIngredient = async () => {
       console.log("Loool");
       var temp = [];
-      temp = zeListe.concat(ingredient);
+      temp = zeFridge.concat(ingredient);
+    
       console.log(temp);
       const action = { type: 'SAVE_INGREDIENT', value: temp };
       props.dispatch(action);
@@ -29,20 +33,58 @@ const MyItem = (props, navigation) => {
       const action = { type: 'UNSAVE_INGREDIENT', value: navigation.getParam('tbIngredients') };
       props.dispatch(action);
     }
-    _kek = () => {
-      console.log("kekkek");
-    }
-    const _displaySaved = () => {
-      return ( 
-        <TouchableOpacity>
-        <TouchableOpacity style = {styles.box} onPress={ _saveIngredient }>
-        <Image style = { styles.bottomIcon } source = { assets.outFridgeIcon } />
-        </TouchableOpacity>
-      <TouchableOpacity style = {styles.box}>
-        <Image style = { styles.bottomIcon } source = { assets.onFridgeIcon } />
-        </TouchableOpacity>
-        </TouchableOpacity>
-        );
+
+    _displaySaved = () => {
+      if(addTo == "Fridge" || addTo == "ShoppingList")
+      {
+        if(addTo == "Fridge")
+        {
+          return (
+            <TouchableOpacity style = {styles.box} onPress={ _saveIngredient }>
+              <Image style = { styles.bottomIcon } source = { assets.toSaveIcon} />
+            </TouchableOpacity>
+          );
+        }
+        else if(addTo == "ShoppingList")
+        {
+          return (
+            <TouchableOpacity style = {styles.box} onPress={ _saveIngredient }>
+            <Image style = { styles.bottomIcon } source = { assets.toSaveIcon} />
+          </TouchableOpacity>
+          );
+        }
+            
+      }
+      else
+      {
+        var otherList;
+        if (myParent == "Fridge")
+        {
+          otherList = zeShoppingList;  
+        }
+        else if(myParent == "ShoppingList")
+        {
+          otherList = zeFridge;
+        }
+        // Dans liste A, si l'ingredient n'est pas dans liste B, on peut l'ajouter à la liste B
+        if(otherList.findIndex( element => element.name == ingredient.name && element.aisle == ingredient.aisle ) > -1)
+        {
+          return (
+            <TouchableOpacity style = {styles.box} onPress={ _saveIngredient }>
+              <Image style = { styles.bottomIcon } source = { assets.outFridgeIcon } />
+            </TouchableOpacity>
+          );
+        }
+        else
+        {
+        return (
+            <TouchableOpacity style = {styles.box}>
+              <Image style = { styles.bottomIcon } source = { assets.onFridgeIcon } />
+            </TouchableOpacity>
+          );
+        }
+      }
+      return null;
     }
 
 	return (
@@ -54,9 +96,7 @@ const MyItem = (props, navigation) => {
           </Text>
         </View>
         
-        
         { _displaySaved() }
-        
         <TouchableOpacity>
         <Image style={styles.typeImage } source={ assets.suppIcon } />
         </TouchableOpacity>

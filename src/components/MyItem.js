@@ -8,69 +8,64 @@ import { ButtonGroup } from 'react-native-elements';
 import { connect, dispatch } from 'react-redux';
 
 const MyItem = (props, { navigation }) => {
-    const ingredient = props.ingredient;
+    const ingredient = props.ingredient; // l'ingredient courant sur lequel on clique
     const uriIngredient = "https://spoonacular.com/cdn/ingredients_100x100/";
     var name = (ingredient.name);
-    const zeFridge = props.lists[0];
-    const zeShoppingList = props.lists[1];
-    const myParent = props.parent;
-    const addTo = props.addTo;
-    console.log(props);
+    const zeFridge = props.lists[0]; // récupère le Fridge de IngredientSearch, /!\ PB: c'est une copie et pas le redux state
+    const zeShoppingList = props.lists[1]; // récupère la Shopping List de IngredientSearch, /!\ PB: c'est une copie et pas le redux state
+    const myParent = props.parent; // regarde si on fait ça depuis My (Fridge ou SL)
+    const addTo = props.addTo; // regarde si on fait ça depuis Add To (Fridge ou SL)
+    //console.log(props);
 
-    _saveIngredient = async () => {
+    // Sauve un ingredient dans la pList
+    _saveIngredient = async (pList) => {
       console.log("Loool");
-      var temp = [];
-      temp = zeFridge.concat(ingredient);
-    
-      console.log(temp);
-      const action = { type: 'SAVE_INGREDIENT', value: temp };
-      props.dispatch(action);
-      
-      console.log("Onch");
+      // Si l'ingredient n'est pas déjà dans la liste, on l'y ajoute
+        if(!_isIngredientInList(pList))
+        {
+          var temp = pList.push(ingredient);
+          const action = { type: 'SAVE_INGREDIENT', value: pList };
+          props.dispatch(action);
+          console.log(pList);
+        }
+
       }
     
-    _unsaveIngredient = async () => {
-      const action = { type: 'UNSAVE_INGREDIENT', value: navigation.getParam('tbIngredients') };
-      props.dispatch(action);
+    // Supprime l'ingredient courant de la pList 
+    _unsaveIngredient = async (pList) => {
+      // Si l'ingredient n'est pas dedans, pas besoin de le retirer
+      if(!_isIngredientInList(pList))
+      {
+        var temp = pLish.filter(element => ((element.name) != (ingredient.name) && (element.aisle) != (ingredient.aisle)));
+        const action = { type: 'UNSAVE_INGREDIENT', value: pList };
+        props.dispatch(action);
+      }
     }
 
+    // Retourne vrai si l'ingredient est dans la pList sinon faux
+    _isIngredientInList = (pList) => {
+      return (pList.findIndex( element => element.name == ingredient.name && element.aisle == ingredient.aisle ) > -1);
+    }
+    // Affiche les icones d'ajout dans My [Fridge/ShoppingList] et AddTo [Fridge/ShoppingList]
     _displaySaved = () => {
       if(addTo == "Fridge" || addTo == "ShoppingList")
       {
-        if(addTo == "Fridge")
-        {
           return (
-            <TouchableOpacity style = {styles.box} onPress={ _saveIngredient }>
+            <TouchableOpacity style = {styles.box} onPress={() => _saveIngredient(addTo) }>
               <Image style = { styles.bottomIcon } source = { assets.toSaveIcon} />
             </TouchableOpacity>
-          );
-        }
-        else if(addTo == "ShoppingList")
-        {
-          return (
-            <TouchableOpacity style = {styles.box} onPress={ _saveIngredient }>
-            <Image style = { styles.bottomIcon } source = { assets.toSaveIcon} />
-          </TouchableOpacity>
-          );
-        }
-            
+          );        
       }
       else
       {
-        var otherList;
-        if (myParent == "Fridge")
-        {
-          otherList = zeShoppingList;  
-        }
-        else if(myParent == "ShoppingList")
-        {
-          otherList = zeFridge;
-        }
         // Dans liste A, si l'ingredient n'est pas dans liste B, on peut l'ajouter à la liste B
-        if(otherList.findIndex( element => element.name == ingredient.name && element.aisle == ingredient.aisle ) > -1)
+        var otherList = (myParent == "Fridge" ? zeShoppingList : zeFridge);
+        
+        //if(otherList.findIndex( element => element.name == ingredient.name && element.aisle == ingredient.aisle ) > -1)
+        if(_isIngredientInList(otherList))
         {
           return (
-            <TouchableOpacity style = {styles.box} onPress={ _saveIngredient }>
+            <TouchableOpacity style = {styles.box} onPress={() => _saveIngredient(otherList) }>
               <Image style = { styles.bottomIcon } source = { assets.outFridgeIcon } />
             </TouchableOpacity>
           );
@@ -84,22 +79,30 @@ const MyItem = (props, { navigation }) => {
           );
         }
       }
-      return null;
     }
+
+    // Affiche l'icone de suppression si la composant parent n'est pas AddTo (et donc soit My [Fridge/ShoppingList])
+    _displaySuppIcons = () => {
+      if(!addTo)
+      {
+        return (
+          <TouchableOpacity>
+          <Image style={styles.typeImage } source={ assets.suppIcon } />
+          </TouchableOpacity>
+        );
+      }
+    };
 
 	return (
         <TouchableOpacity style={ styles.mainContainer } >
         <Image source={{uri: uriIngredient + ingredient.image}} style={ styles.typeImage }/>
         <View style={ styles.itemsContainer }>
           <Text style={ styles.itemNameText }> 
-          { ingredient.name },aisle: {ingredient.aisle}
+          { ingredient.name } - aisle: {ingredient.aisle}
           </Text>
         </View>
-        
         { _displaySaved() }
-        <TouchableOpacity>
-        <Image style={styles.typeImage } source={ assets.suppIcon } />
-        </TouchableOpacity>
+        { _displaySuppIcons() }
       </TouchableOpacity>
 
       

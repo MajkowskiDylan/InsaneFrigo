@@ -7,19 +7,20 @@ import { ButtonGroup } from 'react-native-elements';
 import { getIngredients } from '../api/spoonacular';
 import { connect, dispatch } from 'react-redux';
 
-const IngredientSearch = (props, navigation, ingredientsName,saveIngredients, savedIngredients, dispatch) => {
+const IngredientSearch = (props,state, navigation) => {
 	const [filter, setFilter] = useState(0);
 	const filters = ['Name', 'Aisle'];
-	const [ingredientsData, setIngredientsData] = useState([]);
+	const [ingredientsData, setIngredientsData] = useState([]); // ce que la flatlist va afficher (API ou liste, selon les cas)
 	const [isRefreshing, setRefreshingState] = useState( false );
 	const [isErrorDuringDataLoading, setErrorDataLoading] = useState( false );
 	const paginationData = useRef( {currentOffset: 0, maxResults: 0} );
 	const searchTerm = useRef("");
-	const [theFridge, setTheFridge] = useState([{"name": "Jessaie", "aisle": "EssaiCatego"},{"name": "Zuiglida", "aisle": "Mamarkil"}]);
-	const [theShoppingList, setTheShoppingList] = useState([{"name": "Zuiglida", "aisle": "Mamarkil"}]);
+	// Les listes, theLists correspond à ce qui sera passé en propriété à la FlatList (ci-dessous) dans le MyItem
+	const [theFridge, setTheFridge] = useState([{"name": "Testnom", "aisle": "Testrayon"},{"name": "abcd", "aisle": "rayonabcd"}]);
+	const [theShoppingList, setTheShoppingList] = useState([{"name": "abcd", "aisle": "rayonabcd"}]); 
 	const theLists = [theFridge, theShoppingList];
-	const myOrigin = props.myOrigin;
-	var needToAdd = props.addTo;
+	const myOrigin = props.myOrigin; // regarde si le composant IngredientSearch est appelé depuis une page Fridge ou ShoppingList
+	var needToAdd = props.addTo; // regarde si le composant IngredientSearch est appelé depuis une page AddTo ou non
 
 
 
@@ -49,6 +50,7 @@ const IngredientSearch = (props, navigation, ingredientsName,saveIngredients, sa
 		setRefreshingState( true );
 		setErrorDataLoading( false );
 		try {
+			// Soit on est dans My Fridge, My Shopping List (affichage liste correspondante) ou AddTo (affichage API)
 			if(myOrigin == "Fridge")
 			{
 				var apiSearchResult = theFridge.filter(element => (element.name).startsWith(searchTerm.current));
@@ -59,10 +61,10 @@ const IngredientSearch = (props, navigation, ingredientsName,saveIngredients, sa
 			}
 			else
 			{
-				var apiSearchResult = ( await getIngredients( paginationData.current.currentOffset, searchTerm.current, 2 ) );
+				var apiSearchResult = ( await getIngredients( paginationData.current.currentOffset, searchTerm.current, 10 ) );
 				
 			}
-
+			// Tri selon name ou aisle
 			setIngredientsData( [...prevIngredients, ...apiSearchResult].sort((a,b) => {
 				if(filter == 1)
 				{
@@ -71,7 +73,6 @@ const IngredientSearch = (props, navigation, ingredientsName,saveIngredients, sa
 				return (a.name).localeCompare(b.name);
 			}));
 			//paginationData.current = { currentOffset: paginationData.current.currentOffset + apiSearchResult.number, maxResults: apiSearchResult.totalResults }
-			//salut
 		} catch (error) {
 			paginationData.current = { currentOffset: 0, maxResults: 0 };
 			setIngredientsData( [] );

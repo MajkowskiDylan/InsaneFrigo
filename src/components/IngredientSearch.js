@@ -7,7 +7,7 @@ import { ButtonGroup } from 'react-native-elements';
 import { getIngredients } from '../api/spoonacular';
 import { connect, dispatch } from 'react-redux';
 
-const IngredientSearch = (props,state, navigation) => {
+const IngredientSearch = (props,{updateIngredients}, navigation) => {
 	const [filter, setFilter] = useState(0);
 	const filters = ['Name', 'Aisle'];
 	const [ingredientsData, setIngredientsData] = useState([]); // ce que la flatlist va afficher (API ou liste, selon les cas)
@@ -15,14 +15,15 @@ const IngredientSearch = (props,state, navigation) => {
 	const [isErrorDuringDataLoading, setErrorDataLoading] = useState( false );
 	const paginationData = useRef( {currentOffset: 0, maxResults: 0} );
 	const searchTerm = useRef("");
+	
 	// Les listes, theLists correspond à ce qui sera passé en propriété à la FlatList (ci-dessous) dans le MyItem
-	const [theFridge, setTheFridge] = useState([{"name": "Testnom", "aisle": "Testrayon"},{"name": "abcd", "aisle": "rayonabcd"}]);
-	const [theShoppingList, setTheShoppingList] = useState([{"name": "abcd", "aisle": "rayonabcd"}]); 
+	const [theFridge, setTheFridge] = useState([{"name": "Testnom", "aisle": "Testrayon"},{"name": "Ice", "aisle": "Frozen"}]);
+	const [theShoppingList, setTheShoppingList] = useState([{"name": "Testnom", "aisle": "Testrayon"}]); 
 	const theLists = [theFridge, theShoppingList];
 	const myOrigin = props.myOrigin; // regarde si le composant IngredientSearch est appelé depuis une page Fridge ou ShoppingList
 	var needToAdd = props.addTo; // regarde si le composant IngredientSearch est appelé depuis une page AddTo ou non
-
-
+	const descriptionMy = "Here you can  remove ingredients from the " + myOrigin + ", press an empty icon to add it to the other list,a black one means it is already in the other list.";
+	const descriptionAddTo = "Here you can add to the " + needToAdd + ". Press an empty icon to add it, a black one means it is already in.";
 
 	useEffect(() => {
 		_searchIngredients();
@@ -82,6 +83,18 @@ const IngredientSearch = (props,state, navigation) => {
 		}
 	}
 
+	_displayDescription = () => {
+		if((needToAdd != "Fridge") && (needToAdd != "ShoppingList"))
+		{
+			return (
+				<Text> {descriptionMy} </Text>
+			);
+		}
+		return (
+			<Text> {descriptionAddTo} </Text>
+		);
+	};
+
 	return (
 		<View>
 			<View style = { styles.searchView }>
@@ -97,6 +110,8 @@ const IngredientSearch = (props,state, navigation) => {
 					</View>
 				</TouchableHighlight>
 			</View>
+			
+			{ _displayDescription() }
 			<ButtonGroup onPress={filter => setFilter(filter)} selectedIndex={filter} buttons={filters}></ButtonGroup>
 
 			<FlatList

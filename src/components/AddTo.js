@@ -11,7 +11,6 @@ const AddTo = (props) => {
 	const src = props.navigation.state.params.src;
 	return (
 		<View>
-			<Text> Je viens de { src } </Text>
 			<IngredientSearch addTo={src}/>
             </View>
     );

@@ -44,38 +44,50 @@ const MyItem = (props, { navigation }) => {
 
     // Retourne vrai si l'ingredient est dans la pList sinon faux
     _isIngredientInList = (pList) => {
-      return (pList.findIndex( element => element.name == ingredient.name && element.aisle == ingredient.aisle ) > -1);
+      return (pList.findIndex( element => (element.name).toLowerCase() == (ingredient.name).toLowerCase() && 
+      (element.aisle).toLowerCase() == (ingredient.aisle).toLowerCase() ) > -1);
     }
     // Affiche les icones d'ajout dans My [Fridge/ShoppingList] et AddTo [Fridge/ShoppingList]
+    // Si l'icone n'est pas pleine, on peut l'ajouter
     _displaySaved = () => {
       if(addTo == "Fridge" || addTo == "ShoppingList")
       {
-          return (
-            <TouchableOpacity style = {styles.box} onPress={() => _saveIngredient(addTo) }>
-              <Image style = { styles.bottomIcon } source = { assets.toSaveIcon} />
-            </TouchableOpacity>
-          );        
+          var container = (addTo == "Fridge"? zeFridge:zeShoppingList);
+          if((_isIngredientInList(container)))
+          {
+            return (
+              <View style = {styles.box}>
+                <Image style = { styles.bottomIcon } source = { assets.toUnsaveIcon} />
+              </View>
+            ); 
+          }
+          else
+          {
+            return (
+              <TouchableOpacity style = {styles.box} onPress={() => _saveIngredient(addTo) }>
+                <Image style = { styles.bottomIcon } source = { assets.toSaveIcon} />
+              </TouchableOpacity>
+          );
+          }
       }
       else
       {
         // Dans liste A, si l'ingredient n'est pas dans liste B, on peut l'ajouter à la liste B
         var otherList = (myParent == "Fridge" ? zeShoppingList : zeFridge);
-        
-        //if(otherList.findIndex( element => element.name == ingredient.name && element.aisle == ingredient.aisle ) > -1)
         if(_isIngredientInList(otherList))
         {
           return (
             <TouchableOpacity style = {styles.box} onPress={() => _saveIngredient(otherList) }>
-              <Image style = { styles.bottomIcon } source = { assets.outFridgeIcon } />
+              <Image style = { styles.bottomIcon } source = { assets.onFridgeIcon } />
             </TouchableOpacity>
           );
         }
         else
         {
         return (
-            <TouchableOpacity style = {styles.box}>
-              <Image style = { styles.bottomIcon } source = { assets.onFridgeIcon } />
-            </TouchableOpacity>
+            <View style = {styles.box}>
+              <Image style = { styles.bottomIcon } source = { assets.outFridgeIcon } />
+            </View>
           );
         }
       }

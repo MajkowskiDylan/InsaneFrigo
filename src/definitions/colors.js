@@ -6,4 +6,5 @@ export const colors = {
 	mainBlueColor: '#6b689c',
 	mainWhiteColor: '#FFF',
 	mainRedColor: '#E53935',
+	mainDrakGray: '#25221E'
 }

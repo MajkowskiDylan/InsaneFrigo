@@ -11,4 +11,5 @@ export const assets = {
 	suppIcon: require( '../../assets/icons/supprimer.png' ),
 	timeIcon: require( '../../assets/icons/time.png' ),
 	errorIcon: require( '../../assets/icons/error.png' ),
+	fridgIcon: require( '../../assets/icons/fridge.png' )
 };

@@ -12,7 +12,7 @@ const AddTo = (props) => {
 	return (
 		<View>
 			<IngredientSearch addTo={src}/>
-            </View>
+    	</View>
     );
 }
 

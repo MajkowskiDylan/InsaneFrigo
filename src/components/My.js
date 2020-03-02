@@ -1,18 +1,25 @@
 import React, { useState, Component } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableHighlight, Image, Button, FlatList, navigation } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableHighlight, Image, FlatList, navigation } from 'react-native';
+import { Button} from 'react-native-elements'
+
+
 import IngredientSearch from './IngredientSearch';
+import MyItem from './MyItem';
 import { getIngredients } from '../api/spoonacular';
+
 import { colors } from '../definitions/colors';
 import { assets } from '../definitions/assets';
-import { ButtonGroup } from 'react-native-elements';
-import MyItem from './MyItem';
-const My = (props) => {
-	const origin = props.navigation.state.params.origin;
+
+
+const My = ({navigation}) => {
+	const origine = navigation.state.params.origin;
 	// params.origin fait référence à la page d'origine, par exemple si on a cliqué sur My Fridge ou My Shopping List dans la page Me.js
 	return (
-        <View>
-			<Button onPress={() => props.navigation.navigate('AddTo', {src: origin,})} title="Add ingredient" />
-			<IngredientSearch myOrigin={origin} addTo={false}/>
+		<View style = { styles.all }>
+			<IngredientSearch myOrigin={origine} addTo={false}/>
+			<View style={ styles.bot} >
+				<Button buttonStyle={{height:32}} titleStyle={{fontSize: 15}} onPress={() => navigation.navigate('AddTo', {src: origine,})} title="Add ingredient" icon={{name: "add", size: 28, color: "white"}} />
+			</View>
 		</View>
     );
 }
@@ -23,57 +30,16 @@ My.navigationOptions = {
 	title: 'My Fridge / Shopping List ',
 };
 
+
 const styles = StyleSheet.create({
-	selectedButtonStyle: {
-		backgroundColor: 'red',
-	},
-	selectedTextStyle: {
-		color: 'orange',
-		fontWeight: '900',
-	},
-	mainView: {
-		flex: 1,
-	},
-	searchView: {
-		alignItems: 'stretch',
-		flexDirection: 'row',
-	},
-	searchField: {
-		flex: 1,
-		height: 100,
-		fontSize: 20,
-		paddingLeft: 10,
-		backgroundColor: colors.mainSilverColor,
-	},
-	button: {
-		flex: 1,
+	all: {
+		flex:1,
 		alignItems: 'center',
-		justifyContent: 'center',
-		width: 100,
-		height: 100,
-	},
-	searchIcon: {
-		width: 50,
-		height: 50,
-	},
-	buttonContainer: {
-		flexDirection: 'row',
-		margin: 10
+        justifyContent: 'center',
 	  },
-	  button: {
-		height: 20,
-		width: 20,
-		borderRadius: 10,
-		borderWidth: 1,
-		borderColor: '#DCDCDC',
-		alignItems: 'center',
-		justifyContent: 'center',
-		marginRight: 20
-	  },
-	  checkedButton: {
-		width: 14,
-		height: 14,
-		borderRadius: 7,
-		backgroundColor:'#04549b'
-	  }
+	bot: {
+		width:'100%',
+		position: 'absolute',
+		bottom:0
+	}
 });

@@ -1,18 +1,30 @@
-const initialState = { tbIngredients: [] }
+const initialState = { FridgeIngredients: [{"name": "Testnom", "aisle": "Testrayon"},{"name": "Ice", "aisle": "Frozen"}], ShoppingIngredients:[{"name": "Testnom", "aisle": "Testrayon"}] }
 
 function updateIngredients(state = initialState, action) {
   let nextState
   switch (action.type) {
-    case 'SAVE_INGREDIENT':
+    case 'SAVE_FRIDGE_INGREDIENT':
       nextState = {
         ...state,
-        tbIngredients: [...state.tbIngredients, action.value]
+        FridgeIngredients: [...state.FridgeIngredients, action.value]
       };
       return nextState || state
-    case 'UNSAVE_INGREDIENT':
+    case 'UNSAVE_FRIDGE_INGREDIENT':
         nextState = {
           ...state,
-          tbIngredients: state.tbIngredients.filter(name => name !== action.value)
+          FridgeIngredients: state.FridgeIngredients.filter(name => name !== action.value)
+        };
+      return nextState || state
+    case 'SAVE_SHOPPING_INGREDIENT':
+      nextState = {
+        ...state,
+        ShoppingIngredients: [...state.ShoppingIngredients, action.value]
+      };
+      return nextState || state
+    case 'UNSAVE_SHOPPING_INGREDIENT':
+        nextState = {
+          ...state,
+          ShoppingIngredients: state.ShoppingIngredients.filter(name => name !== action.value)
         };
       return nextState || state
     default:

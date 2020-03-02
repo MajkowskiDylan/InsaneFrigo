@@ -1,13 +1,16 @@
 import React, { useState, useRef, useEffect,  Component } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableHighlight, Image, Button, FlatList, navigation, Keyboard } from 'react-native';
+import { View, Text, StyleSheet, TouchableHighlight, Image, FlatList, navigation, Keyboard } from 'react-native';
+import { connect, dispatch } from 'react-redux';
+import { CheckBox, Button, ButtonGroup, Input  } from 'react-native-elements'
+
 import MyItem from './MyItem';
+import { getIngredients } from '../api/spoonacular';
+
 import { colors } from '../definitions/colors';
 import { assets } from '../definitions/assets';
-import { ButtonGroup } from 'react-native-elements';
-import { getIngredients } from '../api/spoonacular';
-import { connect, dispatch } from 'react-redux';
 
-const IngredientSearch = (props,{updateIngredients}, navigation) => {
+const IngredientSearch = ({updateIngredients, navigation, dispatch, addTo, myOrigin}) => {
+	
 	const [filter, setFilter] = useState(0);
 	const filters = ['Name', 'Aisle'];
 	const [ingredientsData, setIngredientsData] = useState([]); // ce que la flatlist va afficher (API ou liste, selon les cas)
@@ -16,12 +19,15 @@ const IngredientSearch = (props,{updateIngredients}, navigation) => {
 	const paginationData = useRef( {currentOffset: 0, maxResults: 0} );
 	const searchTerm = useRef("");
 	
-	// Les listes, theLists correspond à ce qui sera passé en propriété à la FlatList (ci-dessous) dans le MyItem
-	const [theFridge, setTheFridge] = useState([{"name": "Testnom", "aisle": "Testrayon"},{"name": "Ice", "aisle": "Frozen"}]);
-	const [theShoppingList, setTheShoppingList] = useState([{"name": "Testnom", "aisle": "Testrayon"}]); 
-	const theLists = [theFridge, theShoppingList];
-	const myOrigin = props.myOrigin; // regarde si le composant IngredientSearch est appelé depuis une page Fridge ou ShoppingList
-	var needToAdd = props.addTo; // regarde si le composant IngredientSearch est appelé depuis une page AddTo ou non
+	//Liste selon que l'on affiche le frigo lou la shopping liste
+	listeDispalyItem = null;
+	if (myOrigin == "Fridge")
+		listeDispalyItem = updateIngredients.FridgeIngredients;
+	if (myOrigin == "ShoppingList")
+		listeDispalyItem = updateIngredients.ShoppingIngredients;
+
+	//const myOrigin = props.myOrigin; // regarde si le composant IngredientSearch est appelé depuis une page Fridge ou ShoppingList
+	var needToAdd = /*props.*/addTo; // regarde si le composant IngredientSearch est appelé depuis une page AddTo ou non
 	const descriptionMy = "Here you can  remove ingredients from the " + myOrigin + ", press an empty icon to add it to the other list,a black one means it is already in the other list.";
 	const descriptionAddTo = "Here you can add to the " + needToAdd + ". Press an empty icon to add it, a black one means it is already in.";
 
@@ -51,20 +57,7 @@ const IngredientSearch = (props,{updateIngredients}, navigation) => {
 		setRefreshingState( true );
 		setErrorDataLoading( false );
 		try {
-			// Soit on est dans My Fridge, My Shopping List (affichage liste correspondante) ou AddTo (affichage API)
-			if(myOrigin == "Fridge")
-			{
-				var apiSearchResult = theFridge.filter(element => (element.name).startsWith(searchTerm.current));
-			}
-			else if (myOrigin == "ShoppingList")
-			{
-				var apiSearchResult = theShoppingList.filter(element => (element.name).startsWith(searchTerm.current));
-			}
-			else
-			{
-				var apiSearchResult = ( await getIngredients( paginationData.current.currentOffset, searchTerm.current, 10 ) );
-				
-			}
+			var apiSearchResult = listeDispalyItem.filter(element => (element.name).startsWith(searchTerm.current));
 			// Tri selon name ou aisle
 			setIngredientsData( [...prevIngredients, ...apiSearchResult].sort((a,b) => {
 				if(filter == 1)
@@ -73,8 +66,11 @@ const IngredientSearch = (props,{updateIngredients}, navigation) => {
 				}
 				return (a.name).localeCompare(b.name);
 			}));
-			//paginationData.current = { currentOffset: paginationData.current.currentOffset + apiSearchResult.number, maxResults: apiSearchResult.totalResults }
+			console.log('6')
+
+		//paginationData.current = { currentOffset: paginationData.current.currentOffset + apiSearchResult.number, maxResults: apiSearchResult.totalResults }
 		} catch (error) {
+			console.log("errer" + error)
 			paginationData.current = { currentOffset: 0, maxResults: 0 };
 			setIngredientsData( [] );
 			setErrorDataLoading( true ); // il faut mettre true
@@ -87,48 +83,48 @@ const IngredientSearch = (props,{updateIngredients}, navigation) => {
 		if((needToAdd != "Fridge") && (needToAdd != "ShoppingList"))
 		{
 			return (
-				<Text> {descriptionMy} </Text>
+				<Text style = {styles.description}> {descriptionMy} </Text>
 			);
 		}
 		return (
-			<Text> {descriptionAddTo} </Text>
+			<Text style = {styles.description}>  {descriptionAddTo} </Text>
 		);
 	};
 
+
+
+
+
+
+
 	return (
 		<View>
+			{ _displayDescription() }
+
 			<View style = { styles.searchView }>
-				<TextInput
+				<Input 
 					placeholder = "Ingredient's name"
 					style = { styles.searchField }
 					onChangeText={ text => _inputSearchTermChanged(text) }
 					onSubmitEditing={ () => { _searchIngredients(); Keyboard.dismiss()} }
 				/>
-				<TouchableHighlight onPress={ _searchIngredients }>
-					<View style = { styles.button }>
-						<Image  style = { styles.searchIcon } source = { assets.searchIcon }/>
-					</View>
-				</TouchableHighlight>
 			</View>
 			
-			{ _displayDescription() }
+			
 			<ButtonGroup onPress={filter => setFilter(filter)} selectedIndex={filter} buttons={filters}></ButtonGroup>
 
 			<FlatList
-        data={ ingredientsData }
-		keyExtractor={ (item) => item.name.toString() }
-		renderItem={ ({item}) => <MyItem ingredient={ item } lists={theLists} parent={myOrigin} addTo={needToAdd}/> }
-		onEndReached={ _searchMoreIngredients }
-        onEndReachedThreshold={ 0.5 }
-      />
+				data={ ingredientsData }
+				keyExtractor={ (item) => item.name.toString() }
+				renderItem={ ({item}) => <MyItem ingredient={ item } parent={myOrigin} addTo={needToAdd}/> }
+				onEndReached={ _searchMoreIngredients }
+				onEndReachedThreshold={ 0.5 }
+      		/>
 	 
 		</View>
 	);
 
 }
-
-
-export default connect(mapStateToProps)(IngredientSearch);
 
 IngredientSearch.navigationOptions = {
 	title: 'I',
@@ -136,9 +132,13 @@ IngredientSearch.navigationOptions = {
 
 const mapStateToProps = (state) => {
 	return {
-	  updateIngredients: state.updateIngredients.tbIngredients
+    updateIngredients: state.updateIngredients,
+    config : state.settingPreferance
 	}
 }
+
+export default connect(mapStateToProps)(IngredientSearch);
+
 
 const styles = StyleSheet.create({
 	mainView: {
@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
 	},
 	searchField: {
 		flex: 1,
-		height: 100,
+		height: 20,
 		fontSize: 20,
 		paddingLeft: 10,
 		backgroundColor: colors.mainSilverColor,
@@ -160,11 +160,15 @@ const styles = StyleSheet.create({
 		flex: 1,
 		alignItems: 'center',
 		justifyContent: 'center',
-		width: 100,
-		height: 100,
+		width: 20,
+		height: 20,
 	},
 	searchIcon: {
-		width: 50,
-		height: 50,
+		width: 20,
+		height: 20,
+	},
+	description: {
+		marginLeft : 20,
+		marginRight: 10
 	}
 });

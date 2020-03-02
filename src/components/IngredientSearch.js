@@ -57,7 +57,11 @@ const IngredientSearch = ({updateIngredients, navigation, dispatch, addTo, myOri
 		setRefreshingState( true );
 		setErrorDataLoading( false );
 		try {
-			var apiSearchResult = listeDispalyItem.filter(element => (element.name).startsWith(searchTerm.current));
+			if (!addTo)
+				var apiSearchResult = listeDispalyItem.filter(element => (element.name).startsWith(searchTerm.current));
+			else
+				var apiSearchResult = ( await getIngredients( paginationData.current.currentOffset, searchTerm.current, 10 ) );
+			
 			// Tri selon name ou aisle
 			setIngredientsData( [...prevIngredients, ...apiSearchResult].sort((a,b) => {
 				if(filter == 1)

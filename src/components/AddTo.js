@@ -7,11 +7,11 @@ import { assets } from '../definitions/assets';
 import IngredientSearch from './IngredientSearch';
 import MyItem from './MyItem';
 
-const AddTo = (props) => {
-	const src = props.navigation.state.params.src;
+const AddTo = ({navigation}) => {
+	const src = navigation.state.params.src;
 	return (
 		<View>
-			<IngredientSearch addTo={src}/>
+			<IngredientSearch addTo={true} myOrigin={src}/>
     	</View>
     );
 }

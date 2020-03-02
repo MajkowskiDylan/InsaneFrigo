@@ -17,14 +17,21 @@ const IngredientSearch = ({updateIngredients, navigation, dispatch, addTo, myOri
 	const [isRefreshing, setRefreshingState] = useState( false );
 	const [isErrorDuringDataLoading, setErrorDataLoading] = useState( false );
 	const paginationData = useRef( {currentOffset: 0, maxResults: 0} );
-	const searchTerm = useRef("");
+	const searchTerm = useRef(""); 
 	
 	//Liste selon que l'on affiche le frigo lou la shopping liste
-	listeDispalyItem = null;
+	listeDispalyItem = [];
+	listeOposer = [];
 	if (myOrigin == "Fridge")
+	{
 		listeDispalyItem = updateIngredients.FridgeIngredients;
+		listeOposer = updateIngredients.ShoppingIngredients;
+	}
 	if (myOrigin == "ShoppingList")
+	{
 		listeDispalyItem = updateIngredients.ShoppingIngredients;
+		listeOposer = updateIngredients.FridgeIngredients;
+	}
 
 	//const myOrigin = props.myOrigin; // regarde si le composant IngredientSearch est appelé depuis une page Fridge ou ShoppingList
 	var needToAdd = /*props.*/addTo; // regarde si le composant IngredientSearch est appelé depuis une page AddTo ou non
@@ -60,7 +67,7 @@ const IngredientSearch = ({updateIngredients, navigation, dispatch, addTo, myOri
 			if (!addTo)
 				var apiSearchResult = listeDispalyItem.filter(element => (element.name).startsWith(searchTerm.current));
 			else
-				var apiSearchResult = ( await getIngredients( paginationData.current.currentOffset, searchTerm.current, 10 ) );
+				var apiSearchResult = ( await getIngredients( paginationData.current.currentOffset, searchTerm.current, 1 ) );
 			
 			// Tri selon name ou aisle
 			setIngredientsData( [...prevIngredients, ...apiSearchResult].sort((a,b) => {
@@ -70,7 +77,6 @@ const IngredientSearch = ({updateIngredients, navigation, dispatch, addTo, myOri
 				}
 				return (a.name).localeCompare(b.name);
 			}));
-			console.log('6')
 
 		//paginationData.current = { currentOffset: paginationData.current.currentOffset + apiSearchResult.number, maxResults: apiSearchResult.totalResults }
 		} catch (error) {
@@ -95,12 +101,6 @@ const IngredientSearch = ({updateIngredients, navigation, dispatch, addTo, myOri
 		);
 	};
 
-
-
-
-
-
-
 	return (
 		<View>
 			{ _displayDescription() }
@@ -120,7 +120,7 @@ const IngredientSearch = ({updateIngredients, navigation, dispatch, addTo, myOri
 			<FlatList
 				data={ ingredientsData }
 				keyExtractor={ (item) => item.name.toString() }
-				renderItem={ ({item}) => <MyItem ingredient={ item } parent={myOrigin} addTo={needToAdd}/> }
+				renderItem={ ({item}) => <MyItem listeOposer={ listeOposer } ingredient={ item } parent={myOrigin} addTo={needToAdd}/> }
 				onEndReached={ _searchMoreIngredients }
 				onEndReachedThreshold={ 0.5 }
       		/>

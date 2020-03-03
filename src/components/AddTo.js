@@ -9,10 +9,9 @@ import MyItem from './MyItem';
 
 const AddTo = ({navigation}) => {
 	const src = navigation.state.params.src;
-	const callBack = navigation.state.params.refresh;
 	return (
 		<View>
-			<IngredientSearch addTo={true} myOrigin={src} refresh={callBack}/>
+			<IngredientSearch addTo={true} myOrigin={src}/>
     	</View>
     );
 }

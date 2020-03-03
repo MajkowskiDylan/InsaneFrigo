@@ -9,7 +9,7 @@ import { getIngredients } from '../api/spoonacular';
 import { colors } from '../definitions/colors';
 import { assets } from '../definitions/assets';
 
-const IngredientSearch = ({updateIngredients, addTo, myOrigin, refresh}) => {
+const IngredientSearch = ({updateIngredients, addTo, myOrigin}) => {
 	
 	const [filter, setFilter] = useState(0);
 	const filters = ['Name', 'Aisle'];
@@ -26,10 +26,7 @@ const IngredientSearch = ({updateIngredients, addTo, myOrigin, refresh}) => {
 
 
 	reload = () => {
-		console.log(refresh);
 		_searchIngredients();
-		if (addTo)
-			refresh();
 	}
 
 	

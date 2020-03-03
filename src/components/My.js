@@ -12,13 +12,20 @@ import { assets } from '../definitions/assets';
 
 
 const My = ({navigation}) => {
-	const origine = navigation.state.params.origin;
+	
+	this.state = { ref : true }
+
+	elements = false
+	callBack = () => {
+	}
+
+	const origine = navigation.state.params.origin
 	// params.origin fait référence à la page d'origine, par exemple si on a cliqué sur My Fridge ou My Shopping List dans la page Me.js
 	return (
 		<View style = { styles.all }>
-			<IngredientSearch myOrigin={origine} addTo={false}/>
+			<IngredientSearch myOrigin={origine} addTo={false} refresh={this.callBack} reload={null}/>
 			<View style={ styles.bot} >
-				<Button buttonStyle={{height:32}} titleStyle={{fontSize: 15}} onPress={() => navigation.navigate('AddTo', {src: origine,})} title="Add ingredient" icon={{name: "add", size: 28, color: "white"}} />
+				<Button buttonStyle={{height:32}} titleStyle={{fontSize: 15}} onPress={() => navigation.navigate('AddTo', {src: origine, refresh: this.callBack})} title="Add ingredient" icon={{name: "add", size: 28, color: "white"}} />
 			</View>
 		</View>
     );
@@ -38,6 +45,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
 	  },
 	bot: {
+		marginTop:60,
 		width:'100%',
 		position: 'absolute',
 		bottom:0

@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect,  Component } from 'react';
 import { View, Text, StyleSheet, TouchableHighlight, Image, FlatList, navigation, Keyboard } from 'react-native';
-import { connect, dispatch } from 'react-redux';
+import { connect } from 'react-redux';
 import { CheckBox, Button, ButtonGroup, Input  } from 'react-native-elements'
 
 import MyItem from './MyItem';
@@ -9,7 +9,7 @@ import { getIngredients } from '../api/spoonacular';
 import { colors } from '../definitions/colors';
 import { assets } from '../definitions/assets';
 
-const IngredientSearch = ({updateIngredients, navigation, dispatch, addTo, myOrigin}) => {
+const IngredientSearch = ({updateIngredients, addTo, myOrigin, refresh}) => {
 	
 	const [filter, setFilter] = useState(0);
 	const filters = ['Name', 'Aisle'];
@@ -24,9 +24,15 @@ const IngredientSearch = ({updateIngredients, navigation, dispatch, addTo, myOri
 	const descriptionMy = "Here you can  remove ingredients from the " + myOrigin + ", press an empty icon to add it to the other list,a black one means it is already in the other list.";
 	const descriptionAddTo = "Here you can add to the " + needToAdd + ". Press an empty icon to add it, a black one means it is already in.";
 
-	reload = () => {		
-		_loadIngredients([]);
+
+	reload = () => {
+		console.log(refresh);
+		_searchIngredients();
+		if (addTo)
+			refresh();
 	}
+
+	
 
 	useEffect(() => {
 		_searchIngredients();
@@ -35,7 +41,8 @@ const IngredientSearch = ({updateIngredients, navigation, dispatch, addTo, myOri
 	// Changement du texte de l'input
 	_inputSearchTermChanged = (text) => {
 		searchTerm.current = text;
-		_searchIngredients();
+		if(!addTo)
+			_searchIngredients();
 	}
 
 	// Recherche d'un aliment
@@ -81,8 +88,6 @@ const IngredientSearch = ({updateIngredients, navigation, dispatch, addTo, myOri
 		} finally {
 			setRefreshingState( false );
 		}
-		console.log("------------------------------------------------------------")
-		console.log(apiSearchResult);
 	}
 
 	_displayDescription = () => {
@@ -120,6 +125,7 @@ const IngredientSearch = ({updateIngredients, navigation, dispatch, addTo, myOri
 				onEndReached={ _searchMoreIngredients }
 				onEndReachedThreshold={ 0.5 }
 				refreshingState={ isRefreshing }
+				style = { styles.liste }
       		/>
 	 
 		</View>
@@ -171,5 +177,8 @@ const styles = StyleSheet.create({
 	description: {
 		marginLeft : 20,
 		marginRight: 10
+	},
+	liste:{
+		marginBottom:60
 	}
 });

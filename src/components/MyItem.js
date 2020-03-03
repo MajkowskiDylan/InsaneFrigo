@@ -46,20 +46,28 @@ const MyItem = ({reload, ingredient, parent, addTo, dispatch, updateIngredients}
   }
 
   _supprimerIngredient = async (myIngredient) => {
+    await _supprimerIngredientBis(myIngredient);
+    await reload();
+  }
+
+  _supprimerIngredientBis = async (myIngredient) => {
     if(_isIngredientInList(false, myIngredient))
     {
       const action = { type: 'UN'+suppName, value: myIngredient };
       dispatch(action);
-      await reload();
     }
   }
 
   _ajouterIngredient = async (myIngredient) => {
+    await _ajouterIngredientBis(myIngredient);
+    await reload();
+  }
+
+  _ajouterIngredientBis = async (myIngredient) => {
     if(!_isIngredientInList(false, myIngredient))
     {
       const action = { type: suppName, value: myIngredient };
       dispatch(action);
-      await reload();
     }
   }
   // Retourne vrai si l'ingredient est dans la pList sinon faux

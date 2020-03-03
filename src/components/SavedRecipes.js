@@ -1,23 +1,51 @@
-import React from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableHighlight, Image, Button, TouchableWithoutFeedback, TouchableOpacity } from 'react-native';
-	
-import { getIngredients } from '../api/spoonacular';
+import React, { useState } from 'react';
+import { View, StyleSheet,FlatList } from 'react-native';
+import { connect } from 'react-redux';
+
 import { colors } from '../definitions/colors';
-import { assets } from '../definitions/assets';
-import { ButtonGroup } from 'react-native-elements';
 
-const SavedRecipes = (props) => {
+import Error from './Error';
+import RecipesList from './RecipesList';
+import RecipeItem from './RecipeItem';
 
+const SavedRecipes = ({navigation, savedRecipes}) => {	
+
+	// Gère la navigation
+	_navigateToRecipeDetails = ( recipeID ) => {
+		navigation.navigate("RecipeDetails", { recipeID });
+	}
+	
 	return (
-		<View>
-            <Text> SavedRecipes ! </Text>
-			
+		<View style = { styles.mainView }>
+			<View style = {styles.listLayout}>
+				<RecipesList
+					recipes = {savedRecipes}
+					onClickNavigation = {_navigateToRecipeDetails}
+				/>
+			</View>
 		</View>
-    );
+	);
 }
 
 SavedRecipes.navigationOptions = {
 	title: 'SavedRecipes',
 };
 
-export default SavedRecipes;
+// Récupère la variable globale state
+const mapStateToProps = (state) => {
+	return { savedRecipes: state.savedRecipes.savedRecipes }
+}
+
+export default connect(mapStateToProps)(SavedRecipes);
+
+const styles = StyleSheet.create({
+	mainView: {
+		flex: 1,
+		backgroundColor: colors.mainSearchColor,
+	},
+	loadingView: {
+		flex: 1,
+	},
+	listLayout: {
+	},
+});

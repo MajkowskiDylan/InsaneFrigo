@@ -13,6 +13,7 @@ const RecipeItem = ({recipe, isSaved, onClickOnMe}) => {
 
 	return (
         <TouchableOpacity style = { styles.mainView } onPress = { () => onClickOnMe(recipe.id) } >
+        {console.log('ID : ' + recipe.id)}
             <View style = {styles.viewTop}>
                 <View style = {styles.hr}></View>
                 <Image style = { styles.recipeImage } source = {{ uri: 'https://spoonacular.com/recipeImages/' + recipe.image }}/>

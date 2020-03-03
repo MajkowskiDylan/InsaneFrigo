@@ -1,4 +1,4 @@
-const initialState = { savedRecipeIDs: [] }
+const initialState = { savedRecipes: [] }
 
 function savedRecipes(state = initialState, action) {
 	let nextState
@@ -6,13 +6,13 @@ function savedRecipes(state = initialState, action) {
 	  case 'SAVE_RECIPE':
 		nextState = {
 		  ...state,
-		  savedRecipeIDs: [...state.savedRecipeIDs, action.value]
+		  savedRecipes: [...state.savedRecipes, action.value]
 		};
 		return nextState || state
 	  case 'UNSAVE_RECIPE':
 		  nextState = {
 			...state,
-			savedRecipeIDs: state.savedRecipeIDs.filter(id => id !== action.value)
+			savedRecipes: state.savedRecipes.filter(recipe => recipe.id !== action.value.id)
 		  };
 		return nextState || state
 	  default:

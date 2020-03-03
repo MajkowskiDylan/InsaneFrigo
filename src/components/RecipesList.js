@@ -8,11 +8,11 @@ const RecipesList = ({recipes, refreshingState, onClickNavigation, refreshRecipe
 
     // Retourne vrai si une des recettes chargées est enregistrée
     const _isItSaved = ( recipeID ) => {
-		if (savedRecipes.findIndex((e) => e === recipeID) != -1)
+		if (savedRecipes.findIndex((e) => e.id === recipeID) != -1)
 			return true;
 		return false;
 	}
-
+    
 	return (
         notFirstSearch && recipes.length == 0 ? // Si une recherche a déjà était faite et qu'aucun résultat n'est trouvé
         ( 
@@ -24,11 +24,7 @@ const RecipesList = ({recipes, refreshingState, onClickNavigation, refreshRecipe
                 data = { recipes }
                 keyExtractor = { (item) => item.id.toString() }
                 extraData = { savedRecipes }
-                renderItem = { ({item}) => <RecipeItem
-                                            recipe = { item }
-                                            isSaved = { _isItSaved(item.id) }
-                                            onClickOnMe = { onClickNavigation }
-                                        /> }
+                renderItem = { ({item}) => <Text>{item.id, console.log('ok')}</Text> }
                 refreshing = { refreshingState }
                 onRefresh = { refreshRecipes }
                 onEndReached = { loadMoreRecipes }
@@ -40,7 +36,7 @@ const RecipesList = ({recipes, refreshingState, onClickNavigation, refreshRecipe
 
 // Récupère la variable globale state
 const mapStateToProps = (state) => {
-	return { savedRecipes: state.savedRecipes.savedRecipeIDs }
+	return { savedRecipes: state.savedRecipes.savedRecipes }
 }
 
 export default connect(mapStateToProps)(RecipesList);

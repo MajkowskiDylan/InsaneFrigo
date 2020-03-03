@@ -21,7 +21,7 @@ const combinedReducer = combineReducers({
 
 const persistedReducer = persistReducer(persistConfig, combinedReducer);
 
-//purgeStoredState(persistConfig); // a utiliser pour purger tt purger si le state devien n'importe quoi 
+//purgeStoredState(persistConfig); // A utiliser state fait n'imp pour le purger
 
 export const store = createStore(persistedReducer);
 export let persistor = persistStore(store);

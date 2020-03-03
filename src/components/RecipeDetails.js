@@ -31,12 +31,12 @@ const RecipeDetails = ({navigation, savedRecipes, dispatch}) => {
 	}
 
 	_saveRecipe = async () => {
-		const action = { type: 'SAVE_RECIPE', value: navigation.getParam('recipeID') };
+		const action = { type: 'SAVE_RECIPE', value: recipe };
 		dispatch(action);
 	}
 
 	_unsaveRecipe = async () => {
-		const action = { type: 'UNSAVE_RECIPE', value: navigation.getParam('recipeID') };
+		const action = { type: 'UNSAVE_RECIPE', value: recipe };
 		dispatch(action);
 	}
 
@@ -119,7 +119,7 @@ const RecipeDetails = ({navigation, savedRecipes, dispatch}) => {
 	
 	// Bouton de sauvegarde
 	const _displaySaved = () => { 
-		if (savedRecipes.findIndex((e) => e === navigation.getParam('recipeID')) != -1)
+		if (savedRecipes.findIndex((e) => e.id === navigation.getParam('recipeID')) != -1)
 			return (
 				<TouchableOpacity onPress = { _unsaveRecipe }>
 					<Image style = { styles.saveIcon } source = { assets.toUnsaveIcon } />
@@ -148,7 +148,7 @@ const RecipeDetails = ({navigation, savedRecipes, dispatch}) => {
 
 // Récupère la variable globale state
 const mapStateToProps = (state) => {
-	return { savedRecipes: state.savedRecipes.savedRecipeIDs }
+	return { savedRecipes: state.savedRecipes.savedRecipes }
 }
 
 export default connect(mapStateToProps)(RecipeDetails);

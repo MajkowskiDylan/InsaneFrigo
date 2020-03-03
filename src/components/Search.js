@@ -20,15 +20,6 @@ const Search = ({navigation}) => {
 	const [isErrorDuringDataLoading, setErrorDataLoading] = useState( false );
 	const paginationData = useRef( {currentOffset: 0, maxResults: 0} );
 
-	// Gère les sauvegardes
-	const _isItSaved = ( recipeID ) => {
-		console.log("[SEARCH] Saved recipes : " + savedRecipes);
-		if (savedRecipes.findIndex(i => i === recipeID) !== -1) {
-			return true;
-		}
-		return false;
-	}
-
 	// Recherche d'un aliment
 	_searchRecipes = () => {
 		paginationData.current = { currentOffset: 0, maxResults: 0 }
@@ -56,7 +47,7 @@ const Search = ({navigation}) => {
 			setErrorDataLoading( true );
 		} finally {
 			setRefreshingState( false );
-			setNotFirstSearch(true)
+			setNotFirstSearch(true);
 		}
 	}
 

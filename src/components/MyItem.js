@@ -9,15 +9,13 @@ import { assets } from '../definitions/assets';
 import { ButtonGroup } from 'react-native-elements';
 import { connect, dispatch } from 'react-redux';
 
-const MyItem = ({listeOposer, navigation, ingredient, parent, addTo, dispatch, yolo, updateIngredients}) => {
+const MyItem = ({reload, ingredient, parent, addTo, dispatch, updateIngredients}) => {
   //const ingredient = props.ingredient; // l'ingredient courant sur lequel on clique
   const uriIngredient = "https://spoonacular.com/cdn/ingredients_100x100/";
-  var name = (ingredient.name);
-  const myParent = parent; // regarde si on fait ça depuis My (Fridge ou SL)
   const myAddTo = addTo; // regarde si on fait ça depuis Add To (Fridge ou SL)
   var actionName =null;
   var suppName =null;
-  
+
   if (parent == "Fridge")
   {
     actionName = "SAVE_SHOPPING_INGREDIENT";
@@ -30,58 +28,56 @@ const MyItem = ({listeOposer, navigation, ingredient, parent, addTo, dispatch, y
   }
 
   // Sauve un ingredient dans la pList
-  _saveIngredient = async () => {
-    console.log("save");
-    if(!_isIngredientInList(true))
+  _saveIngredient = async (myIngredient) => {
+    if(!_isIngredientInList(true, myIngredient))
       {
-        const action = { type: actionName, value: ingredient };
+        const action = { type: actionName, value: myIngredient };
         dispatch(action);
       }
     }
   
   // Supprime l'ingredient courant de la pList 
-  _unsaveIngredient = async () => {
-    console.log("unsave");
-    if(_isIngredientInList(true))
+  _unsaveIngredient = async (myIngredient) => {
+    if(_isIngredientInList(true, myIngredient))
     {
-      const action = { type: 'UN'+actionName, value: ingredient };
+      const action = { type: 'UN'+actionName, value: myIngredient };
       dispatch(action);
     }
   }
 
-  _supprimerIngredient = async () => {
-    console.log("supp");
-    if(_isIngredientInList(false))
+  _supprimerIngredient = async (myIngredient) => {
+    if(_isIngredientInList(false, myIngredient))
     {
-      console.log("poluf");
-      const action = { type: 'UN'+suppName, value: ingredient };
+      const action = { type: 'UN'+suppName, value: myIngredient };
       dispatch(action);
+      await reload();
     }
   }
-  _ajouterIngredient = async () => {
-    console.log("add");
-    if(!_isIngredientInList(false))
+
+  _ajouterIngredient = async (myIngredient) => {
+    if(!_isIngredientInList(false, myIngredient))
     {
-      const action = { type: suppName, value: ingredient };
+      const action = { type: suppName, value: myIngredient };
       dispatch(action);
+      await reload();
     }
   }
   // Retourne vrai si l'ingredient est dans la pList sinon faux
-  _isIngredientInList = (Oposer) => {
+  _isIngredientInList = (Oposer, myIngredient) => {
     if(!Oposer)
     {
-      if (parent == "Fridge")
-        return (updateIngredients.FridgeIngredients.findIndex( element => (element.name).toLowerCase() == (ingredient.name).toLowerCase() && (element.aisle).toLowerCase() == (ingredient.aisle).toLowerCase() ) > -1);
-      if (parent == "ShoppingList")
-        return (updateIngredients.ShoppingIngredients.findIndex( element => (element.name).toLowerCase() == (ingredient.name).toLowerCase() && (element.aisle).toLowerCase() == (ingredient.aisle).toLowerCase() ) > -1);
-  }
+      if (parent == "Fridge"){
+        return (updateIngredients.FridgeIngredients.findIndex( element => (element.name).toLowerCase() == (myIngredient.name).toLowerCase() && (element.aisle).toLowerCase() == (myIngredient.aisle).toLowerCase() ) > -1);
+      }if (parent == "ShoppingList"){
+        return (updateIngredients.ShoppingIngredients.findIndex( element => (element.name).toLowerCase() == (myIngredient.name).toLowerCase() && (element.aisle).toLowerCase() == (myIngredient.aisle).toLowerCase() ) > -1);
+  }}
     else
     {
-      if (parent == "Fridge")
-        return (updateIngredients.ShoppingIngredients.findIndex( element => (element.name).toLowerCase() == (ingredient.name).toLowerCase() && (element.aisle).toLowerCase() == (ingredient.aisle).toLowerCase() ) > -1);
-      if (parent == "ShoppingList")
-        return (updateIngredients.FridgeIngredients.findIndex( element => (element.name).toLowerCase() == (ingredient.name).toLowerCase() && (element.aisle).toLowerCase() == (ingredient.aisle).toLowerCase() ) > -1);
-  }
+      if (parent == "Fridge"){
+        return (updateIngredients.ShoppingIngredients.findIndex( element => (element.name).toLowerCase() == (myIngredient.name).toLowerCase() && (element.aisle).toLowerCase() == (myIngredient.aisle).toLowerCase() ) > -1);
+      }if (parent == "ShoppingList"){
+        return (updateIngredients.FridgeIngredients.findIndex( element => (element.name).toLowerCase() == (myIngredient.name).toLowerCase() && (element.aisle).toLowerCase() == (myIngredient.aisle).toLowerCase() ) > -1);
+    }}
   }
 
   // Affiche l'icone de suppression si la composant parent n'est pas AddTo (et donc soit My [Fridge/ShoppingList])
@@ -105,10 +101,10 @@ const MyItem = ({listeOposer, navigation, ingredient, parent, addTo, dispatch, y
         var icone = "shopping-cart";
       if (parent == "ShoppingList")
         var icone = "kitchen";
-      if(_isIngredientInList(true))
-        return(<Button buttonStyle={{backgroundColor: colors.mainDrakGray, height:33, width:33, marginRight:5, padding:0}} icon={{name: icone, size: 18, color: "white"}} onPress={() => _unsaveIngredient() } />);
+      if(_isIngredientInList(true, ingredient))
+        return(<Button buttonStyle={{backgroundColor: colors.mainDrakGray, height:33, width:33, marginRight:5, padding:0}} icon={{name: icone, size: 18, color: "white"}} onPress={() => _unsaveIngredient(ingredient) } />);
       else
-        return(<Button buttonStyle={{backgroundColor: colors.mainWhiteColor, height:33, width:33, marginRight:5, padding:0}} icon={{name: icone, size: 18, color: "black"}} onPress={() => _saveIngredient() } />);
+        return(<Button buttonStyle={{backgroundColor: colors.mainWhiteColor, height:33, width:33, marginRight:5, padding:0}} icon={{name: icone, size: 18, color: "black"}} onPress={() => _saveIngredient(ingredient) } />);
     }
   }
 

@@ -19,24 +19,14 @@ const IngredientSearch = ({updateIngredients, navigation, dispatch, addTo, myOri
 	const paginationData = useRef( {currentOffset: 0, maxResults: 0} );
 	const searchTerm = useRef(""); 
 	
-	//Liste selon que l'on affiche le frigo lou la shopping liste
-	listeDispalyItem = [];
-	listeOposer = [];
-	if (myOrigin == "Fridge")
-	{
-		listeDispalyItem = updateIngredients.FridgeIngredients;
-		listeOposer = updateIngredients.ShoppingIngredients;
-	}
-	if (myOrigin == "ShoppingList")
-	{
-		listeDispalyItem = updateIngredients.ShoppingIngredients;
-		listeOposer = updateIngredients.FridgeIngredients;
-	}
-
 	//const myOrigin = props.myOrigin; // regarde si le composant IngredientSearch est appelé depuis une page Fridge ou ShoppingList
 	var needToAdd = /*props.*/addTo; // regarde si le composant IngredientSearch est appelé depuis une page AddTo ou non
 	const descriptionMy = "Here you can  remove ingredients from the " + myOrigin + ", press an empty icon to add it to the other list,a black one means it is already in the other list.";
 	const descriptionAddTo = "Here you can add to the " + needToAdd + ". Press an empty icon to add it, a black one means it is already in.";
+
+	reload = () => {		
+		_loadIngredients([]);
+	}
 
 	useEffect(() => {
 		_searchIngredients();
@@ -45,6 +35,7 @@ const IngredientSearch = ({updateIngredients, navigation, dispatch, addTo, myOri
 	// Changement du texte de l'input
 	_inputSearchTermChanged = (text) => {
 		searchTerm.current = text;
+		_searchIngredients();
 	}
 
 	// Recherche d'un aliment
@@ -64,10 +55,14 @@ const IngredientSearch = ({updateIngredients, navigation, dispatch, addTo, myOri
 		setRefreshingState( true );
 		setErrorDataLoading( false );
 		try {
-			if (!addTo)
-				var apiSearchResult = listeDispalyItem.filter(element => (element.name).startsWith(searchTerm.current));
+			if (!addTo){
+				if (myOrigin == "ShoppingList")
+					var apiSearchResult = updateIngredients.ShoppingIngredients.filter(element => (element.name.toLowerCase()).startsWith(searchTerm.current.toLowerCase()));
+				if (myOrigin == "Fridge")
+					var apiSearchResult = updateIngredients.FridgeIngredients.filter(element => (element.name.toLowerCase()).startsWith(searchTerm.current.toLowerCase()));
+			}
 			else
-				var apiSearchResult = ( await getIngredients( paginationData.current.currentOffset, searchTerm.current, 1 ) );
+				var apiSearchResult = ( await getIngredients( paginationData.current.currentOffset, searchTerm.current, 10 ) );
 			
 			// Tri selon name ou aisle
 			setIngredientsData( [...prevIngredients, ...apiSearchResult].sort((a,b) => {
@@ -77,16 +72,17 @@ const IngredientSearch = ({updateIngredients, navigation, dispatch, addTo, myOri
 				}
 				return (a.name).localeCompare(b.name);
 			}));
-
 		//paginationData.current = { currentOffset: paginationData.current.currentOffset + apiSearchResult.number, maxResults: apiSearchResult.totalResults }
 		} catch (error) {
-			console.log("errer" + error)
+			console.log("erreur " + error)
 			paginationData.current = { currentOffset: 0, maxResults: 0 };
 			setIngredientsData( [] );
 			setErrorDataLoading( true ); // il faut mettre true
 		} finally {
 			setRefreshingState( false );
 		}
+		console.log("------------------------------------------------------------")
+		console.log(apiSearchResult);
 	}
 
 	_displayDescription = () => {
@@ -120,9 +116,10 @@ const IngredientSearch = ({updateIngredients, navigation, dispatch, addTo, myOri
 			<FlatList
 				data={ ingredientsData }
 				keyExtractor={ (item) => item.name.toString() }
-				renderItem={ ({item}) => <MyItem listeOposer={ listeOposer } ingredient={ item } parent={myOrigin} addTo={needToAdd}/> }
+				renderItem={ ({item}) => <MyItem reload={ this.reload } ingredient={ item } parent={myOrigin} addTo={needToAdd}/> }
 				onEndReached={ _searchMoreIngredients }
 				onEndReachedThreshold={ 0.5 }
+				refreshingState={ isRefreshing }
       		/>
 	 
 		</View>

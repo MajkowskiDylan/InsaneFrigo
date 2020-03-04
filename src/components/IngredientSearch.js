@@ -9,27 +9,34 @@ import { getIngredients } from '../api/spoonacular';
 import { colors } from '../definitions/colors';
 import { assets } from '../definitions/assets';
 
-const IngredientSearch = ({updateIngredients, addTo, myOrigin}) => {
-	
-	const [filter, setFilter] = useState(0);
+const IngredientSearch = ({updateIngredients, addTo, myOrigin, filter, saveFilter, stringSearch, saveStringSearch, }) => {
+
 	const filters = ['Name', 'Aisle'];
 	const [ingredientsData, setIngredientsData] = useState([]); // ce que la flatlist va afficher (API ou liste, selon les cas)
 	const [isRefreshing, setRefreshingState] = useState( false );
 	const [isErrorDuringDataLoading, setErrorDataLoading] = useState( false );
 	const paginationData = useRef( {currentOffset: 0, maxResults: 0} );
-	const searchTerm = useRef(""); 
-	
+
+	if (stringSearch === undefined){
+		stringSearch = "";
+		console.log("yolo");
+	}
+	const searchTerm = useRef(stringSearch);
+
 	//const myOrigin = props.myOrigin; // regarde si le composant IngredientSearch est appelé depuis une page Fridge ou ShoppingList
 	var needToAdd = /*props.*/addTo; // regarde si le composant IngredientSearch est appelé depuis une page AddTo ou non
 	const descriptionMy = "Here you can  remove ingredients from the " + myOrigin + ", press an empty icon to add it to the other list,a black one means it is already in the other list.";
 	const descriptionAddTo = "Here you can add to the " + needToAdd + ". Press an empty icon to add it, a black one means it is already in.";
 
 
-	reload = () => {
+	reload = async(filter) => {
+		await saveFilter(filter)
 		_searchIngredients();
 	}
 
-	
+	reloadIng = async(filter) => {
+		_searchIngredients();
+	}
 
 	useEffect(() => {
 		_searchIngredients();
@@ -38,6 +45,7 @@ const IngredientSearch = ({updateIngredients, addTo, myOrigin}) => {
 	// Changement du texte de l'input
 	_inputSearchTermChanged = (text) => {
 		searchTerm.current = text;
+		saveStringSearch(text)
 		if(!addTo)
 			_searchIngredients();
 	}
@@ -74,7 +82,7 @@ const IngredientSearch = ({updateIngredients, addTo, myOrigin}) => {
 				{
 					return (a.aisle).localeCompare(b.aisle);
 				}
-				return (a.name).localeCompare(b.name);
+					return (a.name).localeCompare(b.name);
 			}));
 		//paginationData.current = { currentOffset: paginationData.current.currentOffset + apiSearchResult.number, maxResults: apiSearchResult.totalResults }
 		} catch (error) {
@@ -109,16 +117,17 @@ const IngredientSearch = ({updateIngredients, addTo, myOrigin}) => {
 					style = { styles.searchField }
 					onChangeText={ text => _inputSearchTermChanged(text) }
 					onSubmitEditing={ () => { _searchIngredients(); Keyboard.dismiss()} }
+					value = {stringSearch}
 				/>
 			</View>
 			
 			
-			<ButtonGroup onPress={filter => setFilter(filter)} selectedIndex={filter} buttons={filters}></ButtonGroup>
+			<ButtonGroup onPress={filter => reload(filter)} selectedIndex={filter} buttons={filters}></ButtonGroup> 
 
 			<FlatList
 				data={ ingredientsData }
 				keyExtractor={ (item) => item.name.toString() }
-				renderItem={ ({item}) => <MyItem reload={ this.reload } ingredient={ item } parent={myOrigin} addTo={needToAdd}/> }
+				renderItem={ ({item}) => <MyItem reloadIng={ this.reloadIng } ingredient={ item } parent={myOrigin} addTo={needToAdd}/> }
 				onEndReached={ _searchMoreIngredients }
 				onEndReachedThreshold={ 0.5 }
 				refreshingState={ isRefreshing }
@@ -136,7 +145,6 @@ IngredientSearch.navigationOptions = {
 
 const mapStateToProps = (state) => {
 	return {
-    updateIngredients: state.updateIngredients,
     config : state.settingPreferance
 	}
 }

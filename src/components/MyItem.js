@@ -9,7 +9,7 @@ import { assets } from '../definitions/assets';
 import { ButtonGroup } from 'react-native-elements';
 import { connect, dispatch } from 'react-redux';
 
-const MyItem = ({reload, ingredient, parent, addTo, dispatch, updateIngredients}) => {
+const MyItem = ({reloadIng, ingredient, parent, addTo, dispatch, updateIngredients}) => {
   //const ingredient = props.ingredient; // l'ingredient courant sur lequel on clique
   const uriIngredient = "https://spoonacular.com/cdn/ingredients_100x100/";
   const myAddTo = addTo; // regarde si on fait ça depuis Add To (Fridge ou SL)
@@ -47,7 +47,7 @@ const MyItem = ({reload, ingredient, parent, addTo, dispatch, updateIngredients}
 
   _supprimerIngredient = async (myIngredient) => {
     await _supprimerIngredientBis(myIngredient);
-    await reload();
+    await reloadIng();
   }
 
   _supprimerIngredientBis = async (myIngredient) => {
@@ -60,7 +60,7 @@ const MyItem = ({reload, ingredient, parent, addTo, dispatch, updateIngredients}
 
   _ajouterIngredient = async (myIngredient) => {
     await _ajouterIngredientBis(myIngredient);
-    await reload();
+    await reloadIng();
   }
 
   _ajouterIngredientBis = async (myIngredient) => {

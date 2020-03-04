@@ -9,9 +9,30 @@ import MyItem from './MyItem';
 
 const AddTo = ({navigation}) => {
 	const src = navigation.state.params.src;
+	const filterBis = navigation.state.params.filter;
+	const _saveFilterBis = navigation.state.params.saveFilter;
+	const searchTermBis = navigation.state.params.searchTerm;
+	const _saveSearchTermBis = navigation.state.params.saveSearchTerm;
+
+	const reload = navigation.state.params.reload;
+
+	const [filter, setFilter] = useState(filterBis);
+
+	_saveFilter = async(sort) => {
+		setFilter(sort);
+		_saveFilterBis(sort);
+	}
+
+	const [searchTerm, setSearchTerm] = useState(searchTermBis);
+
+	_saveSearchTerm = async(sort) => {
+		setSearchTerm(sort);
+		_saveSearchTermBis(sort);
+	}
+
 	return (
 		<View>
-			<IngredientSearch addTo={true} myOrigin={src}/>
+			<IngredientSearch addTo={true} myOrigin={src} filter={filter} saveFilter={_saveFilter} stringSearch={searchTerm} saveStringSearch={_saveSearchTerm} reload={reload}/>
     	</View>
     );
 }

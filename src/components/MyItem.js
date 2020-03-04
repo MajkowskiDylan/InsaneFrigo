@@ -9,7 +9,7 @@ import { assets } from '../definitions/assets';
 import { ButtonGroup } from 'react-native-elements';
 import { connect, dispatch } from 'react-redux';
 
-const MyItem = ({reloadIng, ingredient, parent, addTo, dispatch, updateIngredients}) => {
+const MyItem = ({reloadIng, ingredient, parent, addTo, dispatch, updateIngredients, settingPreferance}) => {
   //const ingredient = props.ingredient; // l'ingredient courant sur lequel on clique
   const uriIngredient = "https://spoonacular.com/cdn/ingredients_100x100/";
   const myAddTo = addTo; // regarde si on fait ça depuis Add To (Fridge ou SL)
@@ -33,6 +33,12 @@ const MyItem = ({reloadIng, ingredient, parent, addTo, dispatch, updateIngredien
       {
         const action = { type: actionName, value: myIngredient };
         dispatch(action);
+        
+        if (parent == "ShoppingList")
+        {
+          if(settingPreferance.FtoL == true)
+            _supprimerIngredient(myIngredient);
+        }
       }
     }
   
@@ -46,6 +52,11 @@ const MyItem = ({reloadIng, ingredient, parent, addTo, dispatch, updateIngredien
   }
 
   _supprimerIngredient = async (myIngredient) => {
+    if (parent == "Fridge")
+    {
+      if(settingPreferance.FtoL == true)
+        _saveIngredient(myIngredient);
+    }
     await _supprimerIngredientBis(myIngredient);
     await reloadIng();
   }
@@ -93,7 +104,7 @@ const MyItem = ({reloadIng, ingredient, parent, addTo, dispatch, updateIngredien
     if(!myAddTo)
     {
       return (					
-        <Button buttonStyle={{backgroundColor: colors.mainDrakGray, height:33, width:33, margin:0,padding:0}} icon={{name: "delete-forever", size: 18, color: "white"}} onPress={() => _supprimerIngredient(ingredient) } />
+        <Button buttonStyle={{backgroundColor: colors.mainOrangeColor, height:33, width:33, margin:0,padding:0}} icon={{name: "delete-forever", size: 18, color: "white"}} onPress={() => _supprimerIngredient(ingredient) } />
       );
     }
   };
@@ -102,7 +113,7 @@ const MyItem = ({reloadIng, ingredient, parent, addTo, dispatch, updateIngredien
   // Si l'icone n'est pas pleine, on peut l'ajouter
   _displaySaved = () => {
     if (addTo)
-      return(<Button buttonStyle={{backgroundColor: colors.mainDrakGray, height:33, width:33, margin:0,padding:0}} icon={{name: "add", size: 18, color: "white"}} onPress={() => _ajouterIngredient(ingredient) } />);
+      return(<Button buttonStyle={{backgroundColor: colors.mainOrangeColor, height:33, width:33, margin:0,padding:0}} icon={{name: "add", size: 18, color: "white"}} onPress={() => _ajouterIngredient(ingredient) } />);
     else
     {
       if (parent == "Fridge")
@@ -110,7 +121,7 @@ const MyItem = ({reloadIng, ingredient, parent, addTo, dispatch, updateIngredien
       if (parent == "ShoppingList")
         var icone = "kitchen";
       if(_isIngredientInList(true, ingredient))
-        return(<Button buttonStyle={{backgroundColor: colors.mainDrakGray, height:33, width:33, marginRight:5, padding:0}} icon={{name: icone, size: 18, color: "white"}} onPress={() => _unsaveIngredient(ingredient) } />);
+        return(<Button buttonStyle={{backgroundColor: colors.mainOrangeColor, height:33, width:33, marginRight:5, padding:0}} icon={{name: icone, size: 18, color: "white"}} onPress={() => _unsaveIngredient(ingredient) } />);
       else
         return(<Button buttonStyle={{backgroundColor: colors.mainWhiteColor, height:33, width:33, marginRight:5, padding:0}} icon={{name: icone, size: 18, color: "black"}} onPress={() => _saveIngredient(ingredient) } />);
     }
@@ -122,7 +133,7 @@ const MyItem = ({reloadIng, ingredient, parent, addTo, dispatch, updateIngredien
 
 	return (
     <TouchableOpacity style={ styles.mainContainer } >
-      <Image source={{uri: uriIngredient + ingredient.image}} style={ styles.typeImage }/>
+      <Image source={{uri: uriIngredient + ingredient.image}} style={ styles.typeImage } resizeMode="contain" />
       <View style={ styles.itemsContainer }>
         <Text style={ styles.itemNameText }> 
         { ingredient.name } - aisle: {ingredient.aisle}
@@ -142,7 +153,8 @@ MyItem.navigationOptions = {
 
 const mapStateToProps = (state) => {
 	return {
-    updateIngredients:state.updateIngredients
+    updateIngredients:state.updateIngredients,
+    settingPreferance:state.settingPreferance,
 	}
 }
   
@@ -157,7 +169,7 @@ const styles = StyleSheet.create({
     typeImage: {
       height: 50,
       width: 50,
-      backgroundColor: '#6b689c',
+      backgroundColor: '#FFF',
     },
     itemsContainer: {
       flex: 1,

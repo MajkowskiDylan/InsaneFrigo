@@ -106,11 +106,9 @@ const IngredientSearch = ({updateIngredients, addTo, myOrigin, filter, saveFilte
 			<Text style = {styles.description}>  {descriptionAddTo} </Text>
 		);
 	};
-
+//{ _displayDescription() }
 	return (
 		<View>
-			{ _displayDescription() }
-
 			<View style = { styles.searchView }>
 				<Input 
 					placeholder = "Ingredient's name"
@@ -122,7 +120,7 @@ const IngredientSearch = ({updateIngredients, addTo, myOrigin, filter, saveFilte
 			</View>
 			
 			
-			<ButtonGroup onPress={filter => reload(filter)} selectedIndex={filter} buttons={filters}></ButtonGroup> 
+			<ButtonGroup onPress={filter => reload(filter)} selectedIndex={filter} buttons={filters} selectedButtonStyle={styles.groupButton}></ButtonGroup> 
 
 			<FlatList
 				data={ ingredientsData }
@@ -183,7 +181,11 @@ const styles = StyleSheet.create({
 		marginLeft : 20,
 		marginRight: 10
 	},
+	groupButton:{
+		backgroundColor:colors.mainGrayColor
+	},
 	liste:{
-		marginBottom:60
+		marginLeft:10,
+		marginRight:2,
 	}
 });

@@ -40,7 +40,7 @@ const Settings = ({quota, settingPreferance, dispatch}) => {
 			</View>
 			<View style = { styles.clearData }>
 				<View style = { styles.clearDataSub }>
-					<Button title = 'Clear Data'  style = {styles.button } icon={{name: "delete-forever", size: 30, color: "white"}} onPress= {this._addQuota} />
+					<Button title = 'Clear Data' buttonStyle={{ backgroundColor : colors.mainOrangeColor}} style = {styles.button } icon={{name: "delete-forever", size: 30, color: "white"}} onPress= {this._addQuota} />
 				</View>
 			</View>
       </View>

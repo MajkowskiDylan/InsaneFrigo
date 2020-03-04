@@ -3,8 +3,9 @@ export const colors = {
 	mainOrangeColor: '#FFA500',
 	mainSilverColor: '#EFEFEF',
 	mainSearchColor: '#FAFAFA',
-	mainBlueColor: '#6b689c',
+	mainBlueColor: '#2288dc',
 	mainWhiteColor: '#FFF',
 	mainRedColor: '#E53935',
-	mainDrakGray: '#25221E'
+	mainDrakGray: '#25221E',
+	mainGrayColor: "#888888"
 }

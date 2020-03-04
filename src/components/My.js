@@ -35,19 +35,28 @@ const My  = ({navigation, updateIngredients}) => {
 	reload = () => {
 		
 	}
+	
 
 	// params.origin fait référence à la page d'origine, par exemple si on a cliqué sur My Fridge ou My Shopping List dans la page Me.js
 	return (
 		<View style = { styles.all }>
 			<IngredientSearch updateIngredients={updateIngredients} myOrigin={origine} addTo={false} filter={filter} saveFilter={_saveFilter} stringSearch={searchTerm} saveStringSearch={_saveSearchTerm} reload={reload}/>
 			<View style={ styles.bot} >
-				<Button buttonStyle={{height:32}} titleStyle={{fontSize: 15}} onPress={() => navigation.navigate('AddTo', {reload:reload, src: origine, filter:filter, saveFilter:_saveFilter, searchTerm:searchTerm, saveSearchTerm:_saveSearchTerm})} title="Add ingredient" icon={{name: "add", size: 28, color: "white"}} />
-				<Button onClick={this.triggerChildAlert} title="click"/>
+				<Button
+					buttonStyle={{width:60, height:60, borderRadius:30, padding:0}} 
+					style = {styles.button } 
+					icon={{name: "add", size: 40, color: "white"}}
+					onPress={() => navigation.navigate('AddTo', {reload:reload, src: origine, filter:filter, saveFilter:_saveFilter, searchTerm:searchTerm, saveSearchTerm:_saveSearchTerm})} 
+					/>
 			</View>
 		</View>
     );
 }
 
+
+My.navigationOptions = {
+	title: 'My',
+};
 
 const mapStateToProps = (state) => {
 	return {
@@ -57,10 +66,6 @@ const mapStateToProps = (state) => {
 
 export default connect(mapStateToProps)(My);
 
-My.navigationOptions = {
-	title: 'My Fridge / Shopping List ',
-};
-
 
 const styles = StyleSheet.create({
 	all: {
@@ -69,9 +74,10 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
 	  },
 	bot: {
-		marginTop:60,
+		alignItems: 'flex-end',
 		width:'100%',
 		position: 'absolute',
-		bottom:0
+		bottom:30,
+		right:30
 	}
 });

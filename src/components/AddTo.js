@@ -31,7 +31,7 @@ const AddTo = ({navigation}) => {
 	}
 
 	return (
-		<View>
+		<View style = { styles.all }>
 			<IngredientSearch addTo={true} myOrigin={src} filter={filter} saveFilter={_saveFilter} stringSearch={searchTerm} saveStringSearch={_saveSearchTerm} reload={reload}/>
     	</View>
     );
@@ -42,3 +42,12 @@ AddTo.navigationOptions = {
 };
 
 export default AddTo;
+
+
+const styles = StyleSheet.create({
+	all: {
+		flex:1,
+		alignItems: 'center',
+        justifyContent: 'center',
+	  },
+});

@@ -15,13 +15,13 @@ const Me = ({navigation}) => {
 			<View style = {styles.middle}>
 				<View style = {styles.middleTop}>
 					<View style = {styles.btn}>
-						<Button buttonStyle={{height:70}} titleStyle={{fontSize: 20}} icon={{name: "kitchen", size: 30, color: "white"}} onPress={() => navigation.navigate('My', {origin: "Fridge"})}  title="My Fridge" />
+						<Button buttonStyle={{height:70, backgroundColor : colors.mainBlueColor}} titleStyle={{fontSize: 20}} icon={{name: "kitchen", size: 30, color: "white"}} onPress={() => navigation.navigate('My', {origin: "Fridge"})}  title="My Fridge" />
 					</View>
 					<View style = {styles.btn}>
-						<Button buttonStyle={{height:70}} titleStyle={{fontSize: 20}} icon={{name: "shopping-cart", size: 30, color: "white"}} onPress={() => navigation.navigate('My', {origin: "ShoppingList"})} title="My List" />
+						<Button buttonStyle={{height:70, backgroundColor : colors.mainBlueColor}} titleStyle={{fontSize: 20}} icon={{name: "shopping-cart", size: 30, color: "white"}} onPress={() => navigation.navigate('My', {origin: "ShoppingList"})} title="My List" />
 					</View>	
 					<View style = {styles.btn}>
-						<Button buttonStyle={{height:70}} titleStyle={{fontSize: 20}} icon={{name: "collections-bookmark", size: 30, color: "white"}} onPress={() => navigation.navigate('SavedRecipes')} title="My Recipes"/>
+						<Button buttonStyle={{height:70, backgroundColor : colors.mainBlueColor}} titleStyle={{fontSize: 20}} icon={{name: "collections-bookmark", size: 30, color: "white"}} onPress={() => navigation.navigate('SavedRecipes')} title="My Recipes"/>
 					</View>
 				</View>
 			<View style = {styles.middleBottom}></View>
@@ -63,18 +63,5 @@ const styles = StyleSheet.create({
 		flex: 1,
 		justifyContent: "center"
 		
-	},
-
-		
-	FacebookStyle: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		backgroundColor: '#485a96',
-		borderWidth: 0.5,
-		borderColor: '#fff',
-		height: 40,
-		width: 220,
-		borderRadius: 5,
-		margin: 5,
-	  },
+	}
 });

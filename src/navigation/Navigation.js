@@ -109,7 +109,7 @@ const TabNavigation = createBottomTabNavigator({
 	},
 },{
 	tabBarOptions: {
-		activeBackgroundColor: colors.mainGreenColor,
+		activeBackgroundColor: colors.mainBlueColor,
 		activeTintColor: 'white',
 	},
 	initialRouteName: 'Me',
@@ -128,4 +128,5 @@ const styles = StyleSheet.create({
 		height: 20,
 		tintColor: 'black',
 	}
+	
 });

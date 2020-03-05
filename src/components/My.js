@@ -25,7 +25,6 @@ const My  = ({navigation, updateIngredients}) => {
 
 	_saveSearchTerm = async(sort) => {
 		await setSearchTerm(sort);
-		console.log("filter mageule = " + searchTerm)
 	}
 
 	triggerChildAlert = () => {

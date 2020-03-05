@@ -71,7 +71,6 @@ const RecipeDetails = ({navigation, savedRecipes, savedIngredients, dispatch}) =
 		if (recipe) {
 			return (
 				<ScrollView style = {styles.mainView}>
-				{console.log('> Tab lenght : ' + missingIngredients.length)}
 					<View style = {styles.viewTop}>
 						<Image style = { styles.recipeImage } source = {{ uri: recipe.image }}/>
 						<Image style = { styles.filter } source = { assets.filter } />
@@ -137,6 +136,22 @@ const RecipeDetails = ({navigation, savedRecipes, savedIngredients, dispatch}) =
 								renderItem = {({item}) => <Text style = {styles.step}> <Text style = {styles.li}>{item.number}</Text> {item.step} </Text>}
 							/>
 						</View> ) : (null)
+					}
+
+					{
+						recipe.winePairing.pairedWines != null &&  recipe.winePairing.pairedWines.length > 0 ? (
+							<View style = {styles.wine}>
+								<Text style = {styles.title}>Wine</Text>
+								<FlatList
+									style = { styles.tagList }
+									data = { recipe.winePairing.pairedWines }
+									keyExtractor = { (item) => item.toString() }
+									renderItem = { ({item}) => <Text style = {styles.wineItem}>{item}</Text> }
+									horizontal
+								/>
+								<Text style = {styles.pairingText}> {recipe.winePairing.pairingText} </Text>
+							</View>
+						) : (null)
 					}
 				</ScrollView>
 			);
@@ -257,7 +272,7 @@ const styles = StyleSheet.create({
 		padding: 3,
 		padding: 5,
 		color: colors.mainWhiteColor,
-		backgroundColor: colors.mainGreenColor,
+		backgroundColor: colors.mainBlueColor,
 	},
 	cuisineItem: {
 		fontSize: 12,
@@ -265,7 +280,7 @@ const styles = StyleSheet.create({
 		padding: 3,
 		padding: 5,
 		color: colors.mainWhiteColor,
-		backgroundColor: colors.mainBlueColor,
+		backgroundColor: colors.mainGrayColor,
 	},
 	ingredients: {
 		padding: 10,
@@ -299,5 +314,21 @@ const styles = StyleSheet.create({
 		fontWeight: "bold",
 		fontSize: 17,
 		marginBottom: 5,
+	},
+	wine:{
+		padding: 10,
+		marginTop: 25,
+	},
+	wineItem: {
+		fontSize: 12,
+		margin: 2,
+		padding: 3,
+		padding: 5,
+		color: colors.mainWhiteColor,
+		backgroundColor: colors.mainWineColor,
+	}, 
+	pairingText: {
+		marginTop: 8,
+		marginLeft: 10,
 	}
 });

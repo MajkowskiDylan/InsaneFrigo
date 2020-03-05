@@ -19,7 +19,6 @@ const IngredientSearch = ({updateIngredients, addTo, myOrigin, filter, saveFilte
 
 	if (stringSearch === undefined){
 		stringSearch = "";
-		console.log("yolo");
 	}
 	const searchTerm = useRef(stringSearch);
 
@@ -86,7 +85,6 @@ const IngredientSearch = ({updateIngredients, addTo, myOrigin, filter, saveFilte
 			}));
 		//paginationData.current = { currentOffset: paginationData.current.currentOffset + apiSearchResult.number, maxResults: apiSearchResult.totalResults }
 		} catch (error) {
-			console.log("erreur " + error)
 			paginationData.current = { currentOffset: 0, maxResults: 0 };
 			setIngredientsData( [] );
 			setErrorDataLoading( true ); // il faut mettre true

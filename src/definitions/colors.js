@@ -7,5 +7,6 @@ export const colors = {
 	mainWhiteColor: '#FFF',
 	mainRedColor: '#E53935',
 	mainDrakGray: '#25221E',
-	mainGrayColor: "#888888"
+	mainGrayColor: '#888888',
+	mainWineColor: '#8e1665',
 }

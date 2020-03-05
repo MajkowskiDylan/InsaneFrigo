@@ -1,8 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet,Image, navigation, TouchableHighlight, TouchableOpacity  } from 'react-native';
-import { Button } from 'react-native-elements'
-
-import MyRecipes from './SavedRecipes';
+import { View, Text, StyleSheet, TouchableOpacity, Image  } from 'react-native';
 
 import { colors } from '../definitions/colors';
 import { assets } from '../definitions/assets';
@@ -10,23 +7,30 @@ import { assets } from '../definitions/assets';
 const Me = ({navigation}) => {
 	return (
 		<View style = { styles.mainView }>
-			<View style = {styles.side}>
-			</View>
-			<View style = {styles.middle}>
-				<View style = {styles.middleTop}>
-					<View style = {styles.btn}>
-						<Button buttonStyle={{height:70, backgroundColor : colors.mainBlueColor}} titleStyle={{fontSize: 20}} icon={{name: "kitchen", size: 30, color: "white"}} onPress={() => navigation.navigate('My', {origin: "Fridge"})}  title="My Fridge" />
+			<View style = {styles.btns}>
+				<TouchableOpacity style = {styles.btn} onPress = {() => navigation.navigate('My', {origin: "Fridge"}) } >
+					<View style = {styles.btnIcon}>
+						<Image style = {styles.icon} source = {assets.fridgIcon}/>
 					</View>
-					<View style = {styles.btn}>
-						<Button buttonStyle={{height:70, backgroundColor : colors.mainBlueColor}} titleStyle={{fontSize: 20}} icon={{name: "shopping-cart", size: 30, color: "white"}} onPress={() => navigation.navigate('My', {origin: "ShoppingList"})} title="My List" />
-					</View>	
-					<View style = {styles.btn}>
-						<Button buttonStyle={{height:70, backgroundColor : colors.mainBlueColor}} titleStyle={{fontSize: 20}} icon={{name: "collections-bookmark", size: 30, color: "white"}} onPress={() => navigation.navigate('SavedRecipes')} title="My Recipes"/>
+					<Text style = {styles.btnText}>My Fridge</Text>
+				</TouchableOpacity>
+
+				<TouchableOpacity style = {styles.btn} onPress = {() => navigation.navigate('My', {origin: "ShoppingList"}) } >
+					<View style = {styles.btnIcon}>
+						<Image style = {styles.icon} source = {assets.shoppingIcon}/>
 					</View>
-				</View>
-			<View style = {styles.middleBottom}></View>
+					<Text style = {styles.btnText}>My List</Text>
+				</TouchableOpacity>
+
+				<TouchableOpacity style = {styles.btn} onPress = {() => navigation.navigate('SavedRecipes') } >
+					<View style = {styles.btnIcon}>
+						<Image style = {styles.icon} source = {assets.heartIcon}/>
+					</View>
+					<Text style = {styles.btnText}>My Recipes</Text>
+				</TouchableOpacity>
 			</View>
-			<View style = {styles.side}>
+			<View style = {styles.fond}>
+				<Image style = { styles.img } source = { assets.fond } />
 			</View>
 		</View>
 	);
@@ -41,27 +45,38 @@ export default Me;
 const styles = StyleSheet.create({
 	mainView: {
 		flex: 1,
-		flexDirection: 'row'
-	},
-	side: {
-		flex: 2
-	},
-	middle: {
-		flex: 3,
-		flexDirection: 'column'
-	},
-	middleTop: {
-		flex: 1,
-		flexDirection: 'column',
-		height: '100%'
-	},
-	middleBottom: {
-		flex: 1,
-		justifyContent: "center"
+		paddingTop: 20,
 	},
 	btn:{
+		width: 340,
+		height: 60,
+		margin: 10,
+		backgroundColor: colors.mainGreenColor,
+		flexDirection: 'row',
+	},
+	btnIcon: {
 		flex: 1,
-		justifyContent: "center"
-		
+		justifyContent: "center",
+	},
+	icon: {
+		left: 100,
+		width: 30,
+		height: 30,
+		tintColor: colors.mainWhiteColor,
+	},
+	btnText: {
+		left: 50,
+		flex: 2,
+		fontSize: 15,
+		fontWeight: 'bold',
+		textAlignVertical: "center",
+		color: colors.mainWhiteColor,
+	},
+	fond: {
+
+	},
+	img: {
+		width: 360,
+		height: 400,
 	}
 });

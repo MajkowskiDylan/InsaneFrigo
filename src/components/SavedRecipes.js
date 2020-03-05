@@ -4,8 +4,6 @@ import { connect } from 'react-redux';
 
 import { colors } from '../definitions/colors';
 
-import Error from './Error';
-import RecipesList from './RecipesList';
 import RecipeItem from './RecipeItem';
 
 const SavedRecipes = ({navigation, savedRecipes}) => {	
@@ -18,9 +16,16 @@ const SavedRecipes = ({navigation, savedRecipes}) => {
 	return (
 		<View style = { styles.mainView }>
 			<View style = {styles.listLayout}>
-				<RecipesList
-					recipes = {savedRecipes}
-					onClickNavigation = {_navigateToRecipeDetails}
+				<FlatList
+					style = { styles.RecipesList }
+					data = { savedRecipes }
+					keyExtractor = { (item) => item.id.toString() }
+					extraData = { savedRecipes }
+					renderItem = { ({item}) => <RecipeItem
+												recipe = { item }
+												isSaved = { true }
+												onClickOnMe = { _navigateToRecipeDetails }
+											/> }
 				/>
 			</View>
 		</View>
@@ -28,7 +33,7 @@ const SavedRecipes = ({navigation, savedRecipes}) => {
 }
 
 SavedRecipes.navigationOptions = {
-	title: 'SavedRecipes',
+	title: 'My Recipes',
 };
 
 // Récupère la variable globale state

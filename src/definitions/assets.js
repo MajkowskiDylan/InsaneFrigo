@@ -11,5 +11,10 @@ export const assets = {
 	suppIcon: require( '../../assets/icons/supprimer.png' ),
 	timeIcon: require( '../../assets/icons/time.png' ),
 	errorIcon: require( '../../assets/icons/error.png' ),
-	fridgIcon: require( '../../assets/icons/fridge.png' )
+	fridgIcon: require( '../../assets/icons/fridge.png' ),
+	shoppingIcon: require( '../../assets/icons/shopping.png' ),
+	heartIcon: require( '../../assets/icons/heart.png' ),
+
+	filter: require( '../../assets/images/filter.png' ),
+	fond: require( '../../assets/images/bg-fond.png' ),
 };

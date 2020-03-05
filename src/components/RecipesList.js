@@ -8,9 +8,7 @@ const RecipesList = ({recipes, refreshingState, onClickNavigation, refreshRecipe
 
     // Retourne vrai si une des recettes chargées est enregistrée
     const _isItSaved = ( recipeID ) => {
-		if (savedRecipes.findIndex((e) => e.id === recipeID) != -1)
-			return true;
-		return false;
+		return (savedRecipes.findIndex((e) => e.id === recipeID) != -1)
 	}
     
 	return (
@@ -24,7 +22,11 @@ const RecipesList = ({recipes, refreshingState, onClickNavigation, refreshRecipe
                 data = { recipes }
                 keyExtractor = { (item) => item.id.toString() }
                 extraData = { savedRecipes }
-                renderItem = { ({item}) => <Text>{item.id, console.log('ok')}</Text> }
+                renderItem = { ({item}) => <RecipeItem
+                                            recipe = { item }
+                                            isSaved = { _isItSaved(item.id) }
+                                            onClickOnMe = { onClickNavigation }
+                                        /> }
                 refreshing = { refreshingState }
                 onRefresh = { refreshRecipes }
                 onEndReached = { loadMoreRecipes }

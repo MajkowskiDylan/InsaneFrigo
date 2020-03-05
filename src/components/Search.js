@@ -73,7 +73,7 @@ const Search = ({navigation}) => {
 					/>
 					<TouchableHighlight onPress = { _searchRecipes }>
 						<View style = { styles.button }>
-							<Image  style = { styles.searchIcon } source = { assets.searchIcon } />
+							<Image style = { styles.searchIcon } source = { assets.searchIcon } />
 						</View>
 					</TouchableHighlight>
 				</View>
@@ -166,11 +166,11 @@ const styles = StyleSheet.create({
 		backgroundColor: colors.mainSearchColor,
 	},
 	searchLayout: {
-		flex: 1,
+		flex: 2,
 		flexDirection: "column",
 	},
 	searchView: {
-		flex: 1,
+		height: 50,
 		alignItems: 'stretch',
 		flexDirection: 'row',
 	},
@@ -184,15 +184,14 @@ const styles = StyleSheet.create({
 		flex: 1,
 		alignItems: 'center',
 		justifyContent: 'center',
-		width: 100,
-		height: 100,
+		width: 60,
+		height: 60,
 	},
 	searchIcon: {
-		width: 50,
-		height: 50,
+		width: 40,
+		height: 40,
 	},
 	lists: {
-		flex: 1,
 		flexDirection: 'row',
 	},
 	list: {
@@ -205,7 +204,7 @@ const styles = StyleSheet.create({
 		color: colors.mainWhiteColor,
 		marginHorizontal: 10,
 		textAlign: 'center',
-		padding: 12,
+		padding: 10,
 	},
 	resultLayout: {
 		flex: 5,

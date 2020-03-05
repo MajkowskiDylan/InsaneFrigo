@@ -43,7 +43,7 @@ const My  = ({navigation, updateIngredients}) => {
 			<IngredientSearch updateIngredients={updateIngredients} myOrigin={origine} addTo={false} filter={filter} saveFilter={_saveFilter} stringSearch={searchTerm} saveStringSearch={_saveSearchTerm} reload={reload}/>
 			<View style={ styles.bot} >
 				<Button
-					buttonStyle={{width:60, height:60, borderRadius:30, padding:0}} 
+					buttonStyle={ styles.btnStyle} 
 					style = {styles.button } 
 					icon={{name: "add", size: 40, color: "white"}}
 					onPress={() => navigation.navigate('AddTo', {reload:reload, src: origine, filter:filter, saveFilter:_saveFilter, searchTerm:searchTerm, saveSearchTerm:_saveSearchTerm})} 
@@ -77,7 +77,22 @@ const styles = StyleSheet.create({
 		alignItems: 'flex-end',
 		width:'100%',
 		position: 'absolute',
-		bottom:30,
-		right:30
+		bottom:20,
+		right:20
+	},
+	btnStyle: {
+		width:60,
+		height:60,
+		borderRadius:30,
+		padding:0,
+		shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 5,
+        },
+        shadowOpacity: 0.8,
+        shadowRadius: 5,
+		elevation: 10,
+		backgroundColor: colors.mainGreenColor,
 	}
 });

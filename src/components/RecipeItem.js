@@ -11,12 +11,19 @@ const RecipeItem = ({recipe, isSaved, onClickOnMe}) => {
 		if( isSaved ) { return ( <Image  style = { styles.saveIcon } source = { assets.toUnsaveIcon } /> ); }
     }
 
+    // Renvoie le lien de l'image
+    _getImage = (img) => {
+        if (img.substr(0, 8) == 'https://') return img;
+        return ('https://spoonacular.com/recipeImages/' + img);
+    }
+
 	return (
         <TouchableOpacity style = { styles.mainView } onPress = { () => onClickOnMe(recipe.id) } >
         {console.log('ID : ' + recipe.id)}
             <View style = {styles.viewTop}>
                 <View style = {styles.hr}></View>
-                <Image style = { styles.recipeImage } source = {{ uri: 'https://spoonacular.com/recipeImages/' + recipe.image }}/>
+                <Image style = { styles.recipeImage } source = {{ uri: _getImage(recipe.image) }}/>
+                <Image style = { styles.filter } source = { assets.filter } />
                 <Text style = { styles.recipeTitle }> 
                     { recipe.title } 
                 </Text>
@@ -48,8 +55,8 @@ const styles = StyleSheet.create({
             width: 0,
             height: 5,
         },
-        shadowOpacity: 0.34,
-        shadowRadius: 6.27,
+        shadowOpacity: 0.5,
+        shadowRadius: 6.28,
         elevation: 10,
         marginLeft: 10,
         marginRight: 10,
@@ -60,9 +67,9 @@ const styles = StyleSheet.create({
         
     },
     recipeTitle: {
-        top: 110,
+        top: 100,
         left: 10,
-        fontSize: 28,
+        fontSize: 18,
         position: "absolute",
         fontWeight: "bold",
         color: colors.mainWhiteColor,
@@ -73,6 +80,11 @@ const styles = StyleSheet.create({
     recipeImage: {
         height: 150,
 		backgroundColor: colors.mainGreenColor,
+    },
+    filter: {
+        width: 340,
+        height: 155,
+        position: "absolute",
     },
     hr: {
         height: 5,
@@ -92,24 +104,26 @@ const styles = StyleSheet.create({
         paddingLeft: 20,
         flexDirection: 'row',
     },
+    bottomIcon: {
+        marginTop: 6,
+        width: 18,
+        height: 18,
+        marginRight: 5,
+    },
+    span: {
+        marginTop: 4,
+        fontSize: 14,
+        fontWeight: "bold",
+    },
     boxSave: {
         flex: 1,
-        paddingTop: 15,
-        paddingLeft: 200,
+        paddingTop: 18,
+        paddingLeft: 120,
         flexDirection: 'row',
-    },
-    bottomIcon: {
-        width: 25,
-        height: 25,
-        marginRight: 10,
     },
     saveIcon: {
         width: 25,
         height: 25,
         tintColor: colors.mainOrangeColor,
-    },
-    span: {
-        fontSize: 20,
-        fontWeight: "bold",
     }
 });

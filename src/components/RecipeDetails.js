@@ -6,14 +6,15 @@ import { colors } from '../definitions/colors';
 import { assets } from '../definitions/assets';
 
 import Error from './Error';
-import { getRecipeDetails } from '../api/spoonacular';
 import IngredientItem from './IngredientItem';
+import { getRecipeDetails } from '../api/spoonacular';
 
-const RecipeDetails = ({navigation, savedRecipes, dispatch}) => {
+const RecipeDetails = ({navigation, savedRecipes, savedIngredients, dispatch}) => {
 
 	const [recipe, setRecipe] = useState( null );
 	const [isLoading, setLoadingState] = useState( true );
 	const [isErrorDuringDataLoading, setErrorDataLoading] = useState( false );
+	var missingIngredients = [];
 
     useEffect(() => {
 		_loadRecipe();
@@ -30,11 +31,18 @@ const RecipeDetails = ({navigation, savedRecipes, dispatch}) => {
 		}
 	}
 
+	// Vérifie si un ingrédient est présent dans le frigo
+	const _isItSaved = ( ingredientID ) => {
+		return (savedIngredients.findIndex((e) => e.id === ingredientID) != -1)
+	}
+
+	// Enregistrement d'une recette
 	_saveRecipe = async () => {
 		const action = { type: 'SAVE_RECIPE', value: recipe };
 		dispatch(action);
 	}
 
+	// Suppression d'une recette
 	_unsaveRecipe = async () => {
 		const action = { type: 'UNSAVE_RECIPE', value: recipe };
 		dispatch(action);
@@ -45,20 +53,28 @@ const RecipeDetails = ({navigation, savedRecipes, dispatch}) => {
         if (isLoading) {
 			return (
 				<View style = {styles.loadingView}>
-					<ActivityIndicator size="large" />
+					<ActivityIndicator size = "large" />
 				</View>
 			);
 		}
 		return null;
-    }
+	}
+	
+	// Permet d'afficher les ingrédients contenu dans le frigo et de garder dans un tableau les ingrédients manquants 
+	_getIngredient = (item, missing) => {
+		if(!missing && _isItSaved(item.id)) return ( <IngredientItem original = {item.original} image = {item.image} instructions = {item.instructions} /> );
+		else if(missing && !_isItSaved(item.id)) return ( <IngredientItem original = {item.original} image = {item.image} instructions = {item.instructions} /> );
+	}
 
     // Détails d'une recette
     _displayRecipeDetails = () => {
 		if (recipe) {
 			return (
 				<ScrollView style = {styles.mainView}>
+				{console.log('> Tab lenght : ' + missingIngredients.length)}
 					<View style = {styles.viewTop}>
 						<Image style = { styles.recipeImage } source = {{ uri: recipe.image }}/>
+						<Image style = { styles.filter } source = { assets.filter } />
 						<Text style = { styles.recipeTitle }> 
 							{ recipe.title }
 						</Text>
@@ -92,13 +108,24 @@ const RecipeDetails = ({navigation, savedRecipes, dispatch}) => {
 					/>
 					<View style = {styles.ingredients}>
 						<Text style = {styles.title}>Ingredients</Text>
+
+						<Text style = {styles.subTitle}>In my fridge</Text>
 						<FlatList
 							style = { styles.ingredientsList }
 							data = { recipe.extendedIngredients }
 							keyExtractor = { (item) => item.id.toString() }
-							renderItem = { ({item}) => <IngredientItem original = {item.original} image = {item.image} instructions = {item.instructions} />}
+							renderItem = { ({item}) => _getIngredient(item, false)}
+						/>
+
+						<Text style = {styles.subTitle}>Missing</Text>
+						<FlatList
+							style = { styles.ingredientsList }
+							data = { recipe.extendedIngredients }
+							keyExtractor = { (item) => item.id.toString() }
+							renderItem = { ({item}) => _getIngredient(item, true)}
 						/>
 					</View>
+					
 					{
 						recipe.analyzedInstructions.length > 0 ? (
 						<View style = {styles.instructions}>
@@ -146,9 +173,13 @@ const RecipeDetails = ({navigation, savedRecipes, dispatch}) => {
 	);
 }
 
+RecipeDetails.navigationOptions = {
+	title: 'Recipe details',
+};
+
 // Récupère la variable globale state
 const mapStateToProps = (state) => {
-	return { savedRecipes: state.savedRecipes.savedRecipes }
+	return { savedRecipes: state.savedRecipes.savedRecipes, savedIngredients: state.updateIngredients.FridgeIngredients }
 }
 
 export default connect(mapStateToProps)(RecipeDetails);
@@ -166,9 +197,9 @@ const styles = StyleSheet.create({
         
     },
     recipeTitle: {
-        top: 160,
+        top: 140,
         left: 10,
-        fontSize: 28,
+        fontSize: 20,
         position: "absolute",
         fontWeight: "bold",
         color: colors.mainWhiteColor,
@@ -180,6 +211,10 @@ const styles = StyleSheet.create({
         height: 200,
 		backgroundColor: colors.mainGreenColor,
 	},
+    filter: {
+        height: 200,
+        position: "absolute",
+    },
     viewBottom: {
         height: 60,
         flexDirection: 'row',
@@ -195,12 +230,12 @@ const styles = StyleSheet.create({
     boxSave: {
         flex: 1,
         paddingTop: 15,
-        paddingLeft: 200,
+        paddingLeft: 120,
         flexDirection: 'row',
     },
     bottomIcon: {
-        width: 25,
-        height: 25,
+        width: 18,
+        height: 18,
         marginRight: 10,
     },
     saveIcon: {
@@ -209,27 +244,26 @@ const styles = StyleSheet.create({
         tintColor: colors.mainOrangeColor,
     },
     span: {
-        fontSize: 20,
+        fontSize: 14,
         fontWeight: "bold",
 	},
 	tagList: {
+		marginLeft: 5,
 		flexDirection: "row",
 	},
 	dietItem:{
-		margin: 3,
+		fontSize: 12,
+		margin: 2,
 		padding: 3,
 		padding: 5,
-		paddingTop: 3,
-		borderRadius: 5,
 		color: colors.mainWhiteColor,
 		backgroundColor: colors.mainGreenColor,
 	},
 	cuisineItem: {
-		margin: 3,
+		fontSize: 12,
+		margin: 2,
 		padding: 3,
 		padding: 5,
-		paddingTop: 3,
-		borderRadius: 5,
 		color: colors.mainWhiteColor,
 		backgroundColor: colors.mainBlueColor,
 	},
@@ -260,5 +294,10 @@ const styles = StyleSheet.create({
 		fontWeight: "bold",
 		fontSize: 20,
 		marginBottom: 15,
+	},
+	subTitle: {
+		fontWeight: "bold",
+		fontSize: 17,
+		marginBottom: 5,
 	}
 });

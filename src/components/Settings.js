@@ -27,16 +27,16 @@ const Settings = ({quota, settingPreferance, dispatch}) => {
 		dispatch(action);
     }
 	return (
-		 <View style={{flex: 10, flexDirection: 'column'}}>
+		 <View style={styles.mainView}>
         	<View style = { styles.configuration }>
 				<Text style ={styles.title}	>Configuration</Text>
-				<CheckBox checked={settingPreferance.FtoL} onPress={this._updateFtoL} title = 'Add ingredients removed from the fridge to the shopping list.' />
-				<CheckBox checked={settingPreferance.LtoF} onPress={this._updateLtoF} title = 'When adding an ingredient to the fridge from the shopping liste remove it from the shopping list.' />
+				<CheckBox checked={settingPreferance.FtoL} onPress={this._updateFtoL} checkedColor={colors.mainOrangeColor} title = 'Add ingredients removed from the fridge to the shopping list.' />
+				<CheckBox checked={settingPreferance.LtoF} onPress={this._updateLtoF} checkedColor={colors.mainOrangeColor} title = 'When adding an ingredient to the fridge from the shopping liste remove it from the shopping list.' />
 			</View>
 			<View style = { styles.api}>
 				<Text style ={styles.title}>API </Text>
-				<Text style ={styles.txt}>API's credits remaining : <Text style={{fontWeight: 'bold'}}> {quota.quota} token</Text></Text>
-				<Text style ={styles.txt}>Last updates: <Text style={{fontWeight: 'bold'}}> {quota.date} </Text></Text>
+				<Text style ={styles.txt}>API's credits remaining : <Text style={{fontWeight: 'bold', color: colors.mainOrangeColor}}> {quota.quota} token</Text></Text>
+				<Text style ={styles.txt}>Last updates: <Text style={{fontWeight: 'bold', color: colors.mainOrangeColor}}> {quota.date} </Text></Text>
 			</View>
 			<View style = { styles.clearData }>
 				<View style = { styles.clearDataSub }>
@@ -61,16 +61,21 @@ const mapStateToProps = (state) => {
   export default connect(mapStateToProps)(Settings);
 
 const styles = StyleSheet.create({
+	mainView: {
+		flex: 1,
+		flexDirection: 'column',
+		padding: 10,
+	},
 	configuration: {
-		margin:10,
-		flex:3,
+		marginTop:10,
+		flex:1,
 	},
 	api: {
-		margin:10,
-		flex:3,
+		marginTop:40,
+		flex:1,
 	},
 	clearData: {
-		flex : 4, 
+		flex : 1, 
 		alignSelf: 'stretch', 
         alignItems: 'center',
 	},
@@ -82,9 +87,9 @@ const styles = StyleSheet.create({
 		color: colors.mainOrangeColor,
 	},
 	title:{
-		fontSize : 30,
+		fontSize : 20,
 		fontWeight :"bold",
-		color : colors.mainOrangeColor,
+		color : colors.mainGreenColor,
 	},
 	txt :{
 		margin : 5,

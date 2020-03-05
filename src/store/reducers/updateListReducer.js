@@ -2,7 +2,6 @@ const initialState = { FridgeIngredients: [], ShoppingIngredients:[] }
 
 function updateIngredients(state = initialState, action) {
   let nextState
-    console.log(action.type);
     switch (action.type) {
     case 'SAVE_FRIDGE_INGREDIENT':
       nextState = {

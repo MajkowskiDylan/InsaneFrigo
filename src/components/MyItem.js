@@ -1,13 +1,10 @@
-import React, { useState, useEffect, Component } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableHighlight, Image, TouchableWithoutFeedback, TouchableOpacity, FlatList, navigation } from 'react-native';
+import React from 'react';
+import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { Button } from 'react-native-elements'
 
 	
-import { getIngredients } from '../api/spoonacular';
 import { colors } from '../definitions/colors';
-import { assets } from '../definitions/assets';
-import { ButtonGroup } from 'react-native-elements';
-import { connect, dispatch } from 'react-redux';
+import { connect } from 'react-redux';
 
 const MyItem = ({reloadIng, ingredient, parent, addTo, dispatch, updateIngredients, settingPreferance}) => {
   //const ingredient = props.ingredient; // l'ingredient courant sur lequel on clique
@@ -127,10 +124,6 @@ const MyItem = ({reloadIng, ingredient, parent, addTo, dispatch, updateIngredien
     }
   }
 
-
-
-
-
 	return (
     <TouchableOpacity style={ styles.mainContainer } >
       <Image source={{uri: uriIngredient + ingredient.image}} style={ styles.typeImage } resizeMode="contain" />
@@ -176,9 +169,9 @@ const styles = StyleSheet.create({
       marginLeft: 10,
     },
     itemNameText: {
+      marginTop: 2,
+      fontSize: 18,
       textTransform: 'capitalize',
-      fontWeight: 'bold',
-      fontSize: 20,
     },
     buttons:{
       flexDirection: 'row',

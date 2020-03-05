@@ -9,7 +9,7 @@ import { getIngredients } from '../api/spoonacular';
 import { colors } from '../definitions/colors';
 import { assets } from '../definitions/assets';
 
-const IngredientSearch = ({updateIngredients, addTo, myOrigin, filter, saveFilter, stringSearch, saveStringSearch, }) => {
+const IngredientSearch = ({updateIngredients, addTo, myOrigin, filter, saveFilter, stringSearch, saveStringSearch }) => {
 
 	const filters = ['Name', 'Aisle'];
 	const [ingredientsData, setIngredientsData] = useState([]); // ce que la flatlist va afficher (API ou liste, selon les cas)

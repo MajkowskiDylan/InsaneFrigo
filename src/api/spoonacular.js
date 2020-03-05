@@ -4,7 +4,7 @@
 const API_KEY = '5cab2b3fe5f34607b25b8170689532c1';
 
 /**
- *
+ * Retourne les recettes de la recherche
  * @export
  * @param {*} searchTerm
  * @param {*} diet
@@ -28,7 +28,29 @@ export async function getRecipeWithSearch(offset, searchTerm, diet, cuisine) {
 }
 
 /**
- * 
+ * Retourne les recettes possibles
+ * @export
+ * @param {*} ingredients
+ * @returns
+ */
+export async function getPossibleRecipe(ingredients) {
+	try {
+		const myHeaders = new Headers({ 'apiKey': API_KEY });
+		const url = `https://api.spoonacular.com/recipes/findByIngredients?apiKey=${API_KEY}&ingredients=${ingredients}&number=10`;
+		const response = await fetch(url, { headers: myHeaders });
+		if (response.ok) {
+			return response.json();
+		}
+		throw new Error(response.status);
+
+	} catch (error) {
+		console.log('[ ! ] Error with function getPossibleRecipe ' + error.message);
+		throw error;
+	}
+}
+
+/**
+ * Retourne le détail d'une recette
  * @export
  */
 export async function getRecipeDetails(recipeID) {
@@ -48,15 +70,7 @@ export async function getRecipeDetails(recipeID) {
 }
 
 /**
- *
- * @export
- */
-export async function getPossibleRecipe() {
-	// Doit retourner des recettes selon les ingrédients enregistrés
-}
-
-/**
- * Renvoie la liste des aliments
+ * Retourne la liste des aliments
  * @param {*} searchTerm 
  * @param {*} diet 
  * @param {*} cuisine 
@@ -77,8 +91,15 @@ export async function getMyFridge(searchTerm, diet, cuisine) {
 	}
 }
 
-
-export async function getIngredients(offset, searchTerm, number) {
+/**
+ * Retourne les ingrédients de la recherche
+ * @export
+ * @param {*} offset
+ * @param {*} searchTerm
+ * @param {*} number
+ * @returns
+ */
+export async function getIngredients(searchTerm, number) {
     try {
         const myHeaders = new Headers({ 'apikey': API_KEY  });
 		const url = `https://api.spoonacular.com/food/ingredients/autocomplete?apiKey=${API_KEY}&metaInformation=true&number=${number || '2'}&query=${searchTerm}`;

@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableHighlight, Image, Picker } from 'react-native';
+import { connect } from 'react-redux';
 
 import { colors } from '../definitions/colors';
 import { assets } from '../definitions/assets';
@@ -7,9 +8,9 @@ import { assets } from '../definitions/assets';
 import Error from './Error';
 import RecipesList from './RecipesList';
 
-import { getRecipeWithSearch } from '../api/spoonacular';
+import { getRecipeWithSearch, getPossibleRecipe } from '../api/spoonacular';
 
-const Search = ({navigation}) => {
+const Search = ({navigation, savedIngredients}) => {
 	
 	const [notFirstSearch, setNotFirstSearch] = useState(false);
 	const [searchTerm, setSearchTerm] = useState("");
@@ -19,20 +20,20 @@ const Search = ({navigation}) => {
 	const [isRefreshing, setRefreshingState] = useState( false );
 	const [isErrorDuringDataLoading, setErrorDataLoading] = useState( false );
 	const paginationData = useRef( {currentOffset: 0, maxResults: 0} );
-
+	
 	// Recherche d'un aliment
 	_searchRecipes = () => {
 		paginationData.current = { currentOffset: 0, maxResults: 0 }
 		_loadRecipes([]);
 	}
-
+	
 	// Charge des données supplementaires
 	_searchMoreRecipes = () => {
 		if( paginationData.current.currentOffset < paginationData.current.maxResults ) {
 			_loadRecipes(recipes);
 		}
 	}
-
+	
 	// Charge les données retournées par l'API
 	_loadRecipes = async (prevRecipes) => {
 		setRefreshingState( true );
@@ -51,16 +52,31 @@ const Search = ({navigation}) => {
 		}
 	}
 
+	// Charge les recettes possibles avec nos ingrédients
+	_searchRecipesIcanCook = async () => {
+		setRefreshingState( true );
+		setErrorDataLoading( false );
+		try {
+			var ingredients = '';
+			savedIngredients.forEach((i) => ingredients += i.name + ', +')
+			console.log('ingredients : ' + ingredients)
+			var apiSearchResult = ( await getPossibleRecipe( ingredients ) );
+			setRecipes( apiSearchResult );
+		} catch (error) {
+			paginationData.current = { currentOffset: 0, maxResults: 0 };
+			setRecipes( [] );
+			setErrorDataLoading( true );
+		} finally {
+			setRefreshingState( false );
+			setNotFirstSearch(true);
+		}
+	}
+	
 	// Gère la navigation
 	_navigateToRecipeDetails = ( recipeID ) => {
 		navigation.navigate("RecipeDetails", { recipeID });
 	}
 
-	// Charge les recettes possibles avec nos ingrédients
-	_searchRecipesIcanCook = () => {
-		console.log("Azul Ddunit !");
-	}
-	
 	return (
 		<View style = { styles.mainView }>
 			<View style = {styles.searchLayout}>
@@ -158,7 +174,12 @@ Search.navigationOptions = {
 	title: 'Search',
 };
 
-export default Search;
+// Récupère la variable globale state
+const mapStateToProps = (state) => {
+	return { savedIngredients: state.updateIngredients.FridgeIngredients }
+}
+
+export default connect(mapStateToProps)(Search);
 
 const styles = StyleSheet.create({
 	mainView: {

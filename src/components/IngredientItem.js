@@ -1,8 +1,6 @@
 import React from 'react';
 import { View, StyleSheet, Image, Text } from 'react-native';
 
-import { colors } from '../definitions/colors';
-
 const IngredientItem = ({original, image}) => {
 	return (
 		<View style = {styles.mainView}>

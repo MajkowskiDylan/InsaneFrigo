@@ -22,15 +22,15 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 	},
 	errorIcon: {
-		width: 100,
-		height: 100,
-        margin: 50,
+		width: 80,
+		height: 80,
+        margin: 25,
         tintColor: colors.mainRedColor,
 	},
 	errorText: {
 		textAlign: "center",
         fontWeight: 'bold',
-        fontSize: 25,
+        fontSize: 22,
         color: colors.mainRedColor,
 	}
 });

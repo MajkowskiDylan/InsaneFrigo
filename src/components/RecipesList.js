@@ -3,6 +3,7 @@ import { FlatList, StyleSheet, Text } from 'react-native';
 import { connect } from 'react-redux';
 
 import RecipeItem from './RecipeItem';
+import { colors } from '../definitions/colors';
 
 const RecipesList = ({recipes, refreshingState, onClickNavigation, refreshRecipes, loadMoreRecipes, notFirstSearch, savedRecipes}) => {
 
@@ -14,7 +15,7 @@ const RecipesList = ({recipes, refreshingState, onClickNavigation, refreshRecipe
 	return (
         notFirstSearch && recipes.length == 0 ? // Si une recherche a déjà était faite et qu'aucun résultat n'est trouvé
         ( 
-            <Text>No results were found for your search.</Text>
+            <Text style = {styles.noResultText}>No results were found for your search.</Text>
         ): 
         (
             <FlatList
@@ -46,5 +47,10 @@ export default connect(mapStateToProps)(RecipesList);
 const styles = StyleSheet.create({
 	RecipesList: {
 		flex: 1,
-	},
+    },
+    noResultText: {
+        marginTop: 25,
+        textAlign: 'center',
+        color: colors.mainGrayColor,
+    }
 });

@@ -52,5 +52,6 @@ const styles = StyleSheet.create({
 		flex: 1,
 	},
 	listLayout: {
+		flex: 1,
 	},
 });

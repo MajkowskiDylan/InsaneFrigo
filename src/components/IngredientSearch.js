@@ -72,8 +72,10 @@ const IngredientSearch = ({updateIngredients, addTo, myOrigin, filter, saveFilte
 				if (myOrigin == "Fridge")
 					var apiSearchResult = updateIngredients.FridgeIngredients.filter(element => (element.name.toLowerCase()).startsWith(searchTerm.current.toLowerCase()));
 			}
-			else
-				var apiSearchResult = ( await getIngredients( paginationData.current.currentOffset, searchTerm.current, 10 ) );
+			else{
+				console.log(searchTerm.current)
+				var apiSearchResult = ( await getIngredients(searchTerm.current, 10 ) );
+			}
 			
 			// Tri selon name ou aisle
 			setIngredientsData( [...prevIngredients, ...apiSearchResult].sort((a,b) => {

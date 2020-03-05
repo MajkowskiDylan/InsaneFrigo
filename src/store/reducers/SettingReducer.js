@@ -15,6 +15,13 @@ function settingPreferance (state = initialState, action) {
                 FtoL: action.value
             }
             return nextState || state
+        case 'RESET_SETTING':
+            nextState = {
+                ...state,
+                FtoL : true,
+                LtoF : true
+                };
+            return nextState || state
         default:
             return state
     };

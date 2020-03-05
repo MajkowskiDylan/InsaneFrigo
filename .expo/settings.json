@@ -1,8 +1,8 @@
 {
-  "hostType": "tunnel",
+  "urlRandomness": "4g-gkd",
+  "hostType": "localhost",
   "lanType": "ip",
   "dev": true,
   "minify": false,
-  "urlRandomness": "zy-hyw",
   "https": false
 }

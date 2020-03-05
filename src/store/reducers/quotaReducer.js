@@ -9,12 +9,12 @@ function updateQuota(state = initialState, action) {
   let min = new Date().getMinutes(); //Current Minutes
   let sec = new Date().getSeconds(); //Current Seconds
   let currentDate = "" + date + "/" + month + "/" + year + " " + hours + ":" + min + ":" + sec;
-
+  const free =  150;
   switch (action.type) {
     case 'UPDATE':
       nextState = {
         ...state,
-        quota: action.value,
+        quota: (free - action.value),
         date: currentDate
       }
       return nextState || state

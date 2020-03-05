@@ -27,6 +27,13 @@ function updateIngredients(state = initialState, action) {
           ShoppingIngredients: state.ShoppingIngredients.filter(element => element.id != action.value.id)
         };
       return nextState || state
+    case 'RESET_INGREDIENT':
+      nextState = {
+          ...state,
+          ShoppingIngredients: [],
+          FridgeIngredients : []
+        };
+      return nextState || state
     default:
       return state
   };

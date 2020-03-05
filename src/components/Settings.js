@@ -2,22 +2,13 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { CheckBox, Button } from 'react-native-elements'
 import { connect } from 'react-redux';
-import Icon from 'react-native-vector-icons';
+import { Alert} from 'react-native'
 
 import { colors } from '../definitions/colors';
 import { assets } from '../definitions/assets';
 
 const Settings = ({quota, settingPreferance, dispatch}) => {
-
-	_updateQuota = async () => {
-	const action = { type: 'UPDATE', value: 300 };
-		dispatch(action);
-	}
-	_addQuota = async () => {
-	const action = { type: 'CHANGE', value: 1 };
-		dispatch(action);
-	}
-
+	
      _updateFtoL= async () => {
 	const action = { type: 'UPFTOL', value: !(settingPreferance.FtoL) };
 		dispatch(action);
@@ -25,7 +16,21 @@ const Settings = ({quota, settingPreferance, dispatch}) => {
 	_updateLtoF= async () => {
 	const action = { type: 'UPLTOF', value: !(settingPreferance.LtoF) };
 		dispatch(action);
-    }
+	}
+	
+	_reset = ( ) =>{
+		Alert.alert( 'Caution','Are you sur to clear all data ?',[{text: 'Yes', onPress: () => {_clear()}}, {text: 'no', onPress: () => {}}]);
+	}
+
+	_clear = async( ) =>{
+		const action1 = { type: 'RESET_RECIPE', value: !(settingPreferance.LtoF) };
+		dispatch(action1);
+		const action2 = { type: 'RESET_SETTING', value: !(settingPreferance.LtoF) };
+		dispatch(action2);
+		const action3 = { type: 'RESET_INGREDIENT', value: !(settingPreferance.LtoF) };
+		dispatch(action3);
+	}
+
 	return (
 		 <View style={styles.mainView}>
         	<View style = { styles.configuration }>
@@ -40,7 +45,7 @@ const Settings = ({quota, settingPreferance, dispatch}) => {
 			</View>
 			<View style = { styles.clearData }>
 				<View style = { styles.clearDataSub }>
-					<Button title = 'Clear Data' buttonStyle={{ backgroundColor : colors.mainOrangeColor}} style = {styles.button } icon={{name: "delete-forever", size: 30, color: "white"}} onPress= {this._addQuota} />
+					<Button title = 'Clear Data' buttonStyle={{ backgroundColor : colors.mainOrangeColor}} style = {styles.button } icon={{name: "delete-forever", size: 30, color: "white"}} onPress= {this._reset} />
 				</View>
 			</View>
       </View>
@@ -58,7 +63,7 @@ const mapStateToProps = (state) => {
 	}
   }
   
-  export default connect(mapStateToProps)(Settings);
+export default connect(mapStateToProps)(Settings);
 
 const styles = StyleSheet.create({
 	mainView: {
